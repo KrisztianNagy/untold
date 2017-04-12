@@ -1,0 +1,62 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card card-w-title">
+            <h1>My Created Realms</h1>
+            <p-dataTable [value]="myCreatedRealms" selectionMode="single" [(selection)]="selectedCreatedRealm" 
+                [paginator]="false" [rows]="100" [responsive]="true">                
+                <p-column field="name" header="Realm Name"></p-column>
+                <p-column field="created" header="Created"> </p-column>               
+            </p-dataTable>
+            <div class="ui-g">
+              <div class="ui-g-3">
+                <button pButton type="button" class='green-btn' [routerLink]="['/save']" label="Create" ></button>
+              </div>
+              <div class="ui-g-3">
+                <button pButton type="button" class='green-btn' [disabled]="!selectedCreatedRealm || busy" [routerLink]="['/save', selectedCreatedRealm ? selectedCreatedRealm.id : '']" label="Edit" ></button>
+              </div>
+              <div class="ui-g-3">
+                <button pButton type="button" class='green-btn' [disabled]="!selectedCreatedRealm || busy" (click)="start(selectedCreatedRealm)" label="Start" ></button>
+              </div>
+               <div class="ui-g-3">
+                <button pButton type="button" class='red-btn' [disabled]="!selectedCreatedRealm || busy" (click)="deleteSelectedRealm()" label="Delete" ></button>
+              </div>
+            </div>
+        </div>
+    </div>    
+    <div class="ui-g-12">
+        <div class="card card-w-title">
+            <h1>My Player Realms</h1>
+            <p-dataTable [value]="myPlayerRealms" selectionMode="single" [(selection)]="selectedPlayerRealm" 
+                [paginator]="false" [rows]="100" [responsive]="true">
+                <p-column field="realm.name" header="Realm Name"></p-column>
+                <p-column styleClass="col-button">
+                  <ng-template pTemplate="header">
+                    Owner
+                  </ng-template>
+                  <ng-template let-realmmember="rowData" pTemplate="body">
+                    <div class="ui-helper-clearfix">
+                        <img [src]="realmmember.realm.owner.picture" style="width:32px;display:inline-block;margin:5px 0 2px 5px"/>
+                        <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{realmmember.realm.owner.displayName}}</div>
+                    </div>
+                  </ng-template>
+                </p-column> 
+                <p-column field="state" header="Status"></p-column>               
+            </p-dataTable>
+            <div class="ui-g">
+              <div class="ui-g-3">
+                <button pButton type="button" class='green-btn' [disabled]="!selectedPlayerRealm || selectedPlayerRealm.stateId !== 'JOIND' || busy" (click)="start(selectedPlayerRealm.realm)" label="Start" ></button>
+              </div>
+              <div class="ui-g-3">
+                
+              </div>
+              <div class="ui-g-3">
+                <button pButton type="button" class='green-btn' [disabled]="busy" *ngIf="selectedPlayerRealm && selectedPlayerRealm.stateId === 'INVTD'" (click)="approveSelectedRealm()" label="Approve" ></button>
+              </div>
+               <div class="ui-g-3">
+                <button pButton type="button" class='red-btn' [disabled]="busy" *ngIf="selectedPlayerRealm && selectedPlayerRealm.stateId === 'INVTD'" (click)="rejectSelectedRealm()" label="Reject" ></button>
+                <button pButton type="button" class='red-btn' [disabled]="busy" *ngIf="selectedPlayerRealm && selectedPlayerRealm.stateId === 'JOIND'" (click)="leaveSelectedRealm()" label="Leave" ></button>
+              </div>
+            </div>
+        </div>
+    </div>    
+</div>

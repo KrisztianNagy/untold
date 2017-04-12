@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="123px" height="135px" viewBox="0 0 123 135" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>19941C63-E0AD-4563-A346-D6EBF1B69002</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <circle id="path-1" cx="30" cy="30" r="30"></circle>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="17" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="25" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.19 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feOffset dx="0" dy="12" in="SourceAlpha" result="shadowOffsetOuter2"></feOffset>
+            <feGaussianBlur stdDeviation="7.5" in="shadowOffsetOuter2" result="shadowBlurOuter2"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.24 0" type="matrix" in="shadowBlurOuter2" result="shadowMatrixOuter2"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="shadowMatrixOuter2"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Barcelona-Dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="desktop-hd---barcelona-color-5">
+            <g id="header">
+                <g id="barcelona-logo" transform="translate(15.000000, 10.000000)">
+                    <g id="Oval-8" opacity="0.100000001">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                        <use fill="#D3FFF9" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                    <path d="M53.466217,48.8736129 C57.5556732,43.7274384 60,37.2060638 60,30.1116613 C60,13.48145 46.5685425,0 30,0 C13.4314575,0 0,13.48145 0,30.1116613 C0,37.30632 2.51390002,43.9116405 6.70813948,49.0909596 L8.22703613,24.6881509 C7.11305879,24.2151784 6.33802817,23.1115759 6.33802817,21.846167 C6.33802817,20.1306044 7.72894979,18.7345057 9.43815064,18.7345057 C11.1473515,18.7345057 12.5382731,20.1306044 12.5382731,21.846167 C12.5382731,23.0825337 11.8107777,24.1529452 10.7360686,24.6445877 L13.4786436,54 L14.7083588,54 L18.4409063,18.4025952 C17.3868647,17.9047294 16.6717697,16.8405412 16.6717697,15.6228445 C16.6717697,13.9072819 18.0626914,12.5111832 19.7718922,12.5111832 C21.4810931,12.5111832 22.8720147,13.9072819 22.8720147,15.6228445 C22.8720147,16.8405412 22.1569198,17.9047294 21.1008114,18.4025952 L24.8354256,54 L25.0462339,54 C25.3149112,52.6993256 26.0858083,51.5334898 27.2018524,50.7680212 L29.1156614,44.3662967 C29.3781384,43.4867338 30.8331292,43.4867338 31.0956062,44.3662967 L33.0094152,50.7680212 C34.1254593,51.5355643 34.8942897,52.6993256 35.1650337,54 L35.375842,54 L39.1083895,18.4025952 C38.0543478,17.9047294 37.3392529,16.8405412 37.3392529,15.6228445 C37.3392529,13.9072819 38.7301745,12.5111832 40.4393754,12.5111832 C42.1485762,12.5111832 43.5394979,13.9072819 43.5394979,15.6228445 C43.5394979,16.8405412 42.8244029,17.9047294 41.7682945,18.4025952 L45.5029088,54 L46.7367575,54 L49.4565983,26.7107307 C48.3922229,26.2128649 47.6729945,25.1466024 47.6729945,23.9206078 C47.6729945,22.2050452 49.0639161,20.8089466 50.773117,20.8089466 C52.4823178,20.8089466 53.8732394,22.2050452 53.8732394,23.9206078 C53.8732394,25.177719 53.1023423,26.2792471 51.996632,26.754294 L53.466217,48.8736129 Z" id="Combined-Shape" fill="#F5F5F5"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

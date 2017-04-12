@@ -1,0 +1,279 @@
+.layout-tabmenu-content {
+    .inbox-tab {        
+        ul {
+            padding: 0 6px;
+            margin: 0;
+            list-style-type: none;
+            
+            li {
+                padding: 8px 16px;
+                
+                img {
+                    float: left;
+                    margin-right: 8px;
+                }
+                
+                .name {
+                    font-weight: bold;
+                    float: left;
+                }
+                .message {
+                    float: left;
+                }
+            }
+        }
+        
+        .inbox-labels {
+            margin: 20px 6px 0 6px;
+            
+            > span {
+                font-weight: bold;
+            }
+            
+            ul {
+                margin-top: 10px;
+                
+                li {
+                    padding: 6px;
+                    
+                    .inbox-label-badge {
+                        color: $accentTextColor;
+                        background-color: $accentColor;
+                        padding: 2px 6px;
+                        @include border-radius(3px);
+                        float: right;
+                        margin-top: -3px;
+                    }
+                }
+                
+                
+            }
+        }
+    }
+    
+    .calendar-tab {
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            
+            li {
+                padding: 8px 16px;
+                
+                .calendar-event-date {
+                    float: left;
+                    width: 48px;
+                    height: 48px;
+                    text-align: center;
+                    padding: 6px 0 0 0;
+                    font-size: 14px;
+                    font-weight: 700;
+                    box-sizing: border-box;
+                    margin-right: 8px;
+                    background-color: $accentColor;
+                    color: $accentTextColor;
+                    
+                    span {
+                        width: 100%;
+                        display: inline-block;
+                    }    
+                }
+                
+                .calendar-event-detail {
+                    float: left;
+                    
+                    .calendar-event-title {
+                        font-weight: 700;
+                        display: block;
+                    }
+                    
+                    i {
+                        margin-right: 4px;
+                        margin-top: 2px;
+                    }
+                    
+                    .calendar-event-location {
+                        position: relative;
+                        top: -6px;
+                        left: -4px;
+                    }
+                    
+                    .calendar-event-rsvp {
+                        display: block;
+                        
+                        &.calendar-event-rsvp-yes {
+                            color: #35ae47;
+                        }
+                        
+                        &.calendar-event-rsvp-maybe {
+                            color: #f5a623;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    .projects-tab {
+        ul {
+           padding: 8px 16px;
+            margin: 0;
+            list-style-type: none;
+            
+            li {
+                padding: 12px 0;
+                
+                i {
+                    font-size: 36px;
+                    margin-right: 12px;
+                    float: left;
+                    width: 32px;
+                    color: $textSecondaryColor;
+                }
+                
+                .project-title {
+                    font-weight: 700;
+                }
+                
+                span {
+                    float: left;
+                    display: block;
+                }
+                
+                .project-progressbar {
+                    width: 100px;
+                    float: left;
+                    background-color: #545b61;
+                    margin-top: 4px;
+                    
+                    .project-progressbar-value {
+                        background-color: $accentColor;
+                        height: 4px;
+                    }
+                }
+            }
+        }
+    }
+    
+    .team-tab {
+        ul {
+           padding: 8px 16px;
+            margin: 0;
+            list-style-type: none;
+            
+            li {
+                padding: 6px 0;
+                
+                img {
+                    float: left;
+                    margin-right: 8px;
+                }
+                
+                .name {
+                    font-weight: bold;
+                    float: left;
+                }
+                .location {
+                    float: left;
+                }
+                
+                span {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+.layout-rtl {
+    .layout-tabmenu-content {
+        .inbox-tab {
+            .inbox-labels {
+                ul {
+                    li {
+                        .inbox-label-badge {
+                            float: left;
+                        }
+                    }
+                }
+            }
+
+            ul {
+                li {
+                    img {
+                        float: right;
+                        margin-right: 0px;
+                        margin-left: 8px;
+                    }
+
+                    .name, .message {
+                        float: right;
+                    }
+                }
+            }
+        }
+
+        .calendar-tab {
+            ul {
+                li {
+                    .calendar-event-date {
+                        float: right;
+                        margin-right: 0px;
+                        margin-left: 8px;
+                    }
+                    
+                    .calendar-event-detail {
+                        float: right;
+                    }
+                }
+            }
+        }
+        
+        .projects-tab {
+            ul {
+                li {
+                    i {
+                        margin-right: 0px;
+                        margin-left: 8px;
+                        float: right;
+                    }
+                    
+                    span {
+                        float: right;
+                    }
+
+                    .project-progressbar {
+                        float: right;
+                    }
+                }
+            }
+        }
+    
+        .team-tab {
+            ul {
+                padding: 0 6px;
+
+                li {
+                    img {
+                        float: right;
+                        margin-right: 0px;
+                        margin-left: 8px;
+                    }
+
+                    .name {
+                        float: right;
+                    }
+                    .location {
+                        float: right;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.layout-sidebar-dark {
+    .layout-tabmenu-content {
+        color: $darkMenuItemTextColor;
+    }
+}

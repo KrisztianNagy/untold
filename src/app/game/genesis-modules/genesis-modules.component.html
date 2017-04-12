@@ -1,0 +1,41 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card">
+            <h1>Modules</h1>
+            <p-dataTable [value]="modules" selectionMode="single" [(selection)]="selectedModule" 
+                [paginator]="false" [rows]="100" [responsive]="true">
+                <p-column field="name" header="Module Name" [sortable]="true"></p-column> 
+            </p-dataTable>
+            <div class="ui-g">
+                <div class="ui-g-3">
+                    <button pButton type="button" class='green-btn' (click)="showCreate()" label="Create" ></button>
+                </div>
+                <div class="ui-g-6">
+                </div>
+                <div class="ui-g-3">
+                    <button pButton type="button" class='red-btn' [disabled]="!selectedModule" (click)="deleteSelectedModule()" label="Delete" ></button>
+                </div>
+            </div>            
+        </div>
+    </div>
+
+    <p-dialog header="Create" [(visible)]="createVisible">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="ui-g form-group">
+                    <div class="ui-g-12">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [(ngModel)]="moduleName">
+                            <label>Module name</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-3">
+                            <button pButton type="button" class='green-btn' [disabled]="!moduleName" (click)='create()' label="Create" ></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-dialog>
+</div>

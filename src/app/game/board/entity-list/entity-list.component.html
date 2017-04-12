@@ -1,0 +1,17 @@
+
+<span class="md-inputfield">
+    <input type="text" pInputText [(ngModel)]="searchFilter" (change)="filterImages(imgscr)"/>
+    <label>Filter</label>
+</span>
+<p-dataScroller *ngIf="game" [value]="images" [rows]="4" [inline]="true" scrollHeight="400px" [loader]="loadButton" [lazy]="true" (onLazyLoad)="loadData($event)" #imgscr>
+    <ng-template let-image>                   
+        <div style="padding:3px" class="ui-g-12">
+            <p-panel [style]="{'text-align':'center'}" [header]="image.fileName">
+                <img id="draggable2"  src="{{image.fileSmallPath + game.accessSignature}}" draggable="true"  (dragstart)="startDragging($event)" width="50" height="50">
+            </p-panel>
+        </div>
+    </ng-template>  
+     <footer>
+        <button #loadButton type="text" icon="uc-icon-refresh" pButton label="Load more"></button>
+    </footer>
+</p-dataScroller > 

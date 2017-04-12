@@ -1,0 +1,31 @@
+<div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <div class="ui-g form-group">
+          <div class="ui-g-12">
+              <span class="md-inputfield">
+                  <input type="text" pInputText [(ngModel)]="clientRealm.name" [disabled]="busy">
+                  <label>Realm name</label>
+              </span>
+          </div>
+          <div class="ui-g-12" *ngIf="clientRealm.id"> 
+              <span class="md-inputfield">
+                  <p-autoComplete [(ngModel)]="clientRealm.members" [suggestions]="userResults" (completeMethod)="searchMember($event)" [multiple]="true" field="displayName">
+                    <ng-template let-member pTemplate="item">
+                        <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+                            <img [src]="member.picture" style="width:32px;display:inline-block;margin:5px 0 2px 5px"/>
+                            <div style="font-size:18px;float:right;margin:10px 10px 0 0">{{member.displayName}}</div>
+                        </div>
+                    </ng-template>
+                  </p-autoComplete>
+                  <label>Members</label>
+              </span>
+          </div>
+          
+          <div class="ui-g-12">
+              <div class="ui-g-3">
+                <button pButton type="button" class='green-btn' (click)='save()' [disabled]="busy" label="{{id ? 'Save' : 'Create'}}" ></button>
+              </div>
+          </div>
+      </div>
+    </div>
+</div>

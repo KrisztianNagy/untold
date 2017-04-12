@@ -1,0 +1,61 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card card-w-title">
+            <h1>Maps</h1>
+            <p-dataTable [value]="myMaps" selectionMode="single" [(selection)]="selectedMap" 
+                [paginator]="false" [rows]="100" [responsive]="true">
+                <p-column field="name" header="Map Name" [sortable]="true"></p-column> 
+                <p-column styleClass="col-button">
+                  <ng-template pTemplate="header">
+                    Load
+                  </ng-template>
+                  <ng-template let-map="rowData" pTemplate="body">
+                    <button type="button" pButton (click)="loadMap(map)" class='green-btn' label="Load map for everyone"></button>
+                  </ng-template>
+                </p-column>                         
+            </p-dataTable>
+            <div class="ui-g">
+              <div class="ui-g-3">
+                <button pButton type="button" class='green-btn' [routerLink]="['/game/savemap']" label="Create" ></button>
+              </div>
+              <div class="ui-g-3">
+                <button pButton type="button" class='green-btn' [disabled]="!selectedMap" [routerLink]="['/game/savemap', selectedMap ? selectedMap.id : '']" label="Edit" ></button>
+              </div>
+              <div class="ui-g-3">
+              </div>
+               <div class="ui-g-3">
+                <button pButton type="button" class='red-btn' [disabled]="!selectedMap" (click)="deleteSelectedMap()" label="Delete" ></button>
+              </div>
+            </div>
+
+            <h1>Players</h1>
+            <div class="ui-g">
+              <div class="ui-g-6">
+                <p-dataTable [value]="game.members" selectionMode="single" [(selection)]="selectedMember" 
+                  [paginator]="false" [rows]="100" [responsive]="true">
+                  <p-column field="user.userName" header="User" [sortable]="true"></p-column>
+                   <p-column styleClass="col-button">
+                  <ng-template pTemplate="header">
+                    Current map
+                  </ng-template>
+                  <ng-template let-member="rowData" pTemplate="body">
+                    <span>{{member.activeMap ? member.activeMap.name : ''}}</span>
+                  </ng-template>
+                </p-column>                           
+                </p-dataTable>
+              </div>
+              <div class="ui-g-6">
+                <div class="ui-g-6">
+                  <button type="button" pButton  [disabled]="!selectedMap || !selectedMember" (click)="loadMap(selectedMap, selectedMember)" class='green-btn' label="Load map for user"></button>
+                </div>
+                <div class="ui-g-6">
+                  <button type="button" pButton  [disabled]="!selectedMember" (click)="loadMap(null, selectedMember)" class='red-btn' label="Unload map for user"></button>
+                </div>
+                <div class="ui-g-6">
+                  <button type="button" pButton  (click)="loadMap(null, selectedMember)" class='red-btn' label="Unload map for all users"></button>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>    
+</div>

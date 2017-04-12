@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+      <script>document.write('<base href="' + document.location + '" />');</script>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <title>PrimeNG - BARCELONA</title>
+      
+      <link rel="stylesheet" type="text/css" href="../theme/theme-teal.css">
+      <link rel="stylesheet" type="text/css" href="../layout/css/layout-teal.css">
+      <link rel="stylesheet" type="text/css" href="primeng.min.css">
+
+      <script src="jquery.js"></script>
+      <script type="text/javascript">
+          $(function() {
+              $('#menu-button').on('click', function(e) {
+                  var menu = $('#menu');
+                  if(menu.hasClass('lmenu-active')) {
+                      menu.addClass('fadeOutUp');
+                      
+                      setTimeout(function() {
+                          menu.removeClass('fadeOutUp fadeInDown lmenu-active');
+                      },500);
+                  }
+                  else {
+                      menu.addClass('lmenu-active fadeInDown');
+                  }
+                  e.preventDefault();
+              });
+          });
+      </script>
+  </head>
+  
+  <body class="landing-body">
+        <div id="home" class="landing-wrapper">
+            <div id="header">
+                <div class="pre-header">
+                    <div class="pre-header-content">
+                        <a href="#">
+                            <img src="../layout/images/logo.png" class="landing-logo"/>
+                        </a>
+                        <img src="../layout/images/logo-text.svg"/>
+                        
+                        <a id="menu-button" href="#">
+                           <span class="material-icons">menu</span>
+                        </a>
+                        
+                        <ul id="menu" class="animated">
+                            <li>
+                                <a href="#home">HOME</a>
+                            </li>
+                            <li>
+                                <a href="#features">FEATURES</a>
+                            </li>
+                            <li>
+                                <a href="#showcase">SHOWCASE</a>
+                            </li>
+                            <li>
+                                <a href="#pricing">PRICING</a>
+                            </li>
+                            <li>
+                                <a href="#video">VIDEO</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="header-content">
+                    <h1>PRIMENG PRESENTS BARCELONA</h1>
+                    <h2>Your Application Tagline</h2>
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all secondary">
+                        <span class="ui-button-text ui-c">LEARN MORE</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="features">
+                <div class="features-content">
+                    <h2>FEATURES</h2>
+                    
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-3">
+                            <img src="../layout/images/landing/icon-welldocumented.png"/>
+                            <h3>RESPONSIVE LAYOUT</h3>
+                            <p>Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                        </div>
+                        <div class="ui-g-12 ui-md-3">
+                            <img src="../layout/images/landing/icon-moderndesign.png"/>
+                            <h3>MODERN DESIGN</h3>
+                            <p>Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                        </div>
+                        <div class="ui-g-12 ui-md-3">
+                            <img src="../layout/images/landing/icon-cleancode.png"/>
+                            <h3>CLEAN CODE</h3>
+                            <p>Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                        </div>
+                        <div class="ui-g-12 ui-md-3">
+                            <img src="../layout/images/landing/icon-welldocumented.png"/>
+                            <h3>WELL DOCUMENTED</h3>
+                            <p>Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="showcase">
+                <div class="showcase-header">
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="showcase-title">Ready to try Barcelona Live</span>
+                            <span class="showcase-description">Barcelona is a material template for PrimeFaces</span>
+                        </div> 
+                        
+                        <div class="ui-g-12 ui-md-6">
+                            <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all secondary">
+                                <span class="ui-button-text ui-c">LIVE PREVIEW</span>
+                            </button>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            
+            <div id="showcase-content-wrapper">
+                <div class="showcase-content">
+                    <h2>PrimeNG Barcelona</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur velit neque, aliquam sed dolor eu, sagittis rutrum erat. Donec eu risus vitae tellus rhoncus iaculis.</p>
+                    <img src="../layout/images/landing/showcase-image.png"/>
+                </div>
+            </div>
+            
+            <div id="pricing">
+                <div class="pricing-content">
+                    <h2>PRICING</h2>
+                    
+                    <div class="pricing-box pricing-basic">
+                        <div class="pricing-header">
+                            <div class="ui-g">
+                                <div class="ui-g-6">
+                                    <h3>PROFESSIONAL</h3>
+                                    <p>For professionals</p>
+                                </div>
+                                <div class="ui-g-6">
+                                    <h3>$10</h3>
+                                    <p>PER YEAR</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pricing-features">
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">Responsive</span>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">7/24 Support</span>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">Push Messages</span>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">Free Shipping</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pricing-footer">
+                            <a href="#">LEARN MORE</a>
+                        </div>
+                    </div>
+                    
+                    <div class="pricing-box pricing-pro">
+                        <div class="pricing-header">
+                            <div class="ui-g">
+                                <div class="ui-g-6">
+                                    <h3>PROFESSIONAL</h3>
+                                    <p>For professionals</p>
+                                </div>
+                                <div class="ui-g-6">
+                                    <h3>$10</h3>
+                                    <p>PER YEAR</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pricing-features">
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">Responsive</span>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">7/24 Support</span>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">Push Messages</span>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">Free Shipping</span>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">Unlimited Bandwidth</span>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="pricing-feature-icon"><i class="material-icons">done</i></span>
+                                    <span class="pricing-feature-text">Unlimited Storage</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pricing-footer">
+                            <a href="#">LEARN MORE</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="video">
+               <div class="video-content">
+                   <h2>VIDEO</h2>
+                   <div class="video-container">
+                       <iframe width="560" height="315" src="https://www.youtube.com/embed/L_bgTJkFk3k" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                   </div>
+               </div>
+           </div>
+           
+           <div id="footer">
+               <div class="footer-content clearfix">
+                   <div class="footer-left">
+                       <img src="../layout/images/logo-black.png" class="landing-logo"/>
+                       <div>PrimeNG Barcelona</div>
+                   </div>
+                   <div class="footer-right">
+                       <a href="#"><i class="material-icons">search</i></a>
+                       <a href="#"><i class="material-icons">settings</i></a>
+                       <a href="#"><i class="material-icons">verified_user</i></a>
+                   </div>
+               </div>
+           </div>
+        </div>
+    </body>
+</html>

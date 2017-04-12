@@ -1,0 +1,10 @@
+<div  [hidden]="(gameService.selectedGame | async).localMembership.activeMap">
+    Waiting for game master to activate a map.
+</div>
+<div  [hidden]="!(gameService.selectedGame | async).localMembership.activeMap">  
+        
+    <app-toolbar style="margin-top: -20px; margin-bottom: 8px; display: block;"></app-toolbar>
+    <canvas id="demoCanvas" width="1000" height="500" style="display: block;" (drop)="drop($event)" (dragover)="allowDrop($event)"></canvas>
+</div>
+
+

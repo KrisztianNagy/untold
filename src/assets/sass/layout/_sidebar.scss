@@ -1,0 +1,392 @@
+.layout-wrapper {
+    
+    .layout-sidebar {
+        position: fixed;
+        top: 60px;
+        width: 60px;
+        background-color: #f5f5f5;
+        height: 100%;
+        -webkit-box-shadow: 0 0 28px 0 rgba(0, 0, 0, 0.24), 0 25px 55px 0 rgba(0, 0, 0, 0.19);
+        -moz-box-shadow: 0 0 28px 0 rgba(0, 0, 0, 0.24), 0 25px 55px 0 rgba(0, 0, 0, 0.19);
+        box-shadow: 0 0 28px 0 rgba(0, 0, 0, 0.24), 0 25px 55px 0 rgba(0, 0, 0, 0.19);
+        z-index: 100;
+        @include transition(width .3s);
+        
+        .layout-tabmenu {
+            height: 100%;
+            position: relative;
+            
+            .layout-tabmenu-nav {
+                margin: 0;
+                padding: 0;
+                display: block;
+                z-index: 100;
+                width: 60px;
+                
+                li {
+                    list-style-type: none;
+                    text-align: center;
+                    box-sizing: border-box;
+                    position: relative;
+                    
+                    a {
+                        display: block;
+                        height: 60px;
+                        line-height: 60px;
+                        width: 100%;
+                        box-sizing: border-box;
+                        color: #757575;
+                        @include transition(background-color .3s);
+                        
+                        i {
+                            line-height: inherit;
+                            @include transition(color .3s);
+                            font-size: 30px;
+                        }
+
+                        &:hover {
+                            background-color: #E0E0E0;
+                        }
+                    }
+
+                    &.active-item {
+                        border-left: 4px solid $activeMenuItemTextColor;
+                        
+                        a {    
+                            background: #ffffff;
+                            color: $primaryColor;
+
+                            i {
+                                margin-left: -4px;
+                            }
+                        }
+
+                        .layout-tabmenu-tooltip {
+                            left: 56px;
+                        }
+                    }
+                    
+                    .layout-tabmenu-tooltip {
+                        display:none;
+                        padding: 0 5px;
+                        position: absolute;
+                        left: 60px;
+                        top: 20px;
+                        z-index: 101;
+                        line-height: 1;
+                        
+                        .layout-tabmenu-tooltip-text {
+                           padding: 6px 8px;
+                           font-weight: 700;
+                           background-color: #424242;
+                           color: #ffffff;
+                           min-width: 75px;
+                           @include overlay-content-shadow();
+                        }
+                        
+                        .layout-tabmenu-tooltip-arrow {
+                            position: absolute;
+                            width: 0;
+                            height: 0;
+                            border-color: transparent;
+                            border-style: solid;
+                            top: 50%;
+                            left: 0;
+                            margin-top: -5px;
+                            border-width: 5px 5px 5px 0;
+                            border-right-color: #424242;
+                        }
+                    }
+                }
+            }
+            
+            .layout-tabmenu-contents {
+                min-width: 250px;
+                position: absolute;
+                top: 0;
+                left: 60px;
+                display: none;
+                background-color: #ffffff;
+                height: 100%;
+                
+                .layout-tabmenu-content {
+                    height: 100%;
+                    display: none;
+                    
+                    &.layout-tabmenu-content-active {
+                        display: block;
+                    }
+                    
+                    a {
+                        color: $menuitemColor;
+                    }
+                    
+                    .layout-submenu-title {
+                        padding: 24px 16px 0 16px;
+                        box-sizing: border-box;
+                        color: #424242;
+                        font-weight: bold;
+                        font-size: 16px;
+
+                        .menu-pin-button {
+                            padding: 4px;
+                            margin-top: -4px;
+                            height: 24px;
+                            width: 24px;
+                            line-height: 24px;
+                            float: right;
+                            text-align: center;
+                            @include border-radius(50%);
+                            @include transition(background-color .3s);
+                            
+                            i {
+                                line-height: inherit;
+                                @include transition(transform .3s);                                    
+                            }
+                            
+                            &:hover {
+                                background-color: #E0E0E0;
+                            }
+                        }
+                        
+                        .menu-button {
+                            padding: 4px;
+                            margin-top: -4px;
+                            float: right;
+                            @include border-radius(50%);
+                            @include transition(background-color .3s);
+                            
+                            &:hover {
+                                background-color: #E0E0E0;
+                            }
+                        }
+                    }
+                    
+                    .layout-submenu-content {
+                        padding: 8px 0;
+                        height: 100%;
+                        overflow: auto;
+                        
+                        .nano {
+                            > .nano-content {
+                                padding-right:6px;
+                                
+                                &.menu-scroll-content {
+                                    display: block;
+                                    height: 100%;
+                                    overflow-x: hidden;
+                                    overflow-y: scroll;
+                                    position: relative;
+                                }
+                                
+                                > *:last-child {
+                                    display: block;
+                                    padding-bottom: 150px;
+                                }
+                            }
+                            
+                            > .nano-pane {
+                                background: transparent;
+                                
+                                > .nano-slider {
+                                    background-color: #aaa;
+                                    opacity: 0.4;
+                                }
+                            }
+                        }
+                        
+                        .navigation-menu {
+                            margin: 0;
+                            padding: 0;
+                            list-style-type: none;
+                            
+                            li {
+                                a {
+                                    display: block;
+                                    padding: 8px 16px;
+                                    @include transition(background-color .3s);
+                                    
+                                    i:first-child {
+                                        margin-right: 8px;
+                                        display: inline-block;
+                                        vertical-align: middle;
+                                    }
+
+                                    span {
+                                        display: inline-block;
+                                        vertical-align: middle;
+                                    }
+                                    
+                                    i:last-child {
+                                        float: right;
+                                        @include transition(transform .3s);
+                                    }
+                                    
+                                    &:hover {
+                                        background-color:#E0E0E0;
+                                    }
+                                }
+                                
+                                ul {
+                                    margin: 0;
+                                    padding: 0;
+                                    list-style-type: none;
+                                    overflow: hidden;
+
+                                    li {
+                                        a {
+                                            padding: 8px 16px 8px 32px;
+                                        }
+
+                                        ul {
+                                            li {
+                                                a {
+                                                    padding: 8px 16px 8px 48px;
+                                                }
+
+                                                ul {
+                                                    li {
+                                                        a {
+                                                            padding: 8px 16px 8px 64px;
+                                                        }
+
+                                                        ul {
+                                                            li {
+                                                                a {
+                                                                    padding: 8px 16px 8px 80px;
+                                                                }
+
+                                                                ul {
+                                                                    li {
+                                                                        a {
+                                                                            padding: 8px 16px 8px 96px;
+                                                                        }
+
+                                                                        ul {
+                                                                            li {
+                                                                                a {
+                                                                                    padding: 8px 16px 8px 112px;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                &.active-menuitem {
+                                    > a {
+                                        color: $activeMenuItemTextColor;
+                                        
+                                        i:last-child {
+                                            @include rotate(-180deg);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        &.layout-sidebar-dark {
+            background-color: $darkSidemenuBgColor;
+            
+            .layout-tabmenu {
+                .layout-tabmenu-nav {                    
+                    li {      
+                        a {      
+                            color: $darkMenuItemInactiveTextColor;      
+                                                                                       
+                            &:hover {
+                                background-color: $darkMenuItemHoverBgColor;
+                                color: #f5f5f5;
+                            }
+                        }    
+                                                              
+                        &.active-item {
+                            border-left: 4px solid $darkActiveMenuItemTextColor;
+                            
+                            a {    
+                                background-color: $darkMenuBgColor;
+                
+                                i {
+                                    color: $darkMenuItemTextColor;
+                                }
+                            }
+                        }
+                        
+                        .layout-tabmenu-tooltip {                            
+                            .layout-tabmenu-tooltip-text {
+                               background-color: $darkActiveMenuItemTextColor;
+                               color: #ffffff;
+                            }
+                            
+                            .layout-tabmenu-tooltip-arrow {
+                                border-right-color: $darkActiveMenuItemTextColor;
+                            }
+                        }
+                    }
+                }
+                
+                .layout-tabmenu-contents {
+                    background-color: $darkMenuBgColor;
+                    
+                    .layout-tabmenu-content {
+                        .layout-submenu-title {
+                            color: $darkMenuItemTextColor;
+                            border-bottom-color: #82878b;
+                            
+                            .menu-button, .menu-pin-button {
+                                color: $darkMenuItemTextColor;
+                                
+                                &:hover {
+                                    background-color: $darkMenuItemHoverBgColor;
+                                }
+                            }
+                        }
+                    }
+                    
+                    .layout-submenu-content {                        
+                        .navigation-menu {                            
+                            li {
+                                > a {
+                                    color: $darkMenuItemTextColor;
+                                    
+                                    i:first-child {
+                                        color: $darkMenuItemTextColor;
+                                    }
+                                    
+                                    &:hover {
+                                        background-color: $darkMenuItemHoverBgColor;
+                                        
+                                        i:first-child {
+                                            color: $darkMenuItemTextColor;
+                                        }
+                                    }
+                                }
+                                
+                                &.active-menuitem {
+                                    > a {
+                                        color: $darkActiveMenuItemTextColor;
+                                        
+                                        i:first-child {
+                                            color: $darkActiveMenuItemTextColor;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

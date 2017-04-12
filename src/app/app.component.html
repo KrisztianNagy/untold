@@ -1,0 +1,19 @@
+<div class="layout-wrapper" [ngClass]="{'layout-wrapper-menu-active':sidebarActive,
+                                        'layout-overlay-menu':overlay}">
+
+    <app-topbar *ngIf="authenticated"></app-topbar>
+    
+    <app-sidebar *ngIf="authenticated"></app-sidebar>
+    
+    <div class="layout-main">
+        <div class="layout-main-content">
+            <router-outlet></router-outlet>
+            
+            <app-footer *ngIf="authenticated"></app-footer>
+        </div>
+    </div>
+
+    <app-connection-overlay></app-connection-overlay>
+    <app-error-dialog></app-error-dialog>
+    <p-growl [value]="msgs" life="3000"></p-growl>
+</div>

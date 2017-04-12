@@ -1,0 +1,21 @@
+<div>
+  Selection mode <br>
+  <input type="radio" [(ngModel)]="cursor"  name="cursor" value="select" (ngModelChange)="update()" >Select<br>
+  <input type="radio" [(ngModel)]="cursor"  name="cursor" value="free" (ngModelChange)="update()">Free
+</div>
+
+<div>
+  Layer<br>
+  <input type="radio" [(ngModel)]="layerId"  name="layerId" value="0" (ngModelChange)="update()">Background<br>
+  <input type="radio" [(ngModel)]="layerId"  name="layerId" value="1" (ngModelChange)="update()">Grid<br>
+  <input type="radio" [(ngModel)]="layerId"  name="layerId" value="2" (ngModelChange)="update()">Wall<br>
+  <input type="radio" [(ngModel)]="layerId"  name="layerId" value="3" (ngModelChange)="update()">Hidden<br>
+  <input type="radio" [(ngModel)]="layerId"  name="layerId" value="4" (ngModelChange)="update()">Foreground<br> 
+</div>
+<div>
+  Other<br>
+  <input type="checkbox" [(ngModel)]="light"  name="light" value="1" (ngModelChange)="update()">Light<br>
+   <button type="button" (click)="zoom(0.1)">+</button>
+   <button type="button" (click)="zoom(-0.1)">-</button>
+    <button type="button" (click)="generate()">Generate</button>
+</div>

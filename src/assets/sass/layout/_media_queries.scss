@@ -1,0 +1,384 @@
+@media (min-width: 1025px) {
+    .layout-wrapper {
+        &.layout-wrapper-menu-active {
+            .layout-sidebar {
+                width: 310px;
+                
+                .layout-tabmenu {                                            
+                    .layout-tabmenu-contents {
+                        display: block;
+                    }
+                }
+            }
+            
+            .layout-main {
+                margin-left: 310px;
+            }
+            
+            
+            &.layout-rtl {
+                .layout-main {
+                    margin-left: 0px;
+                    margin-right: 310px;
+                }
+            }
+        }
+        
+        &.layout-overlay-menu {
+            &.layout-wrapper-menu-active {                
+                .layout-main {
+                    margin-left: 65px;
+                }
+                
+                &.layout-rtl {
+                    .layout-main {
+                        margin-left: 0px;
+                        margin-right: 65px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .layout-wrapper {
+        .topbar {
+            #topbar-menu-button {
+                display: block;
+            }
+            
+            .topbar-menu {
+                position: absolute;
+                top: 60px;
+                right: 15px;
+                width: 250px;
+                -webkit-animation-duration: .5s;
+                -moz-animation-duration: .5s;
+                animation-duration: .5s;
+                display: none;
+                background-color: $topbarSubmenuBgColor;
+                list-style-type: none;
+                margin: 0;
+                padding: 8px 0;
+                @include overlay-content-shadow();
+                
+                > li {
+                    box-sizing: border-box;
+                    width: 100%;
+                    margin: 0;
+                    float: none;
+                    
+                    > a {
+                        font-size: $fontSize;
+                        width: 100%;
+                        display: block;
+                        box-sizing: border-box;
+                        color: $textColor;
+                        padding: $listItemPadding;
+                        position: relative;
+                        @include transition(background-color .3s);
+                        
+                        .topbar-icon {
+                            display: inline-block;
+                            vertical-align: middle;
+                            margin-right: 8px;
+                            font-size: 20px;
+                        }
+                        
+                        &:hover {
+                            background-color: $topbarSubmenuItemHoverBgColor;
+                            color: $textColor;
+                        }
+                        
+                        .topbar-item-name {
+                            display: inline-block;
+                            vertical-align: middle;
+                        }
+                                        
+                        .topbar-badge {
+                            position: absolute;
+                            right: 10px;
+                            top: 8px;
+                            padding: 2px 4px;
+                            display: block;
+                            font-size: 12px;
+                            line-height: 12px;
+                        }
+                    }
+                    
+                    > ul {
+                        display: none;
+                        list-style-type: none;
+                        padding: 0 0 0 18px;
+                        margin: 0;
+                        position: static;
+                        top: auto;
+                        left: auto;
+                        box-sizing: border-box;
+                        width: 100%;
+                        @include no-shadow();
+                        
+                        li {
+                            a {
+                                padding: $listItemPadding;
+                                display: block;
+                                width: 100%;
+                                box-sizing: border-box;
+                                
+                                span, img, .fa {
+                                    display: inline-block;
+                                    vertical-align: middle;
+                                }
+                                
+                                img {
+                                    width: 1.28571429em;
+                                    margin-right: 8px;
+                                }
+                                
+                                .fa {
+                                    margin-right: 8px;
+                                }
+                            }
+                        }
+                    }
+                    
+                    &.active-topmenuitem {
+
+                        
+                        > ul {
+                            display: block;
+                        }
+                    }
+                    
+                    &.profile-item {
+                        .profile-image {
+                            img {
+                                display: inline-block;
+                                vertical-align: middle;
+                                width: 24px;
+                                height: 24px;
+                                margin-right: 8px;
+                            }
+                        }
+                        
+                        .profile-info {
+                            .topbar-item-name {
+                                &.profile-name {
+                                    vertical-align: middle;
+                                    font-size: $fontSize;
+                                }
+                                
+                                &.profile-role {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                    
+                    &.search-item {
+                        text-align: center;
+                        
+                        .fa {
+                            color: $textColor;
+                            left: 14px;
+                            width: 20px;
+                        }
+                        
+                        label {
+                            display: none;
+                        }
+                        
+                        input {
+                            color: $textColor;
+                            border: 0 none;
+                            border-bottom: 1px solid $inputBorderColor;
+                            background: transparent;
+                            width: 90%;
+                            box-sizing: border-box;
+                            padding-left: 30px;
+                            padding-right: 2px;
+                        
+                            &.ui-state-hover {
+                                border-color: $inputBorderColor;
+                            }
+                            
+                            &:focus {
+                                border-color: $primaryColor;
+                                border-width: 0 0 2px 0;
+                            }
+                            
+                            &:focus ~ .fa {
+                                color: $primaryColor;
+                            }
+                        }
+                    }
+                }
+                
+                &.topbar-menu-visible {
+                    display: block;
+                }
+            }
+        }
+        
+        &.layout-wrapper-menu-active {
+            .layout-sidebar {
+                width: 310px;
+                
+                .layout-tabmenu {
+                    .layout-tabmenu-contents {
+                        display: block;
+                    }
+                }
+            }
+        }
+        
+        &.layout-rtl {
+            .topbar {
+                #topbar-menu-button {
+                    float: left;
+                    margin: 12px 0px 0px 20px;
+                }
+                
+                .topbar-menu {
+                    right: auto;
+                    left: 15px;
+                    margin: 0px;
+                    
+                    > li {
+                        margin: 0px;
+                        
+                        > a {
+                            .topbar-icon {
+                                margin-right: 0px;
+                                margin-left: 8px;
+                            }
+                            
+                            .topbar-badge {
+                                left: 10px;
+                            }
+                        }
+                        
+                        > ul {
+                            padding: 0px 18px 0px 0px;
+                        }
+                        
+                        &.profile-item {
+                            img {
+                                margin-right: 0;
+                            }
+                        }
+                    }
+                    
+                    > li.search-item {
+                        input {
+                            padding-left: 0px;
+                            padding-right: 30px;
+                        }
+                        
+                        .fa {
+                            left: auto;
+                            right: 12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 640px) {    
+    .layout-wrapper {
+        .topbar {    
+            .logo {
+                width: 40px;
+                padding-top: 20px;
+                
+                img {
+                    width: 30px;
+                    margin-top: -5px;
+                }
+            }
+        }
+        
+        .layout-sidebar {
+            width: 40px;
+            
+            .layout-tabmenu {                
+                .layout-tabmenu-nav {
+                    width: 40px;
+                    
+                    li {
+                        a {
+                            i {
+                                font-size: 20px;
+                            }
+                        }
+                        
+                        .layout-tabmenu-tooltip {
+                            left: 40px;
+                        }
+                        
+                        &.active-item {
+                            .layout-tabmenu-tooltip {
+                                left: 36px;
+                            }
+                        }
+                    }
+                }
+                
+                .layout-tabmenu-contents {
+                    left: 40px;
+                }
+            }
+        }
+        
+        &.layout-wrapper-menu-active {
+            .layout-sidebar {
+                width: 290px;
+            }
+        }
+        
+        .layout-main {
+            margin-left:40px;
+        }
+        
+        &.layout-rtl {
+            .layout-sidebar {
+                .layout-tabmenu {
+                    .layout-tabmenu-nav {
+                        li {
+                            .layout-tabmenu-tooltip {
+                                left: auto;
+                                right: 40px;
+
+                                .layout-tabmenu-tooltip-arrow {
+                                    left: auto;
+                                    right: 0px;
+                                    border-width: 5px 0px 5px 5px;
+                                    border-left-color: #424242;
+                                }
+                            }
+                            
+                            &.active-item {
+                                .layout-tabmenu-tooltip {
+                                    right: 36px;
+                                }
+                            }
+                        }
+                    }
+
+                    .layout-tabmenu-contents {
+                        left: auto;
+                        right: 40px;
+                    }
+                }
+            }
+            
+            .layout-main {
+                margin-left: 0px;
+                margin-right: 40px;
+            }
+        }
+    }
+}

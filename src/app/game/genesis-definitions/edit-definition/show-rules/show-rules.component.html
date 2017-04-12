@@ -1,0 +1,34 @@
+<div class="ui-g form-group" *ngIf="!editMode"> 
+    <div class="ui-g-12">
+        <div class="ui-g-11">
+        </div>
+        <div class="ui-g-1">
+            <button pButton type="button" class='green-btn' label="Add" (click)="addRule()"></button>
+        </div>
+    </div>
+    <div class="ui-g-12" *ngFor="let rule of editedDefinition.rules; let i = index; let last = last">
+        <div class="ui-g-1">
+            <button type="text" pButton  icon="ui-icon-arrow-upward" (click)="move(rule, true)" [disabled]="i === 0"></button>
+        </div>
+        <div class="ui-g-1">
+            <button type="text" pButton  icon="ui-icon-arrow-downward" (click)="move(rule, false)" [disabled]="last"></button>             
+        </div>
+        <div class="ui-g-3">
+            <span class="md-inputfield" *ngIf="ruleNames && ruleNames[rule.target]">
+                <input type="text" pInputText [(ngModel)]="ruleNames[rule.target]" [readonly]="true">
+            </span>
+        </div>
+        <div class="ui-g-5">
+            <span class="md-inputfield">
+                <input type="text" pInputText [(ngModel)]="rule.expression" [readonly]="true">
+            </span>
+        </div>
+        <div class="ui-g-1">
+           <button pButton type="button" class='green-btn' label="Edit" (click)="editRule(rule)"></button>
+        </div> 
+        <div class="ui-g-1">
+           <button pButton type="button" class='red-btn' label="Delete" (click)="deleteRule(rule)"></button>
+        </div>        
+    </div>
+</div>
+<app-edit-rule [editedDefinition]="editedDefinition" (onCompleted)="onCompletedChild($event)" [rule]="rule" [modules]="modules" *ngIf="editMode"></app-edit-rule>

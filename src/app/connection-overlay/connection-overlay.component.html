@@ -1,0 +1,6 @@
+<p-dialog header="Connecting..." [(visible)]="display" [closable]="false" modal="true">
+    Establishing real-time connection
+</p-dialog>
+<p-dialog header="Error occured" [(visible)]="displayWebApiError" [closable]="true" modal="true">
+    {{webApiError}}
+</p-dialog>

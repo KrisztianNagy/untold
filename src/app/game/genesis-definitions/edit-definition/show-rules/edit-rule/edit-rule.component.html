@@ -1,0 +1,44 @@
+<div class="ui-g form-group"> 
+    <div class="ui-g-12">
+        <div class="ui-g-8">
+        </div>
+        <div class="ui-g-2">
+            <button pButton type="button" class="green-btn" (click)="update()" label="Update" [disabled]="!selectedTargetDefinition"  ></button>
+        </div>
+        <div class="ui-g-2">
+            <button pButton type="button" class="blue-btn" (click)="cancel()" label="Return"></button>
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <div class="ui-g-6">
+             <app-entity-editor *ngIf="testEntity" [entity]="testEntity" (entityChanged)="updateTestEntity($event)"></app-entity-editor>
+        </div>
+        <div class="ui-g-6">
+            <div class="ui-g-12">
+                <app-expression-builder [editedDefinition]="editedDefinition" (onInsert)="insertBuilderScript($event)"></app-expression-builder>
+            </div>
+            <div class="ui-g-12">
+                <p-dropdown [options]="targetDefinitions" [(ngModel)]="selectedTargetDefinition" [autoWidth]="false" [readonly]="isReadOnly"></p-dropdown>
+            </div>
+             <div class="ui-g-12">             
+                    <textarea pInputTextarea #scriptTextArea (click)="getCaretPos(scriptTextArea)" (keyup)="getCaretPos(scriptTextArea)" [(ngModel)]="rule.expression" (keypress)="expressionChanged($event)"  autoResize="autoResize" style="width: 100%" placeholder="Insert script..."></textarea>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-3">
+                    Syntax:
+                </div>
+                <div class="ui-g-9">
+                    {{ result && result.ErrorMessage ? result.errorMessage : 'No syntax errors.'}}
+                </div>
+            </div>
+            <div class="ui-g-12">
+               <div class="ui-g-3">
+                    Test result:
+                </div>
+                <div class="ui-g-9">
+                    {{testResult ? testResult : ''}}
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>

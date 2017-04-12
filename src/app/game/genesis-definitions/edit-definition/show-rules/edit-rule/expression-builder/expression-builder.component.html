@@ -1,0 +1,81 @@
+<p-tabView>
+      <p-tabPanel header="Members">
+            <div class="ui-g form-group"> 
+                  <div class="ui-g-12">
+                        <p-dropdown [options]="simpleDefinitions" [(ngModel)]="selectedSimpleDefinition" [autoWidth]="false"></p-dropdown>
+                  </div>    
+                  <div class="ui-g-12">
+                        <span>Reads the definition value</span>
+                  </div>
+                  <div class="ui-g-12">
+                        <div class="ui-g-9">
+                        </div>            
+                        <div class="ui-g-3">
+                              <button pButton type="button" class="green-btn" (click)="insertMember()" label="Insert" [disabled]="!selectedSimpleDefinition" ></button>
+                        </div>                
+                  </div>  
+            </div>          
+      </p-tabPanel>
+      <p-tabPanel header="List Members">   
+            <div class="ui-g form-group">          
+                  <div class="ui-g-12">
+                        <p-dropdown [options]="listDefinitions" [(ngModel)]="selectedListDefinition" [autoWidth]="false"></p-dropdown>
+                  </div>    
+                  <div class="ui-g-12">
+                        <span>Reads the definition list</span>
+                  </div>
+                  <div class="ui-g-12">
+                        <div class="ui-g-9">
+                        </div>            
+                        <div class="ui-g-3">
+                              <button pButton type="button" class="green-btn" (click)="insertList()" label="Insert" [disabled]="!selectedListDefinition"></button>
+                        </div>                
+                  </div>
+            </div>
+      </p-tabPanel>
+      <p-tabPanel header="Functions">
+             <div class="ui-g form-group">          
+                  <div class="ui-g-12">
+                        <p-dropdown [options]="functions" [(ngModel)]="selectedFunction" [autoWidth]="false"></p-dropdown>
+                  </div>    
+                  <div class="ui-g-12">
+                        <span *ngIf="selectedFunction">{{selectedFunction.description}}</span>
+                  </div>
+                  <div class="ui-g-12">
+                        <div class="ui-g-9">
+                        </div>            
+                        <div class="ui-g-3">
+                              <button pButton type="button" class="green-btn" (click)="insertFunction()" label="Insert" [disabled]="!selectedFunction"></button>
+                        </div>                
+                  </div>
+            </div>
+      </p-tabPanel>
+      <p-tabPanel header="Tables">
+            <div class="ui-g form-group">          
+                  <div class="ui-g-12">
+                        <div class="ui-g-6">
+                              <p-dropdown [options]="modules" [(ngModel)]="selectedModule" (onChange)="onModuleSelect()"[autoWidth]="false"></p-dropdown>
+                        </div>
+                        <div class="ui-g-6">
+                              <p-dropdown [options]="tables" [(ngModel)]="selectedTable" (onChange)="onTableSelect()"[autoWidth]="false" [disabled]="!selectedModule"></p-dropdown>
+                        </div>
+                  </div>    
+                  <div class="ui-g-12">
+                         <div class="ui-g-6">
+                               <p-dropdown [options]="matchColumns" [(ngModel)]="selectedMatchColumn" [autoWidth]="false" [disabled]="!selectedTable || matchColumns.length === 1"></p-dropdown>
+                         </div>
+                          <div class="ui-g-6">
+                               <p-dropdown [options]="targetColumns" [(ngModel)]="selectedTargetColumn" [autoWidth]="false" [disabled]="!selectedTable || targetColumns.length === 1"></p-dropdown>
+                         </div>
+                  </div>
+                  <div class="ui-g-12">
+                        <div class="ui-g-9">
+                              <p-dropdown [options]="simpleDefinitions" [(ngModel)]="selectedSimpleDefinition" [autoWidth]="false"></p-dropdown>
+                        </div>            
+                        <div class="ui-g-3">
+                              <button pButton type="button" class="green-btn" (click)="insertTable()" label="Insert" [disabled]="!selectedMatchColumn ||! selectedTargetColumn"></button>
+                        </div>                
+                  </div>
+            </div>
+      </p-tabPanel>
+</p-tabView>

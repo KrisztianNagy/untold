@@ -1,0 +1,17 @@
+<a href="#" (click)="app.onTopbarItemClick($event,notifications)">
+    <i class="topbar-icon material-icons">notifications</i>
+    <span class="topbar-badge animated rubberBand" *ngIf="unread">{{unread}}</span>
+    <span class="topbar-item-name">Notifications</span>
+</a>
+<ul class="ultima-menu animated fadeInDown">
+    <li role="menuitem" *ngFor="let notification of notifications">
+        <a (click)="openActionPage(notification)">
+            <div [innerHtml]="notification.view"></div>
+        </a>
+    </li>  
+    <li role="menuitem">
+        <a (click)="openNotificationsPage()">
+            <span>...</span>
+        </a>
+    </li>    
+</ul>

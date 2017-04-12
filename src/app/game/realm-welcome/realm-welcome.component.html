@@ -1,0 +1,14 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card">
+            <h1>{{game.realm.name}}</h1>
+
+            <p>The owner of this realm is {{game.realm.owner.displayName}}.</p>
+            <p>Members online: {{onlineCount}} / {{memberCount}}</p>
+            <p>Custom things</p>
+            <div class="ui-g-3">
+                <button pButton type="button" class='red-btn' (click)="disconnect()" label="Disconnect" ></button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+.layout-wrapper {
+        
+    .footer {
+        padding: .5em;
+        
+        img {
+            width: 36px;
+            margin-right: 8px;
+            vertical-align: middle;
+            @include opacity(.6);
+        }
+        
+        span {
+            vertical-align: middle;
+        }
+        
+        a {
+            float: right;
+            margin-top: 4px;
+            font-size: $iconFontSize;
+            margin-left: 24px;
+            display: block;
+            color: $textSecondaryColor;
+        }
+        
+        .footer-content {
+            > div {
+                padding: 0;
+            }
+        }
+    }
+}

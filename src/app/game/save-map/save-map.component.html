@@ -1,0 +1,17 @@
+<div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <div class="ui-g form-group">
+          <div class="ui-g-12">
+              <span class="md-inputfield">
+                  <input type="text" pInputText [(ngModel)]="clientMap.name" [disabled]="busy">
+                  <label>Map name</label>
+              </span>
+          </div>
+          <div class="ui-g-12">
+              <div class="ui-g-3">
+                <button pButton type="button" class='green-btn' (click)='save()' [disabled]="busy" label="{{id ? 'Save' : 'Create'}}" ></button>
+              </div>
+          </div>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+<div class="card">
+  <h1>Edit Definition</h1> 
+  <div class="ui-g form-group" >                  
+      <div class="ui-g-12">
+          <div class="ui-g-4">
+              <span class="md-inputfield">
+                  <input type="text" pInputText [(ngModel)]="editedDefinitionDraft.name">
+                  <label>Definition name</label>
+              </span>
+          </div>
+          <div class="ui-g-4">            
+                <span class="md-inputfield">
+                    <input type="text" pInputText [(ngModel)]="memberFilterText">
+                    <label>Filter members</label>
+                </span>             
+          </div>
+          <div class="ui-g-2">
+              <button pButton type="button" class='green-btn' [disabled]="!editedDefinitionDraft.name || busy" (click)='save()' label="{{editedDefinitionDraft.definitionGuid ? 'Save' : 'Create'}}" ></button>
+          </div>
+          <div class="ui-g-2">
+              <button pButton type="button" class='blue-btn' (click)='cancel()' label="Return"></button>
+          </div>
+      </div>
+  </div>
+  <p-tabView>
+      <p-tabPanel header="Own members">
+          <div class="ui-g form-group" > 
+              <div class="ui-g-12">
+                  <div class="ui-g-4">
+                      <p-dropdown [options]="availableDataTypes" [(ngModel)]="selectedDataType"></p-dropdown>
+                  </div>
+                  <div class="ui-g-4">
+                      <span class="md-inputfield">
+                          <input type="text" pInputText [(ngModel)]="addMemberName" (change)="memberNameChanged($event)">
+                          <label>Inner definition name</label>
+                      </span>
+                  </div>
+                  <div class="ui-g-2">
+                      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="addedMemberIsCalculated" [disabled]="selectedDataType.dataType === 'Definition'"></p-checkbox>
+                  </div>
+                  <div class="ui-g-1">
+                      <p-checkbox label="Is list?" binary="true" [(ngModel)]="addedMemberIsList"></p-checkbox>
+                  </div>
+                  <div class="ui-g-1">
+                      <button pButton type="button" class='green-btn' label="Add" (click)="addMemberToDefinition()" [disabled]="!addMemberName"></button>
+                  </div>
+              </div>
+              <div class="ui-g-12" *ngFor="let member of editedDefinitionDraft.definitions | filtersDefinitionMembers: memberFilterText:true">
+                  <div class="ui-g-4">
+                  <span class="md-inputfield">
+                          <input type="text" pInputText [(ngModel)]="member.dataType" [disabled]="true">
+                          <label>Data type</label>
+                      </span>
+                  </div>
+                  <div class="ui-g-4">
+                      <span class="md-inputfield">
+                          <input type="text" pInputText [(ngModel)]="member.name">
+                          <label>Member name</label>
+                      </span>
+                  </div>
+                  <div class="ui-g-2">
+                      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="member.isCalculated" [disabled]="true"></p-checkbox>
+                  </div>
+                  <div class="ui-g-1">
+                      <p-checkbox label="Is list?" binary="true" [(ngModel)]="member.isList" [disabled]="true"></p-checkbox>
+                  </div>
+                  <div class="ui-g-1">
+                      <button pButton type="button" class='red-btn' label="Delete" *ngIf="!member.inherited" (click)="deleteMemberFromDefinition(member)"></button>
+                  </div>
+              </div>
+          </div>                        
+      </p-tabPanel>
+      <p-tabPanel header="Inherited members">
+          <div class="ui-g form-group" > 
+              <div class="ui-g-12" *ngFor="let member of editedDefinitionDraft.definitions | filtersDefinitionMembers: memberFilterText:false">
+                  <div class="ui-g-4">
+                      <span class="md-inputfield">
+                          <input type="text" pInputText [(ngModel)]="member.dataType" [disabled]="true">
+                          <label>Data type</label>
+                      </span>
+                  </div>
+                  <div class="ui-g-4">
+                      <span class="md-inputfield">
+                          <input type="text" pInputText [(ngModel)]="member.name" [disabled]="true">
+                          <label>Member name</label>
+                      </span>
+                  </div>
+                  <div class="ui-g-2">
+                      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="member.isCalculated" [disabled]="true"></p-checkbox>
+                  </div>
+                  <div class="ui-g-1">
+                      <p-checkbox label="Is list?" binary="true" [(ngModel)]="member.isList" [disabled]="true"></p-checkbox>
+                  </div>
+                  <div class="ui-g-1">
+                      
+                  </div>
+              </div>
+          </div>
+      </p-tabPanel>
+      <p-tabPanel header="Rules">
+          <app-show-rules [editedDefinition]="editedDefinition" (onCompleted)="onRuleCompleted($event)" [modules]="modules"></app-show-rules>
+      </p-tabPanel>
+  </p-tabView>
+</div>
+

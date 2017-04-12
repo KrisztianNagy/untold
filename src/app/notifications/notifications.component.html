@@ -1,0 +1,26 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card card-w-title">
+            <h1>My Notifications</h1>
+            <p-dataTable [value]="pagedNotifications.notifications" selectionMode="single" [(selection)]="selectedNotification" 
+                [paginator]="false" [rows]="10" [responsive]="true">
+                <header>List of Notifications</header>
+                <p-column styleClass="col-button">
+                  <ng-template pTemplate="header">
+                    Message
+                  </ng-template>
+                  <ng-template let-notification="rowData" pTemplate="body">
+                    <div [innerHtml]="notification.view">
+                    </div>
+                  </ng-template>
+                </p-column> 
+                <p-column field="created" header="Created"></p-column>               
+            </p-dataTable>
+            <div class="ui-g">              
+               <div class="ui-g-3">
+                <button pButton type="button" class='red-btn' [disabled]="!selectedNotification" (click)="deleteSelectedNotification()" label="Delete" ></button>
+              </div>
+            </div>
+        </div>
+    </div>    
+</div>

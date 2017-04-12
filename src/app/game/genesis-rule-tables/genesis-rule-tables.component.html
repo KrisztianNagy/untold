@@ -1,0 +1,156 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div *ngIf="importMode">
+            <app-rule-table-import-wizard [module]="selectedModule"></app-rule-table-import-wizard>
+        </div>
+        <div class="card" *ngIf="!importMode">
+            <h1>Rule tables</h1>     
+            <div *ngIf="!modules || !modules.length">
+                Please create a module first.
+            </div>
+            <div *ngIf="modules && modules.length && !selectedTable" class="ui-g">
+                <div class="ui-g-2">
+                    <p-dropdown [options]="modules"  [(ngModel)]="selectedModule" (onChange)="moduleChanged()"></p-dropdown>
+                </div>
+                <div class="ui-g-2">
+                      <button pButton type="button" class='green-btn' (click)="showEdit()" label="Create" ></button>
+                </div> 
+                <div class="ui-g-2">
+                      <button pButton type="button" class='blue-btn' (click)="showImport()" label="Import" ></button>
+                </div>               
+                <div class="ui-g-12">
+                    <p-dataTable [value]="selectedModule.tables" 
+                      [paginator]="false" [rows]="100" [responsive]="true">
+                      <p-column field="name" header="Name"></p-column>
+                      <p-column styleClass="col-button">
+                        <ng-template pTemplate="header">
+                          Edit
+                        </ng-template>
+                        <ng-template let-currtable="rowData" pTemplate="body">
+                          <button type="button" pButton (click)="showEdit(currtable)" class='green-btn' label="Edit rule"></button>
+                        </ng-template>
+                      </p-column>
+                      <p-column styleClass="col-button">
+                        <ng-template pTemplate="header">
+                          Delete
+                        </ng-template>
+                        <ng-template let-currtable="rowData" pTemplate="body">
+                          <button type="button" pButton (click)="deleteTable(currtable)" class='red-btn' label="Delete rule"></button>
+                        </ng-template>  
+                      </p-column>
+                      
+                            
+                    </p-dataTable>
+                </div>
+            </div>
+            <div *ngIf="modules && modules.length && selectedTable" class="ui-g">
+              <div class="ui-g form-group" >
+                <div class="ui-g-8">
+                  <span class="md-inputfield">
+                     <input type="text" pInputText [(ngModel)]="selectedTable.name">
+                      <label>Rule table name</label>
+                  </span>
+                </div>
+                <div class="ui-g-2">
+                    <button pButton type="button" class='green-btn' (click)="saveTable()" label="Save name" [disabled]="!selectedTable.name"></button>
+                </div>
+                
+                <div class="ui-g-2">
+                  <button pButton type="button" class='green-btn' (click)="hideEdit()" label="Return"></button>
+                </div>
+                <div class="ui-g-12" *ngIf="dataTable">
+                  <p-fieldset legend="Table actions" toggleable="true" >
+                      <div class="ui-g form-group" >
+                        <div class="ui-g-12">
+                          <div class="ui-g-3">
+                            <p-listbox *ngIf="columns.length" [options]="columns" [(ngModel)]="selectedColumn" (onChange)="selectColumn($event)"></p-listbox>
+                          </div> 
+                          <div class="ui-g-9">
+                            <div class="ui-g-12">
+                              <div class="ui-g-5">
+                                <span class="md-inputfield">
+                                  <input type="text" pInputText [(ngModel)]="renameColumnName">
+                                <label>Rename column</label>
+                              </span>
+                              </div>
+                              <div class="ui-g-1">
+                              </div>
+                              <div class="ui-g-4">
+                                <span class="md-inputfield">
+                                  <input type="text" pInputText [(ngModel)]="addColumnName"/>
+                                  <label>Column name</label>
+                                </span>
+                              </div>
+                              <div class="ui-g-2">
+                                <h3 class="first">Delete row?</h3>
+                              </div>
+                            </div>
+                            <div class="ui-g-12">
+                              <div class="ui-g-5">
+                                <button pButton type="button" class='green-btn' (click)="saveColumnName()" label="Save name" [disabled]="!selectedColumn"></button>
+                              </div>
+                              <div class="ui-g-1">
+                              </div>
+                              <div class="ui-g-4">
+                                <p-dropdown [options]="columnTypes" [(ngModel)]="selectedColumnType"></p-dropdown>
+                              </div>   
+                              <div class="ui-g-2">
+                                <p-toggleButton [(ngModel)]="isDeleteVisible" onLabel="Visible" offLabel="Hidden" onIcon="ui-icon-check-box" offIcon="ui-icon-check-box-outline-blank" (onChange)="deleteVisibleChanged($event)"></p-toggleButton>
+                              </div>                       
+                            </div>
+                            <div class="ui-g-12">
+                              <div class="ui-g-5">
+                                <button pButton type="button" class='red-btn' (click)="removeColumn()" label="Delete column" [disabled]="!selectedColumn"></button>
+                              </div>
+                              <div class="ui-g-1">
+                              </div>
+                              <div class="ui-g-4">
+                                  <button type="button" pButton label="Add Column" (click)="addColumn()"  icon="ui-icon-add" [disabled]="!addColumnName"></button>
+                              </div>
+                              <div>
+                               
+                              </div>
+                            </div>
+                          </div>                        
+                              
+                        </div>
+                      </div>
+                  </p-fieldset>
+                </div>
+                <div class="ui-g-12" *ngIf="dataTable">                  
+                  <p-dataTable *ngIf="dataTable.columns.length" [value]="dataTable.rows" [editable]="true" reorderableColumns="true" #dt (onEditComplete)="editComplete($event)" (onColReorder)="colReorder($event)">
+                    <footer>
+                      <div class="ui-g">
+                        <div class="ui-g-2">
+                              <button pButton type="button" class='green-btn' (click)="addRow()" label="Add row" [disabled]="!selectedTable.name"></button>
+                        </div>
+                        <div class="ui-g-8">
+                        </div>
+                        <div class="ui-g-2">
+                           <button type="button" pButton icon="ui-icon-download" iconPos="left" label="CSV" (click)="exportCsv()"></button>
+                        </div>
+                      </div>
+                      </footer>                     
+                    <p-column *ngFor="let col of dataTable.columns |filtersRuleTableColumns" [field]="'c' + col.id" [header]="col.name" [editable]="col.type!='bool'"  (onColReorder)="colReorder($event)">
+                       <ng-template pTemplate="header" *ngIf="col.type=='bool'">
+                          {{col.name}}
+                      </ng-template>
+                      <ng-template let-cell="rowData" pTemplate="body" *ngIf="col.type=='bool'">
+                        <p-checkbox name="'groupname' + {{index}} + '-' + {{cell.RowKey}}" [(ngModel)]="cell['c' + col.id]"  binary="true" (onChange)="checkboxChanged($event, cell)"></p-checkbox>
+                      </ng-template>
+                    </p-column>
+                    <p-column styleClass="col-button" *ngIf="isDeleteVisible">
+                      <ng-template pTemplate="header">
+                          Delete
+                      </ng-template>
+                      <ng-template let-cell="rowData" pTemplate="body">
+                          <button type="button" pButton (click)="deleteRow(cell)" icon="ui-icon-delete-forever"></button>
+                      </ng-template>
+                  </p-column>
+                  </p-dataTable>
+                </div>
+                     
+            </div>
+        </div>
+    </div>    
+</div>

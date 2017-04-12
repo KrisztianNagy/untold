@@ -1,0 +1,527 @@
+.dashboard {
+    
+    .card {
+        height: 100%;
+    }
+    
+    .overview-box {
+        padding: 0 !important; 
+        text-align: left;
+        overflow: hidden;
+        margin-bottom: 0px !important;
+        position: relative;
+        -webkit-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        -moz-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        min-height: 100px;
+                
+        .overview-box-name {
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            margin: 8px 0 0 8px;
+            color: #ffffff;
+            @include opacity(.8);
+        }
+        
+        .overview-box-count {
+            color: #ffffff;
+            margin: -36px 0 0 8px;
+            font-size: 24px;
+            display: block;
+            font-weight: bold;
+        }
+
+        .overview-box-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.12);
+            @include border-radius($borderRadius);
+            padding: 2px 4px;
+            color: #ffffff;
+        }
+        
+        img {
+            position:absolute;
+            bottom:0px;
+        }
+        
+        &.overview-box-1 {            
+            background: linear-gradient(229deg, #fd9a77, #fb827a);
+        }
+        
+        &.overview-box-2 {            
+            background: linear-gradient(229deg, #8edead, #43c6ac);
+        }
+
+        &.overview-box-3 {            
+            background: linear-gradient(248deg, #348ac7, #7474bf);
+        }
+
+        &.overview-box-4 {            
+            background: linear-gradient(67deg, #f15f79, #b24592);
+        }
+    }
+    
+    .task-list {
+        overflow: hidden;
+        
+        > .ui-panel {
+            min-height: 360px;
+        }
+        
+        .ui-panel-content {
+            padding: 0px !important;
+        }
+        
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            
+            li {
+                padding: 10px 14px;
+                border-bottom: 1px solid $dividerColor;
+                
+                &:last-child {
+                    border-bottom: 0 none;
+                }
+            }
+            
+            .ui-chkbox {
+                vertical-align: middle;
+                margin-right: 5px;
+            }
+            
+            .task-name {
+                vertical-align: middle;
+            }
+            
+            i {
+                color: $textSecondaryColor;
+                float: right;
+                font-size: 20px;
+            }
+        } 
+    }
+    
+    .contact-form {
+        overflow: hidden;
+        
+        .ui-panel {
+            min-height: 360px;
+        }
+        
+        .ui-g-12 {
+            padding: 20px 10px;
+        }
+        
+        .ui-button {
+            margin-top: 20px;
+        }
+    }
+    
+    .contacts {
+        overflow: hidden;
+        
+        > .ui-panel {
+            min-height: 360px;
+        }
+        
+        .ui-panel-content{
+            padding: 0px !important;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            
+            li {
+                border-bottom: 1px solid $dividerColor;
+                padding: 9px;
+                width: 100%;
+                box-sizing: border-box;
+                text-decoration: none;
+                position: relative;
+                display: block;
+                @include border-radius(2px);
+                @include transition(background-color .2s);
+                                
+                img {
+                    float: left;
+                    margin-right: 8px;
+                }
+                
+                .contact-info {
+                    float: left;
+                    
+                    .name {
+                        display: block;
+                        margin-top: 4px;
+                        font-size: 14px;
+                    }
+                    
+                    .location {
+                        margin-top: 4px;
+                        display: block;
+                        font-size: 12px;
+                        color: $textSecondaryColor;
+                    }
+                }
+                
+                .contact-actions {
+                    float: right;
+                    padding-top:12px;
+                    
+                    .connection-status {
+                        color: #ffffff;
+                        padding: 2px 3px;
+                        
+                        &.online {
+                            background-color: #AED581;
+                        }
+                        
+                        &.offline {
+                            background-color: #E57373;
+                        }
+                    }
+                    
+                    .fa {
+                        color: $textSecondaryColor;
+                        margin-left: 5px;
+                    }
+                }
+                
+                &:last-child {
+                    border: 0;
+                }
+            }
+        }
+    }
+    
+    .activity-feed {
+        text-align: center;
+        
+        h3 {
+            color: #525262;
+            margin: 20px 0 5px 0;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        p {
+            color: $textSecondaryColor;
+            margin: 0;
+            font-size: 13px;
+        }
+        
+        .ui-g-12 {
+            padding: 20px;
+            
+            span {
+                display: block;
+                font-weight: bold;
+                color: #6a6a7d;
+            }
+        }
+        
+        .knob {
+            width: 140px;
+            height: 140px;
+            line-height: 120px;
+            margin-top: 20px;
+            font-size: 30px;
+            color: $textSecondaryColor;
+            @include border-radius(50%);
+            display: inline-block;
+            
+            &.income {
+                border: 10px solid #1976d2;
+                border-left-color: lighten(#2196F3,30%);
+            }
+            
+            &.tax {
+                border: 10px solid #009688;
+                border-left-color: #80CBC4;
+            }
+            
+            &.invoice {
+                border: 10px solid #e91e63;
+                border-left-color: #F8BBD0;
+            }
+            
+            &.expense {
+                border: 10px solid #673ab7;
+                border-left-color: #B39DDB;
+            }
+        }
+    }
+    
+    .activity-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        
+        li {
+            border-bottom: 1px solid $dividerColor;
+            padding: 15px 0 9px 9px;
+            
+            .count {
+                display: inline-block;
+                font-size: 24px;
+                color: #ffffff;
+                background-color: #03A9F4;
+                font-weight: bold;
+                padding: 6px;
+                @include border-radius(2px);
+            }
+            
+            &:first-child {
+                border-top: 1px solid $dividerColor;
+            }
+            
+            &:last-child {
+                border: 0;
+            }
+
+            .ui-g-6:first-child {
+                font-size: 18px;
+                padding-left: 0;
+            }
+            
+            .ui-g-6:last-child {
+                text-align: right;
+                color: $textSecondaryColor;
+            }
+        }
+    }
+    
+    .user-card {
+        border:1px solid #c7c7c7;
+        @include border-radius($borderRadius);
+        
+        .user-card-header {
+            height: 100px;
+            overflow: hidden;
+            background-color: #545b61;
+            
+            img {
+                width: 100%;
+            }
+        }
+        
+        .user-card-content {
+            height: 340px;
+            background-color: #ffffff;
+            
+            img {
+                margin: -40px 0 0 24px;
+            }
+            
+            .ui-button {
+                float: right;
+                width: 48px;
+                height: 48px;
+                margin: -24px 24px 0 0;
+            }
+            
+            .user-card-name {
+                font-size: 20px;
+                color: #ffffff;
+                position: relative;
+                top: -70px;
+                margin-left: 110px;
+                font-weight: 700;
+            }
+                        
+            .user-detail {
+                text-align: left;
+                
+                ul {
+                   padding: 0px 0 32px 0;
+                   margin: 0;
+                   list-style-type: none;
+                    
+                    li {
+                        padding: 16px 24px;
+                        border-top: 1px solid $dividerColor;
+                        
+                        &:last-child {
+                            border-bottom: 1px solid $dividerColor;
+                        }
+                        
+                        i {
+                            font-size: 24px;
+                            margin-right: 8px;
+                            width: 32px;
+                            vertical-align: middle;
+                            color: $textSecondaryColor;
+                        }
+                        
+                        .project-title {
+                            font-weight: 700;
+                            margin-right: 8px;
+                        }
+                        
+                        .project-detail {
+                            color: $textSecondaryColor;
+                        }
+                        
+                        .project-progressbar {
+                            display: inline-block;
+                            width: 100px;
+                            background-color: #545b61;
+                            float: right;
+                            margin-top: 12px;
+                            
+                            .project-progressbar-value {
+                                background-color: $accentColor;
+                                height: 4px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    .chat {
+        .ui-panel-content {
+            padding: 0 !important;
+        }
+        ul {
+            padding: 12px;
+            margin: 0;
+            list-style-type: none;
+            
+            li {
+                padding: 6px 0;
+                img {
+                    width: 36px;
+                    float: left;
+                }
+                
+                span {
+                    padding: 6px 12px;
+                    float: left;
+                    display: inline-block;
+                    margin: 4px 0;
+                    @include border-radius(10px);
+                }
+                
+                &.message-from {
+                    img, span {
+                        float: left;
+                    }
+                    
+                    img {
+                        margin-right: 8px;
+                    }
+                    
+                    span {
+                        background-color: $primaryTextColor;
+                        color: #000000;
+                    }
+                }
+                
+                &.message-own {
+                    img, span {
+                        float: right;
+                    }
+                    
+                    img {
+                        margin-left: 8px;
+                    }
+                    
+                    span {
+                        background: $accentLightColor;
+                        color: #000000;
+                    }
+                }
+            }
+        }
+        
+        .new-message {
+            height: 40px;
+            border-top: 1px solid #dce2e7;
+            color: #afafc0;
+            
+            .message-attachment {
+                display: inline-block;
+                border-right: 1px solid #dce2e7;
+                width: 40px;
+                line-height: 40px;
+                height: 100%;
+                text-align: center;
+                
+                i {
+                    line-height: inherit;
+                    font-size: 24px;
+                }
+            }
+            
+            .message-input {
+                position: relative;
+                top: -4px;
+                width: calc(100% - 100px);
+                display: inline-block;
+                
+                input {
+                    border: 0 none;
+                    font-size: 14px;
+                    width: 100%;
+                    background-color: transparent;
+                    outline: 0 none;
+                    color: $textSecondaryColor;
+                }
+            }
+        }
+    }
+    
+    .timeline {
+        height: 100%;
+        box-sizing: border-box;
+        
+        > .ui-g {
+            .ui-g-3 {
+                font-size: 14px;
+                position: relative;
+                border-right: 1px solid #bdbdbd;
+                
+                i {
+                    background-color: #ffffff;
+                    font-size: 24px;
+                    position: absolute;
+                    top: 6px;
+                    right: -12px;
+                }
+            }
+            
+            .ui-g-9 {
+                padding-left: 1.5em;
+                .event-owner {
+                    
+                }
+                
+                .event-text {
+                    color: $textSecondaryColor;
+                    font-size: 14px;
+                    display: block;
+                    padding-bottom: 20px;
+                }
+                
+                .event-content {
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }  
+    
+    .chart-panel .ui-panel-content {
+        overflow: auto;
+    }
+}

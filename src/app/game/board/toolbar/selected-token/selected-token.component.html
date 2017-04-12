@@ -1,0 +1,13 @@
+<p-panel *ngIf="selectedToken && selectedToken.id">
+    <header>
+        <div class="ui-helper-clearfix">
+            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{selectedToken.image.fileName}}</span>
+            
+            <div style="float: right">
+                <button pButton type="text" (click)="move(true)" icon="ui-icon-chevron-left"></button>
+                <button pButton type="text" (click)="move(false)" icon="ui-icon-chevron-right"></button>
+            </div>
+        </div>
+    </header>
+   Salalala
+</p-panel>

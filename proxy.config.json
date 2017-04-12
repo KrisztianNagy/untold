@@ -1,0 +1,26 @@
+{
+  "/token": {
+    "target": "http://untold.azurewebsites.net",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true    
+  },
+  "/api/*": {
+    "target": "http://untold.azurewebsites.net",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true    
+  },
+  "/signalr": {
+    "target": "http://untold.azurewebsites.net",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true    
+  },
+  "/signalr/hubs": {
+    "target": "http://untold.azurewebsites.net",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true    
+  }  
+}

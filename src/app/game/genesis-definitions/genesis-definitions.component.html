@@ -1,0 +1,35 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card" *ngIf="!editedDefinition || !createVisible">
+            <h1>Definitions</h1>     
+            <div *ngIf="!modules || !modules.length">
+                Please create a module first.
+            </div>
+            <div *ngIf="modules && modules.length" class="ui-g">
+                    <div class="ui-g-2">
+                        <p-dropdown [options]="modules"  [(ngModel)]="selectedModule" (onChange)="moduleChanged()"></p-dropdown>
+                    </div>
+                    <div class="ui-g-2">
+                         <button pButton type="button" class='green-btn' (click)="createEntity(selectedNode)" label="Create entity" [disabled]="!selectedNode"></button>
+                    </div>
+                    <div class="ui-g-2">
+                         <button pButton type="button" class='green-btn' (click)="showEdit()" label="Create root definition" ></button>
+                    </div>
+                    <div class="ui-g-2">
+                        <button pButton type="button" class='green-btn' (click)="showEdit(null, selectedNode)" label="Edit" [disabled]="!selectedNode" ></button>
+                    </div>
+                    <div class="ui-g-2">
+                        <button pButton type="button" class='green-btn' (click)="showEdit(selectedNode)" label="Add child definition" [disabled]="!selectedNode" ></button>
+                    </div>                    
+                    <div class="ui-g-2">
+                        <button pButton type="button" class='red-btn' (click)="deleteNode(selectedNode)" label="Delete" [disabled]="!selectedNode"></button>
+                    </div>
+                    <div class="ui-g-12">
+                        <p-tree [value]="definitions" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)" (onNodeExpand)="loadNode($event)"></p-tree>
+                    </div>
+            </div>
+        </div>
+        <app-edit-definition [editedDefinition]="editedDefinition" (onSaved)="onSaved($event)" [modules]="modules" *ngIf="editedDefinition && createVisible">
+        </app-edit-definition>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="ui-g ui-fluid">
+    <div class="ui-g-12" *ngIf="token">
+      <div class="ui-g form-group">
+          <div class="ui-g8" *ngIf="token"> 
+              <span class="md-inputfield">
+                  <p-autoComplete [(ngModel)]="token.owner" [suggestions]="userResults" (onSelect)="saveToken()" (completeMethod)="searchMember($event)" [multiple]="false" field="userName"></p-autoComplete>
+                  <label>Owner</label>
+              </span>
+          </div>
+          <div class="ui-g4" *ngIf="token"> 
+            <button pButton type="button" icon="ui-icon-check" iconPos="left" (click)="saveToken()" ></button>
+          </div>
+      </div>
+    </div>
+</div>

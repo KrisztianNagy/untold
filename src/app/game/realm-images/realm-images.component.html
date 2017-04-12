@@ -1,0 +1,21 @@
+<div class="ui-g" *ngIf="game">
+    <div class="ui-g-12">
+        <div class="card">
+            <h1>Images</h1>
+              <p-fileUpload name="myfile[]" url="/api/file" 
+                accept="image/*" (onUpload)="loadImages(1, $event)"></p-fileUpload>
+
+              <p-dataGrid [value]="images" [paginator]="true" [rows]="9" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords">
+                  <ng-template let-image>                   
+                    <div style="padding:3px" class="ui-g-12 ui-md-4">
+                        <p-panel [style]="{'text-align':'center'}" [header]="image.fileName">
+                            <img [src]="image.fileSmallPath">
+                            <hr class="ui-widget-content" style="border-top:0">
+                            <i class="fa ui-icon-delete-forever" (click)="delete(image)" style="cursor:pointer"></i>
+                        </p-panel>
+                    </div>
+                  </ng-template>
+              </p-dataGrid> 
+        </div>
+    </div>
+</div>

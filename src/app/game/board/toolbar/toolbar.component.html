@@ -1,0 +1,32 @@
+<p-toolbar>
+    <div class="ui-toolbar-group-left">
+        <p-dropdown *ngIf="this.game.realm.isCurrentUserOwner" [options]="layers"  [(ngModel)]="selectedLayer" (onChange)="layerChanged()"></p-dropdown>
+
+        <button type="text" pButton  [disabled]="!interaction || interaction.cursor === 'select'" icon="ui-icon-near-me" (click)="changeInteraction(null, 'select')"></button>
+        <button type="text" pButton  [disabled]="!interaction || interaction.cursor === 'free'" icon="ui-icon-pan-tool" (click)="changeInteraction(null, 'free')"></button>
+        <button type="text" pButton  icon="ui-icon-zoom-in" (click)="zoom(0.1)"></button>
+        <button type="text" pButton  icon="ui-icon-zoom-out" (click)="zoom(-0.1)"></button>
+
+    </div>
+    
+    <div class="ui-toolbar-group-right">
+         <p-dialog header="Drag image to board"  [visible]="visibleDialog ==='all-images'" (onAfterHide)="onCloseDialog(false)">
+            <app-entity-list></app-entity-list>
+        </p-dialog>
+         
+         <p-dialog header="All Tokens" [visible]="visibleDialog==='all-token'" (onAfterHide)="onCloseDialog(false)">
+            Hah2!
+        </p-dialog>
+         <p-dialog header="Edit token"  [visible]="visibleDialog ==='edit-token'" (onAfterHide)="onCloseDialog(true)" minWidth="400" minHeight="400">
+            <app-edit-token></app-edit-token>
+        </p-dialog>
+        
+        <button type="text" [disabled]="visibleDialog==='all-token'" pButton  icon="ui-icon-people" (click)="openDialog('all-token')"></button>
+        <button type="text" [disabled]="!selectedToken || !selectedToken.id || visibleDialog ==='select-token'" pButton  icon="ui-icon-person" (click)="openDialog('select-token')"></button>
+        <button type="text" [disabled]="!selectedToken || !selectedToken.id || visibleDialog ==='edit-token'" *ngIf="this.game.realm.isCurrentUserOwner" pButton  icon="ui-icon-edit" (click)="openDialog('edit-token')"></button>
+        <button type="text" [disabled]="visibleDialog==='all-images'" *ngIf="this.game.realm.isCurrentUserOwner" pButton  icon="ui-icon-image" (click)="openDialog('all-images')"></button>
+    </div>
+</p-toolbar>
+<p-dialog header="Selected Token"  *ngIf="visibleDialog ==='select-token'" [visible]="visibleDialog ==='select-token'" (onAfterHide)="onCloseDialog(false)" width="400" responsive="false">
+    <app-selected-token></app-selected-token>
+</p-dialog>
