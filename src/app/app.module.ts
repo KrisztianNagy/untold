@@ -163,6 +163,15 @@ import { EntityEditorComponent } from './game/genesis-entities/entity-editor/ent
 import { CreateEntityComponent } from './game/genesis-entities/create-entity/create-entity.component';
 // tslint:disable-next-line:max-line-length
 import { ExpressionBuilderComponent } from './game/genesis-definitions/edit-definition/show-rules/edit-rule/expression-builder/expression-builder.component';
+import { HomeSideBarComponent } from './side-bar/home-side-bar/home-side-bar.component';
+import { TemplateSideBarComponent } from './side-bar/template-side-bar/template-side-bar.component';
+import { DefinitionSideBarComponent } from './side-bar/definition-side-bar/definition-side-bar.component';
+import { ModuleSideBarComponent } from './side-bar/module-side-bar/module-side-bar.component';
+import { EntitySideBarComponent } from './side-bar/entity-side-bar/entity-side-bar.component';
+import { ImageSideBarComponent } from './side-bar/image-side-bar/image-side-bar.component';
+import { MapSideBarComponent } from './side-bar/map-side-bar/map-side-bar.component';
+import { RuleSideBarComponent } from './side-bar/rule-side-bar/rule-side-bar.component';
+import { BoardSideBarComponent } from './side-bar/board-side-bar/board-side-bar.component';
 
 @NgModule({
     imports: [
@@ -279,7 +288,16 @@ import { ExpressionBuilderComponent } from './game/genesis-definitions/edit-defi
     FooterComponent,
     EntityEditorComponent,
     ExpressionBuilderComponent,
-    CreateEntityComponent
+    CreateEntityComponent,
+    HomeSideBarComponent,
+    TemplateSideBarComponent,
+    DefinitionSideBarComponent,
+    ModuleSideBarComponent,
+    EntitySideBarComponent,
+    ImageSideBarComponent,
+    MapSideBarComponent,
+    RuleSideBarComponent,
+    BoardSideBarComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

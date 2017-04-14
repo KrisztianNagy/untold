@@ -69,211 +69,85 @@
         <div class="layout-tabmenu-contents">
             <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 0}">
                 <div class="layout-submenu-title clearfix">
-                    <span>Features</span>
+                    <span>Home</span>
                     <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
                 </div>
                 <app-sidebarTabContent>
-                    <app-menu></app-menu>
+                    <app-home-side-bar></app-home-side-bar>
                 </app-sidebarTabContent>
             </div>
             <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 1}">
                 <div class="layout-submenu-title clearfix">
-                    <span>Inbox</span>
+                    <span>Modules</span>
                     <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
                 </div>
                 <app-sidebarTabContent>
-                    <div class="inbox-tab">
-                        <ul>
-                            <li class="clearfix">
-                                <img src="assets/layout/images/avatar1.png" alt="" width="45">
-                                <span class="name">Joshua Williams</span>
-                                <span class="message">Reports attached</span>
-                            </li>
-                            <li class="clearfix">
-                                <img src="assets/layout/images/avatar1.png" alt="" width="45">
-                                <span class="name">Joshua Williams</span>
-                                <span class="message">About the meeting</span>
-                            </li>
-                            <li class="clearfix">
-                                <img src="assets/layout/images/avatar2.png" alt="" width="45">
-                                <span class="name">Emily Clark</span>
-                                <span class="message">TODO Update</span>
-                            </li>
-                            <li class="clearfix">
-                                <img src="assets/layout/images/avatar3.png" alt="" width="45">
-                                <span class="name">Tim Johnson</span>
-                                <span class="message">Expense Reports</span>
-                            </li>
-                            <li class="clearfix">
-                                <img src="assets/layout/images/avatar4.png" alt="" width="45">
-                                <span class="name">David Stark</span>
-                                <span class="message">Rating Reviews</span>
-                            </li>
-                        </ul>
-                        <div class="inbox-labels">
-                            <span>Labels</span>
-                            <ul>
-                                <li class="clearfix">
-                                    <span class="inbox-label">Work</span>
-                                    <span class="inbox-label-badge">4</span>
-                                </li>
-                                <li class="clearfix">
-                                    <span class="inbox-label">Personel</span>
-                                    <span class="inbox-label-badge">2</span>
-                                </li>
-                                <li class="clearfix">
-                                    <span class="inbox-label">Shared</span>
-                                    <span class="inbox-label-badge">3</span>
-                                </li>
-                                <li class="clearfix">
-                                    <span class="inbox-label">General</span>
-                                    <span class="inbox-label-badge">5</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                     <app-module-side-bar></app-module-side-bar>
                 </app-sidebarTabContent>
             </div>
             <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 2}">
                 <div class="layout-submenu-title clearfix">
-                    <span>Calendar</span>
+                    <span>Definitions</span>
                     <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
                 </div>
                 <app-sidebarTabContent>
-                    <div class="calendar-tab">
-                        <ul>
-                            <li class="clearfix">
-                                <div class="calendar-event-date">
-                                    <span>21</span>
-                                    <span>OCT</span>
-                                </div>
-                                <div class="calendar-event-detail">
-                                    <span class="calendar-event-title">Project Meeting</span>
-                                    <i class="material-icons">place</i>
-                                    <span class="calendar-event-location">Chicago</span>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="calendar-event-date">
-                                    <span>13</span>
-                                    <span>NOV</span>
-                                </div>
-                                <div class="calendar-event-detail">
-                                    <span class="calendar-event-title">Presentation 1</span>
-                                    <i class="material-icons">place</i>
-                                    <span class="calendar-event-location">New York</span>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="calendar-event-date">
-                                    <span>01</span>
-                                    <span>DEC</span>
-                                </div>
-                                <div class="calendar-event-detail">
-                                    <span class="calendar-event-title">Presentation 2</span>
-                                    <i class="material-icons">place</i>
-                                    <span class="calendar-event-location">New York</span>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="calendar-event-date">
-                                    <span>25</span>
-                                    <span>DEC</span>
-                                </div>
-                                <div class="calendar-event-detail">
-                                    <span class="calendar-event-title">New Year Party</span>
-                                    <i class="material-icons">place</i>
-                                    <span class="calendar-event-location">San Francisco</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                   <app-definition-side-bar></app-definition-side-bar>
                 </app-sidebarTabContent>
             </div>
             <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 3}">
                 <div class="layout-submenu-title clearfix">
-                    <span>Projects</span>
+                    <span>Templates</span>
                     <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
                 </div>
                 <app-sidebarTabContent>
-                    <div class="projects-tab">
-                        <ul>
-                            <li class="clearfix">
-                                <i class="material-icons">playlist_add_check</i>
-                                <span class="project-title">Current Tasks</span>
-                                <span>3 open, 4 closed</span>
-                                <div class="project-progressbar">
-                                    <div class="project-progressbar-value" style="width: 50%"></div>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <i class="material-icons">videocam</i>
-                                <span class="project-title">Latest Videos</span>
-                                <span>12 new, 2 subscribers</span>
-                                <div class="project-progressbar">
-                                    <div class="project-progressbar-value" style="width: 20%"></div>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <i class="material-icons">message</i>
-                                <span class="project-title">Unread Posts</span>
-                                <span>24 new messages</span>
-                                <div class="project-progressbar">
-                                    <div class="project-progressbar-value" style="width: 65%"></div>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <i class="material-icons">favorite</i>
-                                <span class="project-title">Favorite Contacts</span>
-                                <span>8 total, 4 approved</span>
-                                <div class="project-progressbar">
-                                    <div class="project-progressbar-value" style="width: 80%"></div>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <i class="material-icons">verified_user</i>
-                                <span class="project-title">Verified Users</span>
-                                <span>90 total, 45 pending</span>
-                                <div class="project-progressbar">
-                                    <div class="project-progressbar-value" style="width: 90%"></div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                   <app-template-side-bar></app-template-side-bar>
                 </app-sidebarTabContent>
             </div>
             <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 4}">
                 <div class="layout-submenu-title clearfix">
-                    <span>Team</span>
+                    <span>Entities</span>
                     <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
                 </div>
                 <app-sidebarTabContent>
-                    <div class="team-tab">
-                        <ul>
-                            <li class="clearfix">
-                                <img src="assets/layout/images/avatar1.png" alt="" width="45">
-                                <span class="name">Joshua Williams</span>
-                                <span class="location">New York, USA</span>
-                            </li>
-                            <li class="clearfix">
-                                <img src="assets/layout/images/avatar2.png" alt="" width="45">
-                                <span class="name">Jennifer Clarkson</span>
-                                <span class="location">Paris, France</span>
-                            </li>
-                            <li class="clearfix">
-                                <img src="assets/layout/images/avatar3.png" alt="" width="45">
-                                <span class="name">Tim Johnson</span>
-                                <span class="location">London, United Kingdom</span>
-                            </li>
-                            <li class="clearfix">
-                                <img src="assets/layout/images/avatar4.png" alt="" width="45">
-                                <span class="name">David Stark</span>
-                                <span class="location">San Francisco, USA</span>
-                            </li>
-                        </ul>
-                    </div>
+                   <app-entity-side-bar></app-entity-side-bar>
                 </app-sidebarTabContent>
             </div>
+            <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 5}">
+                <div class="layout-submenu-title clearfix">
+                    <span>Tables</span>
+                    <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
+                </div>
+                <app-sidebarTabContent>
+                   <app-rule-side-bar></app-rule-side-bar>
+                </app-sidebarTabContent>
+            </div>
+            <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 6}">
+                <div class="layout-submenu-title clearfix">
+                    <span>Images</span>
+                    <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
+                </div>
+                <app-sidebarTabContent>
+                   <app-image-side-bar></app-image-side-bar>
+                </app-sidebarTabContent>
+            </div>
+            <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 7}">
+                <div class="layout-submenu-title clearfix">
+                    <span>Maps</span>
+                    <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
+                </div>
+                <app-sidebarTabContent>
+                   <app-map-side-bar></app-map-side-bar>
+                </app-sidebarTabContent>
+            </div>
+            <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 8}">
+                <div class="layout-submenu-title clearfix">
+                    <span>Board</span>
+                    <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
+                </div>
+                <app-sidebarTabContent>
+                   <app-board-side-bar></app-board-side-bar>
+                </app-sidebarTabContent>
+            </div>            
         </div>
     </div>
 </div>
