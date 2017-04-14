@@ -159,8 +159,6 @@ import { EditRuleComponent } from './game/genesis-definitions/edit-definition/sh
 import { ShowRulesComponent } from './game/genesis-definitions/edit-definition/show-rules/show-rules.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { FooterComponent } from './footer/footer.component';
-import { MenuComponent } from './menu/menu.component';
-import { SubMenuComponent } from './menu/sub-menu/sub-menu.component';
 import { EntityEditorComponent } from './game/genesis-entities/entity-editor/entity-editor.component';
 import { CreateEntityComponent } from './game/genesis-entities/create-entity/create-entity.component';
 // tslint:disable-next-line:max-line-length
@@ -254,7 +252,6 @@ import { ExpressionBuilderComponent } from './game/genesis-definitions/edit-defi
     WallDrawingComponent,
     MyRealmsComponent,
     SaveRealmComponent,
-    MenuComponent,
     RealmWelcomeComponent,
     GenesisModulesComponent,
     GenesisDefinitionsComponent,
@@ -280,8 +277,6 @@ import { ExpressionBuilderComponent } from './game/genesis-definitions/edit-defi
     ShowRulesComponent,
     TopBarComponent,
     FooterComponent,
-    MenuComponent,
-    SubMenuComponent,
     EntityEditorComponent,
     ExpressionBuilderComponent,
     CreateEntityComponent

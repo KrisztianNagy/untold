@@ -6,35 +6,63 @@
                 <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 0)"><i class="material-icons">home</i></a>
                 <div class="layout-tabmenu-tooltip">
                     <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Features</div>
+                    <div class="layout-tabmenu-tooltip-text">Home</div>
                 </div>
             </li>
-            <li [ngClass]="{'active-item':app.activeTabIndex === 1}">
-                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 1)"><i class="material-icons">inbox</i></a>
+            <li [ngClass]="{'active-item':app.activeTabIndex === 1}" *ngIf="isCurrentUserRealmOwner">
+                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 1)"><i class="material-icons">view_module</i></a>
                 <div class="layout-tabmenu-tooltip">
                     <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Inbox</div>
+                    <div class="layout-tabmenu-tooltip-text">Modules</div>
                 </div>
             </li>
-            <li [ngClass]="{'active-item':app.activeTabIndex === 2}">
-                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 2)"><i class="material-icons">event</i></a>
+            <li [ngClass]="{'active-item':app.activeTabIndex === 2}" *ngIf="isCurrentUserRealmOwner">
+                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 2)"><i class="material-icons">layers</i></a>
                 <div class="layout-tabmenu-tooltip">
                     <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Calendar</div>
+                    <div class="layout-tabmenu-tooltip-text">Definitions</div>
                 </div>
             </li>
-            <li [ngClass]="{'active-item':app.activeTabIndex === 3}">
-                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 3)"><i class="material-icons">insert_chart</i></a>
+            <li [ngClass]="{'active-item':app.activeTabIndex === 3}" *ngIf="isCurrentUserRealmOwner">
+                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 3)"><i class="material-icons">crop_paste</i></a>
                 <div class="layout-tabmenu-tooltip">
                     <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Projects</div>
+                    <div class="layout-tabmenu-tooltip-text">Templates</div>
                 </div>
             </li>
-            <li [ngClass]="{'active-item':app.activeTabIndex === 4}">
-                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 4)"><i class="material-icons">people</i></a>
+            <li [ngClass]="{'active-item':app.activeTabIndex === 4}" *ngIf="isRealmSelected">
+                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 4)"><i class="material-icons">person_pin</i></a>
                 <div class="layout-tabmenu-tooltip">
                     <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Team</div>
+                    <div class="layout-tabmenu-tooltip-text">Entities</div>
+                </div>
+            </li>
+            <li [ngClass]="{'active-item':app.activeTabIndex === 5}" *ngIf="isRealmSelected">
+                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 5)"><i class="material-icons">content_copy</i></a>
+                <div class="layout-tabmenu-tooltip">
+                    <div class="layout-tabmenu-tooltip-arrow"></div>
+                    <div class="layout-tabmenu-tooltip-text">Tables</div>
+                </div>
+            </li>
+            <li [ngClass]="{'active-item':app.activeTabIndex === 6}" *ngIf="isCurrentUserRealmOwner">
+                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 6)"><i class="material-icons">image</i></a>
+                <div class="layout-tabmenu-tooltip">
+                    <div class="layout-tabmenu-tooltip-arrow"></div>
+                    <div class="layout-tabmenu-tooltip-text">Images</div>
+                </div>
+            </li>
+            <li [ngClass]="{'active-item':app.activeTabIndex === 7}" *ngIf="isCurrentUserRealmOwner">
+                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 7)"><i class="material-icons">map</i></a>
+                <div class="layout-tabmenu-tooltip">
+                    <div class="layout-tabmenu-tooltip-arrow"></div>
+                    <div class="layout-tabmenu-tooltip-text">Maps</div>
+                </div>
+            </li>
+            <li [ngClass]="{'active-item':app.activeTabIndex === 8}" *ngIf="isRealmSelected">
+                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 8)"><i class="material-icons">tab</i></a>
+                <div class="layout-tabmenu-tooltip">
+                    <div class="layout-tabmenu-tooltip-arrow"></div>
+                    <div class="layout-tabmenu-tooltip-text">Board</div>
                 </div>
             </li>
         </ul>
