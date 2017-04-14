@@ -1,6 +1,8 @@
 import {Component,Inject,forwardRef} from '@angular/core';
 import {AppComponent} from './app.component';
 
+import { AuthService } from './shared/services/auth.service';
+
 @Component({
     selector: 'app-topbar',
     template: `
@@ -21,11 +23,10 @@ import {AppComponent} from './app.component';
                 <li #profile class="profile-item" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
                     <a href="#" (click)="app.onTopbarItemClick($event,profile)">                            
                         <div class="profile-image">
-                            <img src="assets/layout/images/profile-image.png">
+                            <img [src]="authService.userProfile.picture">
                         </div>
                         <div class="profile-info">
-                            <span class="topbar-item-name profile-name">Claire White</span>
-                            <span class="topbar-item-name profile-role">System Admin</span>
+                            <span class="topbar-item-name profile-name">{{authService.userProfile.name}}</span>
                         </div>
                     </a>
                     
@@ -51,7 +52,7 @@ import {AppComponent} from './app.component';
                             </a>
                         </li>
                         <li role="menuitem">
-                            <a href="#">
+                            <a href="#" (click)='logout()'>
                                 <i class="material-icons">power_settings_new</i>
                                 <span>Logout</span>
                             </a>
@@ -176,6 +177,13 @@ import {AppComponent} from './app.component';
 })
 export class AppTopBar {
 
-    constructor(@Inject(forwardRef(() => AppComponent)) public app:AppComponent) {}
+    constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,
+                public authService: AuthService) {
 
+    }
+
+    logout() {
+        this.authService.logout();
+        window.location.href = '/';
+    }
 }
