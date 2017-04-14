@@ -1,18 +1,18 @@
 <div class="projects-tab">
   <ul>     
-    <li class="clearfix" *ngIf="isRealmSelected" (click)="openWelcome()">
+    <li class="clearfix" *ngIf="isRealmSelected" (click)="openWelcome()" style="cursor: pointer">
           <i class="material-icons">description</i>
-          <span class="project-title">Welcome Page</span>
-          <span>Created by the game master</span>         
+          <span class="project-title" style="float: none;">Welcome Page</span>
+          <span  style="float: none;">Created by the game master</span>       
     </li> 
-    <li class="clearfix" (click)="openMyRealms()">
+    <li class="clearfix" (click)="openMyRealms()" style="cursor: pointer">
         <i class="material-icons">favorite</i>
-        <span class="project-title">View Realms</span>                
+        <span class="project-title"  style="float: none;">View Realms</span>                
     </li>
-    <li class="clearfix" *ngIf="isRealmSelected" (click)="disconnect()">
-        <i class="material-icons">cancel</i>
-        <span class="project-title">Leave Realm</span> 
-        <span></span>             
+    <li class="clearfix" *ngIf="isRealmSelected" (click)="disconnect()" style="cursor: pointer">
+          <i class="material-icons">cancel</i>
+          <span class="project-title"  style="float: none;">Leave Realm</span> 
+          <span  style="float: none;"></span>          
     </li>      
   </ul>
 </div>
