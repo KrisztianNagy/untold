@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import {Router} from '@angular/router';
 
 import { RealmHubSenderService } from '../../shared/services/realm-hub-sender.service';
 import { GameService } from '../../store/services/game.service';
@@ -19,8 +18,7 @@ export class RealmWelcomeComponent implements OnInit, OnDestroy {
   private gameSubscription;
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private gameService: GameService,
-              private realmHubSenderService: RealmHubSenderService,
-              private router: Router) {
+              private realmHubSenderService: RealmHubSenderService) {
   }
 
   ngOnInit() {
