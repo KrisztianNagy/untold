@@ -1,15 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+
+import { RealmDefinitionService } from '../../store/services/realm-definition.service';
+import { Untold } from '../../shared/models/backend-export';
 
 @Component({
   selector: 'app-definition-side-bar',
   templateUrl: './definition-side-bar.component.html',
-  styleUrls: ['./definition-side-bar.component.scss']
+  styleUrls: ['./definition-side-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DefinitionSideBarComponent implements OnInit {
+export class DefinitionSideBarComponent implements OnInit, OnDestroy {
+  private definitionSubscription;
 
-  constructor() { }
+  constructor(private realmDefinitionService: RealmDefinitionService) {
+
+  }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.definitionSubscription.unsubscribe();
   }
 
 }
