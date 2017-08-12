@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, 
+import { Component, OnInit, Input, Output, EventEmitter,
          ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
 import { TreeNode } from 'primeng/primeng';
 
@@ -13,11 +13,12 @@ import { Untold } from '../../../shared/models/backend-export';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntityEditorComponent implements OnInit, OnChanges {
+  @Input() testMode: boolean;
   @Input() entity: GenesisEntity;
   @Output() entityChanged = new EventEmitter<GenesisEntity>();
 
   tree: TreeNode[];
- 
+
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private treeNodeService: TreeNodeService) { }
 

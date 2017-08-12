@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 import { Untold } from '../../models/backend-export';
 import { AzureTableRow } from '../../models/data-table';
@@ -25,24 +25,24 @@ export class StorageDataService {
     });
 
     const path = this.storageUrl + tableName +
-                  '(PartitionKey=\'' + data.PartitionKey + '\',RowKey=\'' + data.RowKey + '\')' + editorSignature;
+      '(PartitionKey=\'' + data.PartitionKey + '\',RowKey=\'' + data.RowKey + '\')' + editorSignature;
     return this.http.put(path, data, options);
   }
 
   readColumns(tableName: string, readerSignature: string): Observable<string> {
-  const headers = new Headers({
-        'Accept': 'application/json;odata=nometadata'
-      });
+    const headers = new Headers({
+      'Accept': 'application/json;odata=nometadata'
+    });
 
-      const options = new RequestOptions({
-        headers: headers
-      });
+    const options = new RequestOptions({
+      headers: headers
+    });
 
-      const path = this.storageUrl + tableName + readerSignature + '&$filter=PartitionKey%20eq%20\'column\'%20';
-      const observable = this.http.get(path, options)
-        .map(res => res.text());
+    const path = this.storageUrl + tableName + readerSignature + '&$filter=PartitionKey%20eq%20\'column\'%20';
+    const observable = this.http.get(path, options)
+      .map(res => res.text());
 
-      return observable;
+    return observable;
   }
 
   readRow(tableName: string, partitionKey: string, rowKey: string, readerSignature: string): Observable<string> {
@@ -90,7 +90,7 @@ export class StorageDataService {
     const path = this.storageUrl + tableName + readerSignature + '&$filter=' + filter;
     const observable = this.http.get(path, options)
       .map(res => res.text());
-    
+
     return observable;
   }
 
@@ -108,7 +108,7 @@ export class StorageDataService {
     });
 
     const path = this.storageUrl + tableName +
-                  '(PartitionKey=\'' + data.PartitionKey + '\',RowKey=\'' + data.RowKey + '\')' + editorSignature;
+      '(PartitionKey=\'' + data.PartitionKey + '\',RowKey=\'' + data.RowKey + '\')' + editorSignature;
     return this.http.delete(path, options);
   }
 

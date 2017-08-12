@@ -29,13 +29,33 @@ export class EntityEnhancerService {
     modules.forEach(mod => {
       mod.definitions.forEach(def => {
         if (def.definitionGuid === entity.definitionGuid) {
-          (<GenesisEntity> entity.entity).definition = <Untold.ClientInnerDefinition> def;
+          entity.definition = <Untold.ClientInnerDefinition> def;
           return;
         }
       });
     });
 
-    this.ensureEntityStructure((<GenesisEntity> entity.entity));
+    this.ensureEntityStructure(entity.entity, entity.definition);
+  }
+
+  getGenesisEntity(entity: Untold.ClientEntity): AsyncSubject<GenesisEntity> {
+    const subject = new AsyncSubject<GenesisEntity>();
+
+    const modules = this.realmDefinitionService.getCurrent();
+
+    modules.forEach(mod => {
+      mod.definitions.forEach(def => {
+        if (def.definitionGuid === entity.definitionGuid) {
+          subject.next({
+            entity: entity.entity,
+            definition: <Untold.ClientInnerDefinition> def
+          });
+          subject.complete();
+        }
+      });
+    });
+
+    return subject;
   }
 
   saveEntity(entity: Untold.ClientEntity, realm: Untold.ClientRealm): Observable<Response> {
@@ -43,7 +63,7 @@ export class EntityEnhancerService {
       PartitionKey: 'entity',
       RowKey: entity.id.toString(),
       rowStatus: 1,
-      entity: entity.entity
+      entity: JSON.stringify(entity.entity)
     };
 
     return this.storageDataService.insertOrUpdate(tableRow, 'RM' + realm.id + 'Entities', realm.entityEditorAcccessSignature);
@@ -81,8 +101,8 @@ export class EntityEnhancerService {
       return subject;
   }
 
-  recalculate(entity: GenesisEntity): AsyncSubject<GenesisEntity> {
-    const recalculateSubject = new AsyncSubject<GenesisEntity>();
+  recalculate(entity: Untold.ClientEntity): AsyncSubject<Untold.ClientEntity> {
+    const recalculateSubject = new AsyncSubject<Untold.ClientEntity>();
 
     entity = JSON.parse(JSON.stringify(entity));
     const calcFunctions = [];
@@ -94,9 +114,9 @@ export class EntityEnhancerService {
       rulesSubject.subscribe(pos => {
         const rule = rules[pos];
 
-        this.recalculateRule(entity, rule).subscribe(() => {;
+        this.recalculateRule(entity.entity, rule).subscribe(() => {;
 
-          if (pos < rules.length) {
+          if (pos < rules.length - 1) {
             rulesSubject.next(pos + 1);
           } else {
             rulesSubject.complete();
@@ -115,10 +135,10 @@ export class EntityEnhancerService {
     return recalculateSubject;
   }
 
-  private recalculateRule(entity: GenesisEntity, rule: RuleDefinition): AsyncSubject<boolean> {
+  private recalculateRule(entity: any, rule: RuleDefinition): AsyncSubject<boolean> {
     const subject = new AsyncSubject<boolean>();
 
-    const ruleScopes = this.getContainers(entity.entity, <string> rule.definition.occurrenceGuid)
+    const ruleScopes = this.getContainers(entity, <string> rule.definition.occurrenceGuid)
      .map(obj => {
         return {
           entity: obj[<string> rule.rule.target],
@@ -165,18 +185,19 @@ export class EntityEnhancerService {
 
     const retVal: Array<Object> = [];
 
-    for (const property in container) {
-      if (container.hasOwnProperty(property)) {
+    for (const propertyName in container) {
+      if (container.hasOwnProperty(propertyName)) {
 
-        if (property === targetName) {
+        if (propertyName === targetName) {
           retVal.push(container);
         }
 
+        const property = container[propertyName];
         const isObject = typeof(property) === 'object';
-        const listElements = container[property]['listElements'];
+        const listElements = property ? property['listElements'] : null;
 
         if (isObject && !listElements) {
-          this.getContainers(container[property], targetName).forEach(obj => retVal.push(obj));
+          this.getContainers(container[propertyName], targetName).forEach(obj => retVal.push(obj));
         }
 
         if (listElements) {
@@ -211,37 +232,31 @@ export class EntityEnhancerService {
     return result;
   }
 
-  private ensureEntityStructure(entity: GenesisEntity) {
-    if (!entity.definition.definitions || entity.definition.definitions.length === 0) {
+  private ensureEntityStructure(targetEntity: any, definition: Untold.ClientDefinition) {
+    if (!definition.definitions || definition.definitions.length === 0) {
       return;
     }
 
-    entity.definition.definitions.forEach(def => {
-      const exist = entity[<string> def.occurrenceGuid];
+    definition.definitions.forEach(def => {
+      const exist = targetEntity[<string> def.occurrenceGuid];
 
       if (!exist) {
         if (def.isList) {
-          entity[<string> def.occurrenceGuid] = [];
+          targetEntity[<string> def.occurrenceGuid] = [];
         } else if (def.dataType === 'Definition') {
-          entity[<string> def.occurrenceGuid] = {};
+          targetEntity[<string> def.occurrenceGuid] = {};
         } else {
-          entity[<string> def.occurrenceGuid] = '';
+          targetEntity[<string> def.occurrenceGuid] = '';
         }
       } else {
         if (def.isList) {
           if (exist.length > 0) {
-            (<Array<any>> exist).forEach(val => this.ensureEntityStructure({
-              definition: def,
-              entity: val
-            }));
+            (<Array<any>> exist).forEach(val => this.ensureEntityStructure(val, def));
           }
         }
       }
 
-      this.ensureEntityStructure({
-        definition: def,
-        entity: entity[<string> def.occurrenceGuid]
-      });
+      this.ensureEntityStructure(targetEntity[<string> def.occurrenceGuid], def);
     });
   }
 }

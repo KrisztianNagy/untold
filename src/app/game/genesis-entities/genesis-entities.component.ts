@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { Router } from '@angular/router';
 
 import { SelectItem } from 'primeng/primeng';
 
@@ -63,6 +64,10 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
 
   private populateEntities() {
     this.entities = this.entityService.getCurrent().filter(ent => ent.moduleGuid = this.selectedModule.guid);
+  }
+
+  selectEntity() {
+
   }
 
 }

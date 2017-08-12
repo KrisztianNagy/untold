@@ -16,7 +16,10 @@
             <p-dataGrid [value]="entities">
                 <ng-template let-entity pTemplate="item">
                     <div class="ui-g-12 ui-md-3">
-                        entity.name
+                        {{entity.name}}
+                        <p-panel [header]="entity.name" [style]="{'text-align':'center'}">
+                            <i class="fa fa-search" [routerLink]="['/game/entity', entity.id]" style="cursor:pointer"></i>
+                        </p-panel>
                     </div>
                 </ng-template>
             </p-dataGrid>
