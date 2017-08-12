@@ -243,7 +243,7 @@ import { EntityWrapperComponent } from './entity-wrapper/entity-wrapper.componen
         TooltipModule,
         TreeModule,
         TreeTableModule,
-        StoreModule.provideStore(CombinedReducers)
+        StoreModule.forRoot(CombinedReducers)
     ],
     declarations: [
         AppComponent,

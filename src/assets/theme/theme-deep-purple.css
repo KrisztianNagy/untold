@@ -3296,7 +3296,8 @@ body {
     body .ui-splitbutton > .ui-button {
       box-shadow: none;
       -webkit-box-shadow: none;
-      -moz-box-shadow: none; }
+      -moz-box-shadow: none;
+      vertical-align: top; }
       body .ui-splitbutton > .ui-button:active {
         background-color: #8259cb; }
     body .ui-splitbutton .ui-splitbutton-menubutton {
@@ -3385,7 +3386,8 @@ body {
         transition: -webkit-transform ease .28s;
         transition: transform ease .28s;
         -webkit-transform: scale(0);
-        transform: scale(0); }
+        transform: scale(0);
+        margin: 0; }
       body .ui-radiobutton .ui-radiobutton-box .fa-circle {
         background-color: #673ab7;
         -webkit-transform: scale(0.5);
@@ -3654,7 +3656,7 @@ body {
       height: .5em;
       color: #757575; }
     body .ui-spinner .ui-spinner-button:enabled:hover, body .ui-spinner .ui-spinner-button:active {
-      background-color: #ffffff; }
+      background-color: transparent; }
   body .ui-spinner .ui-spinner-up .fa {
     top: .25em; }
   body .ui-spinner .ui-spinner-down .fa {
@@ -3676,7 +3678,7 @@ body {
     -webkit-border-radius: 8px;
     border-radius: 8px; }
     body .ui-inputswitch .ui-inputswitch-handle {
-      top: -3px;
+      top: -4px;
       background-color: #ffffff;
       -moz-border-radius: 50%;
       -webkit-border-radius: 50%;
@@ -4087,6 +4089,11 @@ body {
         background-color: #c2185b; }
   body .ui-fileupload .ui-fileupload-content .ui-messages-error .fa {
     color: #ffffff; }
+  body .ui-fileupload-choose:not(.ui-state-disabled):hover.ui-button,
+  body .ui-fileupload-choose.ui-state-focus.ui-button {
+    background-color: #d81558; }
+  body .ui-fileupload-choose:not(.ui-state-disabled):active.ui-button {
+    background-color: #c1134e; }
   body .ui-editor-container .ui-editor-toolbar {
     background-color: #e8e8e8; }
   body .ui-editor-container .ql-picker.ql-expanded .ql-picker-label {
@@ -4425,14 +4432,82 @@ body .ui-orderlist .ui-orderlist-list {
     body .ui-orderlist .ui-orderlist-list li.ui-orderlist-item.ui-state-highlight {
       background-color: #e91e63;
       color: #ffffff; }
+body .ui-orderlist.ui-orderlist-responsive .ui-orderlist-controls {
+  width: 3.75em; }
 body .ui-orderlist .ui-orderlist-controls {
   width: 3.75em;
   text-align: center; }
   body .ui-orderlist .ui-orderlist-controls .ui-button.ui-button-icon-only {
     width: 2.5em;
     margin-bottom: .5em;
-    margin-right: 0;
-    display: inline-block; }
+    margin-right: 0; }
+body .ui-organizationchart .ui-organizationchart-node-content.ui-organizationchart-selectable-node:not(.ui-state-highlight):hover {
+  background-color: #e8e8e8;
+  color: #000000; }
+body .ui-organizationchart .ui-organizationchart-node-content.ui-state-highlight .ui-node-toggler i {
+  color: #7b0c32; }
+body .ui-organizationchart .ui-organizationchart-line-down {
+  background-color: #bfbfbf; }
+body .ui-organizationchart .ui-organizationchart-line-left {
+  border-right: 1px solid #bfbfbf; }
+body .ui-organizationchart .ui-organizationchart-line-top {
+  border-top: 1px solid #bfbfbf; }
+body .ui-organizationchart .ui-organizationchart-node-content {
+  border-color: #bfbfbf; }
+body .ui-organizationchart .ui-organizationchart-node-content .ui-node-toggler {
+  bottom: -1.143em;
+  margin-left: -.825em;
+  color: #bfbfbf; }
+  body .ui-organizationchart .ui-organizationchart-node-content .ui-node-toggler .fa-chevron-down {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    /* Preferred icon size */
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for IE. */
+    font-feature-settings: 'liga'; }
+    body .ui-organizationchart .ui-organizationchart-node-content .ui-node-toggler .fa-chevron-down:before {
+      content: "keyboard_arrow_down"; }
+  body .ui-organizationchart .ui-organizationchart-node-content .ui-node-toggler .fa-chevron-up {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    /* Preferred icon size */
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for IE. */
+    font-feature-settings: 'liga'; }
+    body .ui-organizationchart .ui-organizationchart-node-content .ui-node-toggler .fa-chevron-up:before {
+      content: "keyboard_arrow_up"; }
 body .ui-paginator {
   background-color: #512da8;
   padding: 0.625em 1em; }
@@ -4697,6 +4772,49 @@ body .ui-datatable.ui-datatable-scrollable thead tr th {
 body .ui-datatable.ui-datatable-scrollable tfoot tr td {
   color: #424242;
   font-size: 14px; }
+body .ui-datatable .ui-datatable-loading-content {
+  top: 30%; }
+  body .ui-datatable .ui-datatable-loading-content .fa {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    /* Preferred icon size */
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for IE. */
+    font-feature-settings: 'liga';
+    font-size: 2em;
+    -webkit-animation-delay: 0;
+    -webkit-animation-duration: 1000ms;
+    -webkit-animation-name: spin;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -moz-animation-delay: 0;
+    -moz-animation-duration: 1000ms;
+    -moz-animation-name: spin;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: linear;
+    animation-delay: 0;
+    animation-duration: 1000ms;
+    animation-name: spin;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; }
+    body .ui-datatable .ui-datatable-loading-content .fa:before {
+      content: "refresh"; }
 body .ui-carousel {
   padding: 0; }
   body .ui-carousel .ui-carousel-header {
@@ -4908,6 +5026,9 @@ body .ui-treetable.ui-treetable-scrollable thead th {
   background-color: #ffffff;
   color: #424242; }
 
+@media (max-width: 40em) {
+  body .ui-orderlist.ui-orderlist-responsive .ui-orderlist-controls {
+    width: 100%; } }
 @media (max-width: 640px) {
   body .ui-picklist.ui-picklist-responsive .ui-picklist-list-wrapper {
     margin-bottom: .5em; }
@@ -5162,6 +5283,8 @@ body .ui-panelmenu .ui-panelmenu-header {
     border-bottom-right-radius: 0; }
     body .ui-panelmenu .ui-panelmenu-header.ui-state-active a, body .ui-panelmenu .ui-panelmenu-header.ui-state-active .fa {
       color: #ffffff; }
+body .ui-panelmenu .ui-panelmenu-panel {
+  margin-bottom: 1px; }
 body .ui-panelmenu .ui-panelmenu-content {
   padding: 0; }
   body .ui-panelmenu .ui-panelmenu-content .ui-menuitem {
@@ -5529,18 +5652,20 @@ body .ui-dialog .ui-dialog-titlebar {
       content: "fullscreen_exit"; }
 body .ui-dialog .ui-dialog-content {
   padding: 0.625em 1em; }
-body .ui-dialog .ui-dialog-buttonpane, body .ui-dialog .ui-dialog-footer {
-  text-align: right; }
-  body .ui-dialog .ui-dialog-buttonpane .ui-button, body .ui-dialog .ui-dialog-footer .ui-button {
+body .ui-dialog .ui-dialog-footer {
+  text-align: right;
+  border: 0 none;
+  border-top: 1px solid #d8d8d8; }
+  body .ui-dialog .ui-dialog-footer .ui-button {
     background-color: #ffffff;
     color: #424242;
     box-shadow: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     width: auto; }
-    body .ui-dialog .ui-dialog-buttonpane .ui-button .fa, body .ui-dialog .ui-dialog-footer .ui-button .fa {
+    body .ui-dialog .ui-dialog-footer .ui-button .fa {
       color: #757575; }
-    body .ui-dialog .ui-dialog-buttonpane .ui-button:hover, body .ui-dialog .ui-dialog-footer .ui-button:hover {
+    body .ui-dialog .ui-dialog-footer .ui-button:hover {
       background-color: #e8e8e8;
       color: #000000; }
 body .ui-dialog .ui-confirm-dialog-severity {
@@ -5643,9 +5768,11 @@ body .ui-progressbar {
     color: #ffffff;
     display: none !important; }
 body .ui-galleria .ui-galleria-nav-prev {
-  left: 0; }
+  left: 0;
+  margin-bottom: -.4em; }
 body .ui-galleria .ui-galleria-nav-next {
-  right: 0; }
+  right: 0;
+  margin-bottom: -.4em; }
 body .ui-inplace .ui-inplace-display {
   -moz-transition: background-color 0.3s;
   -o-transition: background-color 0.3s;
@@ -5658,5 +5785,3 @@ body .ui-inplace .ui-inplace-display {
     background-color: #e8e8e8; }
 body .ui-terminal .ui-terminal-input {
   font-size: 14px; }
-
-/*# sourceMappingURL=theme-deep-purple.css.map */

@@ -16,7 +16,7 @@ export class AppMenuComponent implements OnInit {
     private model: any[];
 
     constructor(@Inject(forwardRef(() => AppComponent)) public app:AppComponent) {}
-    
+
     ngOnInit() {
         this.model = [
             {label: 'Dashboard', icon: 'dashboard', routerLink: ['/']},
@@ -123,7 +123,7 @@ export class AppMenuComponent implements OnInit {
     changeTheme(theme) {
         let themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
         let layoutLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('layout-css');
-        
+
         themeLink.href = 'assets/theme/theme-' + theme +'.css';
         layoutLink.href = 'assets/layout/css/layout-' + theme +'.css';
     }
@@ -131,6 +131,8 @@ export class AppMenuComponent implements OnInit {
 
 @Component({
     selector: '[app-submenu]',
+
+    // tslint:disable-next-line:max-line-length
     template: `
         <ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
             <li [ngClass]="{'active-menuitem': isActive(i)}" *ngIf="child.visible === false ? false : true">
@@ -167,75 +169,57 @@ export class AppMenuComponent implements OnInit {
         ])
     ]
 })
-export class AppSubMenu implements OnDestroy {
 
-    @Input() item: MenuItem;
-    
-    @Input() root: boolean;
-    
-    @Input() visible: boolean;
-        
-    activeIndex: number;
-    
-    hover: boolean;
-    
-    constructor(@Inject(forwardRef(() => AppComponent)) public app:AppComponent, public router: Router, public location: Location) {}
-        
-    itemClick(event: Event, item: MenuItem, index: number) {
-        //avoid processing disabled items
-        if(item.disabled) {
-            event.preventDefault();
-            return true;
-        }
-        
-        //activate current item and deactivate active sibling if any
-        this.activeIndex = (this.activeIndex === index) ? null : index;
-                
-        //execute command
-        if(item.command) {
-            if(!item.eventEmitter) {
-                item.eventEmitter = new EventEmitter();
-                item.eventEmitter.subscribe(item.command);
+// tslint:disable-next-line:component-class-suffix
+export class AppSubMenu {
+        @Input() item: MenuItem;
+        @Input() root: boolean;
+        @Input() visible: boolean;
+
+        activeIndex: number;
+        hover: boolean;
+
+        constructor(@Inject(forwardRef(() => AppComponent)) public app:AppComponent, public router: Router, public location: Location) {}
+
+        itemClick(event: Event, item: MenuItem, index: number) {
+            // avoid processing disabled items
+            if (item.disabled) {
+                event.preventDefault();
+                return true;
             }
-            
-            item.eventEmitter.emit({
-                originalEvent: event,
-                item: item
-            });
+
+            // activate current item and deactivate active sibling if any
+            this.activeIndex = (this.activeIndex === index) ? null : index;
+
+            // execute command
+            if (item.command) {
+                item.command({originalEvent: event, item: item});
+            }
+
+            // prevent hash change
+            if (item.items || (!item.url && !item.routerLink)) {
+                event.preventDefault();
+            }
+
+            // hide menu
+            if (!item.items && this.app.overlay) {
+                this.app.sidebarActive = false;
+            }
         }
 
-        //prevent hash change
-        if(item.items || (!item.url && !item.routerLink)) {
-            event.preventDefault();
+        isActive(index: number): boolean {
+            return this.activeIndex === index;
         }
-        
-        //hide menu
-        if(!item.items && this.app.overlay) {                
-            this.app.sidebarActive = false;
-        }
-    }
-    
-    isActive(index: number): boolean {
-        return this.activeIndex === index;
-    }
-    
-    unsubscribe(item: any) {
-        if(item.eventEmitter) {
-            item.eventEmitter.unsubscribe();
-        }
-        
-        if(item.items) {
-            for(let childItem of item.items) {
-                this.unsubscribe(childItem);
+
+        unsubscribe(item: any) {
+            if (item.eventEmitter) {
+                item.eventEmitter.unsubscribe();
+            }
+ 
+            if (item.items) {
+                for(let childItem of item.items) {
+                    this.unsubscribe(childItem);
+                }
             }
         }
     }
-        
-    ngOnDestroy() {        
-        if(this.item && this.item.items) {
-            for(let item of this.item.items) {
-                this.unsubscribe(item);
-            }
-        }
-    }
-}

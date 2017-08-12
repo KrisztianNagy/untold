@@ -111,6 +111,20 @@
     opacity: 0;
     -webkit-transform: translate3d(0, -20px, 0);
     transform: translate3d(0, -20px, 0); } }
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(359deg); } }
+@keyframes spin {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(359deg); } }
+.ui-icon-spin {
+  -webkit-animation-name: spin;
+  animation-name: spin; }
+
 .fadeInDown {
   -webkit-animation-name: fadeInDown;
   animation-name: fadeInDown; }
@@ -1463,6 +1477,13 @@ body {
                 transition: transform 0.3s; }
               .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li a:hover {
                 background-color: #E0E0E0; }
+              .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li a.active-menuitem-routerlink {
+                color: #00796b; }
+                .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li a.active-menuitem-routerlink i {
+                  color: #00796b; }
+            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li.red-badge > a .menuitem-badge {
+              background-color: #F44336;
+              color: #ffffff; }
             .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li ul {
               margin: 0;
               padding: 0;
@@ -1488,6 +1509,23 @@ body {
                 -o-transform: rotate(-180deg);
                 -ms-transform: rotate(-180deg);
                 transform: rotate(-180deg); }
+            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu .menuitem-badge {
+              position: absolute;
+              right: 40px;
+              top: 10px;
+              display: inline-block;
+              width: 16px;
+              height: 16px;
+              margin-right: 6px;
+              text-align: center;
+              background-color: #FFC107;
+              color: #000000;
+              font-size: 12px;
+              font-weight: 700;
+              line-height: 16px;
+              -moz-border-radius: 50%;
+              -webkit-border-radius: 50%;
+              border-radius: 50%; }
   .layout-wrapper .layout-sidebar.layout-sidebar-dark {
     background-color: #343434; }
     .layout-wrapper .layout-sidebar.layout-sidebar-dark .layout-tabmenu .layout-tabmenu-nav li a {
@@ -1523,6 +1561,10 @@ body {
           background-color: #545454; }
           .layout-wrapper .layout-sidebar.layout-sidebar-dark .layout-tabmenu .layout-tabmenu-contents .layout-submenu-content .navigation-menu li > a:hover i:first-child {
             color: #dee0e3; }
+        .layout-wrapper .layout-sidebar.layout-sidebar-dark .layout-tabmenu .layout-tabmenu-contents .layout-submenu-content .navigation-menu li > a.active-menuitem-routerlink {
+          color: #83ccc5; }
+          .layout-wrapper .layout-sidebar.layout-sidebar-dark .layout-tabmenu .layout-tabmenu-contents .layout-submenu-content .navigation-menu li > a.active-menuitem-routerlink i {
+            color: #83ccc5; }
       .layout-wrapper .layout-sidebar.layout-sidebar-dark .layout-tabmenu .layout-tabmenu-contents .layout-submenu-content .navigation-menu li.active-menuitem > a {
         color: #4DB6AC; }
         .layout-wrapper .layout-sidebar.layout-sidebar-dark .layout-tabmenu .layout-tabmenu-contents .layout-submenu-content .navigation-menu li.active-menuitem > a i:first-child {
