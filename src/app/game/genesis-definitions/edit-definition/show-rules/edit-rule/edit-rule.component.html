@@ -1,19 +1,16 @@
-<div class="ui-g form-group"> 
-    <div class="ui-g-12">
-        <div class="ui-g-8">
-        </div>
-        <div class="ui-g-2">
-            <button pButton type="button" class="green-btn" (click)="update()" label="Update" [disabled]="!selectedTargetDefinition"  ></button>
-        </div>
-        <div class="ui-g-2">
-            <button pButton type="button" class="blue-btn" (click)="cancel()" label="Return"></button>
-        </div>
-    </div>
-    <div class="ui-g-12">
+<div class="ui-g form-group">     
+    <div class="ui-g-12">        
         <div class="ui-g-6">
-             <app-entity-editor *ngIf="testEntity" [entity]="testEntity" (entityChanged)="updateTestEntity($event)"></app-entity-editor>
-        </div>
-        <div class="ui-g-6">
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                </div>
+                <div class="ui-g-4">
+                    <button pButton type="button" class="green-btn" (click)="update()" label="Update" [disabled]="!selectedTargetDefinition"  ></button>
+                </div>
+                <div class="ui-g-4">
+                    <button pButton type="button" class="blue-btn" (click)="cancel()" label="Return"></button>
+                </div>
+            </div>
             <div class="ui-g-12">
                 <app-expression-builder [editedDefinition]="editedDefinition" (onInsert)="insertBuilderScript($event)"></app-expression-builder>
             </div>
@@ -39,6 +36,9 @@
                     {{testResult ? testResult : ''}}
                 </div>
             </div>            
+        </div>
+        <div class="ui-g-6">
+            <app-entity-editor *ngIf="testEntity" [entity]="testEntity" (entityChanged)="updateTestEntity($event)"></app-entity-editor>
         </div>
     </div>
 </div>

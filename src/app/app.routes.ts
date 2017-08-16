@@ -24,7 +24,7 @@ export const routes: Routes = [
     {path: 'notifications', component: NotificationsComponent},
     {path: 'save', component: SaveRealmComponent},
     {path: 'save/:id', component: SaveRealmComponent},
-    {path: 'game', component: GameComponent, children: [
+    {path: 'game', component: GameComponent, canActivate: [CanActivateSelectedRealmGuard], children: [
         {path: '', component: RealmWelcomeComponent},
         {path: 'modules', component: GenesisModulesComponent, canActivate: [CanActivateSelectedRealmOwnerGuard]},
         {path: 'ruletables', component: GenesisRuleTablesComponent, canActivate: [CanActivateSelectedRealmOwnerGuard]},

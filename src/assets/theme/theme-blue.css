@@ -4830,7 +4830,7 @@ body .ui-carousel {
     body .ui-carousel .ui-carousel-header .ui-carousel-page-links {
       margin: -.143em 0 0 0; }
 body .ui-tree {
-  padding: 0.625em 1em/2; }
+  padding: 0.625em 1em/2; width: 100%}
   body .ui-tree .ui-treenode-children {
     padding-left: 1.75em; }
   body .ui-tree .ui-treenode-content .ui-chkbox {

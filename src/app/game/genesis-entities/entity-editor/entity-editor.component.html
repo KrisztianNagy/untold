@@ -11,7 +11,7 @@
                     <label>{{node.label}}</label>
                 </span>
                 <p-checkbox [(ngModel)]="node.data.temp" (onChange)="updateEntity()" binary="true" *ngIf="node.data.dataType && node.data.dataType ==='bool'" label="{{node.label}}" [disabled]="!testMode && node.data.isCalculated"></p-checkbox>
-                <span style="padding-left: 10px">
+                <span style="padding-left: 10px" *ngIf="node.data.isList || (node.parent && node.parent.data.isList)">
                     <a (click)="addChild(node)" *ngIf="node.data.isList" style="font-size: x-small; color: green;">Add child</a>
                     <a (click)="remove(node)" *ngIf="node.parent && node.parent.data.isList" style="font-size: x-small; color: red;">Remove</a>
                 </span>

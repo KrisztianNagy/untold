@@ -1969,7 +1969,7 @@ body {
       width: 32px;
       color: #757575; }
     .layout-tabmenu-content .projects-tab ul li .project-title {
-      font-weight: 700; }
+      font-weight: 700; padding-top:8px }
     .layout-tabmenu-content .projects-tab ul li span {
       float: left;
       display: block; }
