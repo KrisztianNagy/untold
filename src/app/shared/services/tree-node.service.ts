@@ -139,7 +139,7 @@ export class TreeNodeService {
             case 'bool':
                 tree.expandedIcon = 'ui-icon-check-box-outline-blank';
                 tree.collapsedIcon = 'ui-icon-check-box-outline-blank';
-                tree.data.temp = entity.entity;
+                tree.data.temp = typeof entity.entity === 'boolean' ? entity.entity : false;
             break;
             default:
                 tree.expandedIcon = 'ui-icon-layers';

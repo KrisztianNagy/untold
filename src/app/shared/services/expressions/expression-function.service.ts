@@ -52,6 +52,11 @@ export class ExpressionFunctionService {
         }
 
         args = this.flatArray(args);
+
+        if (!args.length) {
+            return 0;
+        }
+
         return args.map(arg => this.toNumber(arg)).reduce((a, b) => {
             return a + b;
         });
