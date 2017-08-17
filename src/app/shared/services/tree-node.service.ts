@@ -91,16 +91,11 @@ export class TreeNodeService {
         label : entity.definition.name
     };
 
-    if (entity.definition.isCalculated) {
-        tree.data.temp = entity.entity;
-    }
-
-
     if (entity.definition.isList) {
         tree.expandedIcon = 'ui-icon-list';
         tree.collapsedIcon = 'ui-icon-list';
         tree.children = [];
-        const listElements: Array<any> = entity[<string> entity.definition.occurrenceGuid];
+        const listElements: Array<any> = entity.entity.listElements;
 
         if (listElements && listElements.length > 0) {
             const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
@@ -134,14 +129,17 @@ export class TreeNodeService {
             case 'number':
                 tree.expandedIcon = 'ui-icon-exposure-zero';
                 tree.collapsedIcon = 'ui-icon-exposure-zero';
+                tree.data.temp = entity.entity;
             break;
             case 'text':
                 tree.expandedIcon = 'ui-icon-text-format';
                 tree.collapsedIcon = 'ui-icon-text-format';
+                tree.data.temp = typeof entity.entity === 'string' ? entity.entity : '';
             break;
             case 'bool':
                 tree.expandedIcon = 'ui-icon-check-box-outline-blank';
                 tree.collapsedIcon = 'ui-icon-check-box-outline-blank';
+                tree.data.temp = entity.entity;
             break;
             default:
                 tree.expandedIcon = 'ui-icon-layers';
