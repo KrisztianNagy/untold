@@ -174,6 +174,10 @@ export class ExpressionEvaluatorService {
           callSub.next(this.expressionFunctionService.floorFunction(args));
           callSub.complete();
         break;
+        case 'sum':
+          callSub.next(this.expressionFunctionService.sumFunction(args));
+          callSub.complete();
+        break;
         case 'table':
           this.expressionFunctionService.tableFunction(args, entity).subscribe(res => {
             callSub.next(res);

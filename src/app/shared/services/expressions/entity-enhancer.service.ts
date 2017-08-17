@@ -138,10 +138,10 @@ export class EntityEnhancerService {
   private recalculateRule(entity: any, rule: RuleDefinition): AsyncSubject<boolean> {
     const subject = new AsyncSubject<boolean>();
 
-    const ruleScopes = this.getContainers(entity, <string> rule.definition.occurrenceGuid)
+    const ruleScopes = this.getContainers(entity, <string> rule.rule.target)
      .map(obj => {
         return {
-          entity: obj[<string> rule.definition.occurrenceGuid],
+          entity: obj,
           definition: rule.definition
         };
       });
@@ -156,23 +156,23 @@ export class EntityEnhancerService {
       const tree = this.calculatedExpressionService.parseTree(spaceless);
 
       ruleScopes.forEach(scope => {
-        const targetContainer = this.getContainers(scope.entity, <string> rule.rule.target);
+        // const targetContainer = this.getContainers(scope.entity, <string> rule.rule.target);
 
-        if (targetContainer && targetContainer.length > 0) {
+        // if (targetContainer && targetContainer.length > 0) {
           this.calculatedExpressionService.resolveNode(tree.tree, <any> scope.definition);
           this.expressionEvaluatorService.processExpression(tree.tree, scope)
             .subscribe(val => {
-              targetContainer[0][<string> rule.rule.target] = val;
+              scope.entity[<string> rule.rule.target] = val;
               subject.next(true);
               subject.complete();
             }, err => {
               subject.next(false);
               subject.complete();
             });
-        } else {
+        /*} else {
           subject.next(false);
           subject.complete();
-        }
+        }*/
       });
     } else {
       subject.next(false);
