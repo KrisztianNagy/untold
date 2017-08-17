@@ -17,10 +17,11 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
   private entitySub: any;
   private routeSub: any;
 
-  constructor(private entityService: EntityService,
+  constructor(private changeDetectorRef: ChangeDetectorRef,
+              private entityService: EntityService,
               private entityEnhancerService: EntityEnhancerService,
               private route: ActivatedRoute,
-              private router: Router,) {
+              private router: Router) {
 
   }
 
@@ -35,6 +36,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
               .forEach(ent => {
                 this.entityEnhancerService.getGenesisEntity(ent).subscribe(gen => {
                   this.entity = gen;
+                  this.changeDetectorRef.markForCheck();
                 });
               }));
       }
@@ -53,8 +55,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
         ent.entity = event.entity;
 
         this.entityEnhancerService.recalculate(ent).subscribe(calculated => {
-          ent.entity = calculated;
-          this.entityService.updateEntity(ent);
+          this.entityService.updateEntity(calculated);
       });
     });
   }

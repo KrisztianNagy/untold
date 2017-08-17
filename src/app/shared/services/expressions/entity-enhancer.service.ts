@@ -141,7 +141,7 @@ export class EntityEnhancerService {
     const ruleScopes = this.getContainers(entity, <string> rule.definition.occurrenceGuid)
      .map(obj => {
         return {
-          entity: obj[<string> rule.rule.target],
+          entity: obj[<string> rule.definition.occurrenceGuid],
           definition: rule.definition
         };
       });
@@ -159,9 +159,10 @@ export class EntityEnhancerService {
         const targetContainer = this.getContainers(scope.entity, <string> rule.rule.target);
 
         if (targetContainer && targetContainer.length > 0) {
+          this.calculatedExpressionService.resolveNode(tree.tree, <any> scope.definition);
           this.expressionEvaluatorService.processExpression(tree.tree, scope)
             .subscribe(val => {
-              targetContainer[<string> rule.rule.target] = val;
+              targetContainer[0][<string> rule.rule.target] = val;
               subject.next(true);
               subject.complete();
             }, err => {

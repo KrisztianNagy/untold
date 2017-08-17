@@ -91,6 +91,10 @@ export class TreeNodeService {
         label : entity.definition.name
     };
 
+    if (entity.definition.isCalculated) {
+        tree.data.temp = entity.entity;
+    }
+
 
     if (entity.definition.isList) {
         tree.expandedIcon = 'ui-icon-list';
