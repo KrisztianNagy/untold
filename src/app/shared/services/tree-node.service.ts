@@ -235,6 +235,22 @@ export class TreeNodeService {
       return validDefinitions;
   }
 
+  keepNodesExpanded(previous: TreeNode, next: TreeNode) {
+    try {
+        if (previous.expanded) {
+            next.expanded = true;
+        }
+
+        if (previous.children) {
+            previous.children.forEach((item, index) => {
+                this.keepNodesExpanded(previous.children[index], next.children[index]);
+            });
+        }
+    } catch (ex) {
+
+    }
+  }
+
   private assertRecursiveCircularDependency(originalDefinition: Untold.ClientDefinition,
                                             targetDefinition: Untold.ClientDefinition,
                                             allDefinitions: Array<Untold.ClientDefinition>,

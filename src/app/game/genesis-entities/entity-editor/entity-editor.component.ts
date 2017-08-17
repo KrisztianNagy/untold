@@ -32,7 +32,13 @@ export class EntityEditorComponent implements OnInit, OnChanges {
         const cur: GenesisEntity  = chng.currentValue ;
         const prev: GenesisEntity = chng.previousValue;
 
-        this.tree = [this.treeNodeService.getTreeFromGenesisEntity(cur)];
+        const nextTree = [this.treeNodeService.getTreeFromGenesisEntity(cur)];
+
+        if (this.tree) {
+          this.treeNodeService.keepNodesExpanded(this.tree[0], nextTree[0]);
+        }
+
+        this.tree = nextTree;
       }
     }
   }
