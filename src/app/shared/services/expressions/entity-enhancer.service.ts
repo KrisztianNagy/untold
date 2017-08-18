@@ -86,7 +86,7 @@ export class EntityEnhancerService {
         const storageEntity = JSON.parse(res);
 
         const loadedEntity: Untold.ClientEntity = JSON.parse(JSON.stringify(entity));
-        loadedEntity.entity = storageEntity.value && storageEntity.value['entity'] ? storageEntity.value['entity'] : {};
+        loadedEntity.entity = storageEntity && storageEntity['entity'] ? JSON.parse(storageEntity['entity']) : {};
 
         subject.next(loadedEntity);
         subject.complete();

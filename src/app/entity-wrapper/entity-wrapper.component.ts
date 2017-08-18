@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EntityEnhancerService } from '../shared/services/expressions/entity-enhancer.service';
 import { GenesisEntity, GenesisTreeNode } from '../shared/models/genesis-entity';
 import { EntityService } from '../store/services/entity.service';
+import { GameWorkflowEntityService } from '../shared/services/game-flow/game-workflow-entity.service';
 
 @Component({
   selector: 'app-entity-wrapper',
@@ -20,6 +21,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private entityService: EntityService,
               private entityEnhancerService: EntityEnhancerService,
+              private gameWorkflowEntityService: GameWorkflowEntityService,
               private route: ActivatedRoute,
               private router: Router) {
 
@@ -56,6 +58,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
 
         this.entityEnhancerService.recalculate(ent).subscribe(calculated => {
           this.entityService.updateEntity(calculated);
+          this.gameWorkflowEntityService.saveEntity(calculated);
       });
     });
   }
