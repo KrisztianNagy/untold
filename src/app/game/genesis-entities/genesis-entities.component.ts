@@ -2,10 +2,12 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRe
 import { Router } from '@angular/router';
 
 import { SelectItem } from 'primeng/primeng';
+import { Inplace } from 'primeng/primeng';
 
 import { Untold } from '../../shared/models/backend-export';
 import { RealmDefinitionService } from '../../store/services/realm-definition.service';
 import { EntityService } from '../../store/services/entity.service';
+import { GameWorkflowEntityService } from '../../shared/services/game-flow/game-workflow-entity.service';
 
 @Component({
   selector: 'app-genesis-entities',
@@ -20,7 +22,8 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
 
   constructor(private realmDefinitionService: RealmDefinitionService,
               private changeDetectorRef: ChangeDetectorRef,
-              private entityService: EntityService) {
+              private entityService: EntityService,
+              private gameWorkflowEntityService: GameWorkflowEntityService) {
 
   }
 
@@ -56,6 +59,11 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
 
   moduleChanged() {
     this.populateEntities();
+  }
+
+  updateEntityName(entity: Untold.ClientEntity) {
+        this.entityService.updateEntity(entity);
+        this.gameWorkflowEntityService.saveEntity(entity);
   }
 
   showEdit() {

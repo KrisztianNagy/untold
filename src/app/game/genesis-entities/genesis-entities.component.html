@@ -16,8 +16,20 @@
             <p-dataGrid [value]="entities">
                 <ng-template let-entity pTemplate="item">
                     <div class="ui-g-12 ui-md-3">
-                        {{entity.name}}
-                        <p-panel [header]="entity.name" [style]="{'text-align':'center'}">
+                        
+                        <p-panel>
+                            <p-header>
+                                <div class="ui-helper-clearfix">
+                                    <p-inplace closable="closable">
+                                        <span pInplaceDisplay closable="closable">
+                                            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{entity.name}}</span>                                            
+                                        </span>
+                                        <span pInplaceContent>
+                                            <input type="text" [(ngModel)]="entity.name" (change)="updateEntityName(entity)" pInputText>                                            
+                                        </span>
+                                    </p-inplace>
+                                </div>
+                            </p-header>
                             <i class="fa fa-search" [routerLink]="['/game/entity', entity.id]" style="cursor:pointer"></i>
                         </p-panel>
                     </div>

@@ -72,6 +72,7 @@ import {ToolbarModule} from 'primeng/primeng';
 import {TooltipModule} from 'primeng/primeng';
 import {TreeModule} from 'primeng/primeng';
 import {TreeTableModule} from 'primeng/primeng';
+import {InplaceModule} from 'primeng/primeng';
 
 // Barcelona layout
 import {AppComponent} from './app.component';
@@ -243,6 +244,7 @@ import { EntityWrapperComponent } from './entity-wrapper/entity-wrapper.componen
         TooltipModule,
         TreeModule,
         TreeTableModule,
+        InplaceModule,
         StoreModule.forRoot(CombinedReducers)
     ],
     declarations: [
