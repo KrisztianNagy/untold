@@ -69,6 +69,17 @@ export class EntityEnhancerService {
     return this.storageDataService.insertOrUpdate(tableRow, 'RM' + realm.id + 'Entities', realm.entityEditorAcccessSignature);
   }
 
+  deleteEntity(entity: Untold.ClientEntity, realm: Untold.ClientRealm): Observable<Response> {
+    const tableRow: EntityTableRow = {
+      PartitionKey: 'entity',
+      RowKey: entity.id.toString(),
+      rowStatus: 1,
+      entity: JSON.stringify(entity.entity)
+    };
+
+    return this.storageDataService.delete(tableRow, 'RM' + realm.id + 'Entities', realm.entityEditorAcccessSignature);
+  }
+
   loadEntity(entity: Untold.ClientEntity, realm: Untold.ClientRealm):
     AsyncSubject<Untold.ClientEntity> {
 

@@ -63,4 +63,13 @@ export class GameWorkflowEntityService {
         });
       });
   }
+
+  public deleteEntity(entity: Untold.ClientEntity) {
+    this.genesisDataService.deleteEntity( entity.id)
+    .subscribe(() => {
+      this.entityService.deleteEntity(entity);
+      this.entityEnhancerService.deleteEntity(entity, this.gameService.getCurrent().realm);
+      // TODO: Notify other users
+    });
+  }
 }

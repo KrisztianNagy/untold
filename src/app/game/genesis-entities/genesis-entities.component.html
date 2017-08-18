@@ -8,10 +8,7 @@
             <div *ngIf="modules && modules.length" class="ui-g">
                 <div class="ui-g-2">
                     <p-dropdown [options]="modules"  [(ngModel)]="selectedModule" (onChange)="moduleChanged()"></p-dropdown>
-                </div>
-                <div class="ui-g-2">
-                        <button pButton type="button" class='green-btn' (click)="showEdit()" label="Create entity" ></button>
-                </div>                   
+                </div>                                 
             </div>
             <p-dataGrid [value]="entities">
                 <ng-template let-entity pTemplate="item">
@@ -30,7 +27,20 @@
                                     </p-inplace>
                                 </div>
                             </p-header>
-                            <i class="fa fa-search" [routerLink]="['/game/entity', entity.id]" style="cursor:pointer"></i>
+                            
+                            <p-footer>
+                                <div class="ui-g">
+                                    <div class="ui-g-4">
+                                        <button pButton type="button" class='blue-btn' [routerLink]="['/game/entity', entity.id]" icon="ui-icon-dehaze" ></button>
+                                    </div>
+                                    <div class="ui-g-4">
+                                            
+                                    </div>
+                                    <div class="ui-g-4">
+                                        <button pButton type="button" class='red-btn' (click)="deleteEntity(entity)" icon="ui-icon-delete-forever" ></button>
+                                    </div>
+                                </div>
+                            </p-footer>
                         </p-panel>
                     </div>
                 </ng-template>
