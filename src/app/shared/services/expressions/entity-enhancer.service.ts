@@ -92,7 +92,7 @@ export class EntityEnhancerService {
         subject.complete();
       }, err => {
         const loadedEntity: Untold.ClientEntity = JSON.parse(JSON.stringify(entity));
-        entity.entity = {};
+        loadedEntity.entity = {};
 
         subject.next(loadedEntity);
         subject.complete();
