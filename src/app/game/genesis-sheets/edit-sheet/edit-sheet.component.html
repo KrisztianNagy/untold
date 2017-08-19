@@ -1,9 +1,9 @@
 <p-tabView>
     <p-tabPanel header="HTML">
-        <p-editor [(ngModel)]="htmlText"></p-editor>
+        <ace-editor [(text)]="htmlText" [mode]="'html'" #editorhtml style="height:400px;"></ace-editor>
     </p-tabPanel>
     <p-tabPanel header="CSS">
-        css
+        <ace-editor [(text)]="cssText" [mode]="'css'" #editorcss style="height:400px;"></ace-editor>
     </p-tabPanel>
     <p-tabPanel header="Preview">
         preview
