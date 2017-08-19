@@ -173,6 +173,9 @@ import { MapSideBarComponent } from './side-bar/map-side-bar/map-side-bar.compon
 import { RuleSideBarComponent } from './side-bar/rule-side-bar/rule-side-bar.component';
 import { BoardSideBarComponent } from './side-bar/board-side-bar/board-side-bar.component';
 import { EntityWrapperComponent } from './entity-wrapper/entity-wrapper.component';
+import { SheetSideBarComponent } from './side-bar/sheet-side-bar/sheet-side-bar.component';
+import { GenesisSheetsComponent } from './game/genesis-sheets/genesis-sheets.component';
+import { EditSheetComponent } from './game/genesis-sheets//edit-sheet/edit-sheet.component';
 
 @NgModule({
     imports: [
@@ -299,7 +302,10 @@ import { EntityWrapperComponent } from './entity-wrapper/entity-wrapper.componen
     MapSideBarComponent,
     RuleSideBarComponent,
     BoardSideBarComponent,
-    EntityWrapperComponent
+    EntityWrapperComponent,
+    SheetSideBarComponent,
+    GenesisSheetsComponent,
+    EditSheetComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
