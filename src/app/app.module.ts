@@ -177,6 +177,7 @@ import { EntityWrapperComponent } from './entity-wrapper/entity-wrapper.componen
 import { SheetSideBarComponent } from './side-bar/sheet-side-bar/sheet-side-bar.component';
 import { GenesisSheetsComponent } from './game/genesis-sheets/genesis-sheets.component';
 import { EditSheetComponent } from './game/genesis-sheets//edit-sheet/edit-sheet.component';
+import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
 
 
 @NgModule({
@@ -309,6 +310,7 @@ import { EditSheetComponent } from './game/genesis-sheets//edit-sheet/edit-sheet
         SheetSideBarComponent,
         GenesisSheetsComponent,
         EditSheetComponent,
+        SheetViewerComponent,
         //AceEditorComponent
     ],
     providers: [

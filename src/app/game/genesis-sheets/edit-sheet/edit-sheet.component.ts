@@ -14,9 +14,14 @@ export class EditSheetComponent implements OnInit, AfterViewInit {
 
   private htmlText = '';
   private cssText = '';
+  private model: any;
 
-
-  constructor() { }
+  constructor() {
+      this.model = {
+          name: 'My name',
+          size: '15'
+      };
+   }
 
   ngOnInit() {
   }

@@ -6,6 +6,6 @@
         <ace-editor [(text)]="cssText" [mode]="'css'" #editorcss style="height:400px;"></ace-editor>
     </p-tabPanel>
     <p-tabPanel header="Preview">
-        preview
+        <app-sheet-viewer [model]="model" [html]="htmlText" [css]="cssText"></app-sheet-viewer>
     </p-tabPanel>
 </p-tabView>
