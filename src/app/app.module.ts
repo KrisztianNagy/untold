@@ -123,6 +123,7 @@ import { ExpressionOperatorService } from './shared/services/expressions/express
 import { ExpressionFunctionService } from './shared/services/expressions/expression-function.service';
 import { ExpressionTableCacheService } from './shared/services/expressions/expression-table-cache.service';
 import { EntityEnhancerService } from './shared/services/expressions/entity-enhancer.service';
+import { SheetEntityService } from './shared/services/expressions/sheet-entity.service';
 import { CanActivateSelectedRealmGuard } from './shared/guards/can-activate-selected-realm.guard';
 import { CanActivateSelectedRealmOwnerGuard } from './shared/guards/can-activate-selected-realm-owner.guard';
 import { CanActivateAuthenticationGuard } from './shared/guards/can-activate-authentication.guard';
@@ -355,6 +356,7 @@ import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
         ExpressionFunctionService,
         ExpressionTableCacheService,
         EntityEnhancerService,
+        SheetEntityService,
         CanActivateSelectedRealmGuard,
         CanActivateSelectedRealmOwnerGuard,
         CanActivateAuthenticationGuard

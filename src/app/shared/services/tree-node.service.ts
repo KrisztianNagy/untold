@@ -178,6 +178,7 @@ export class TreeNodeService {
     return entity;
   }
 
+  
   addListItemToTreeNode(tree: GenesisTreeNode): GenesisTreeNode {
     if (tree.data.isList) {
         const def: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(tree.data));
