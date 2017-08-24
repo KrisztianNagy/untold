@@ -6,6 +6,6 @@
         <ace-editor [(text)]="cssText" [mode]="'css'" #editorcss style="height:400px;"></ace-editor>
     </p-tabPanel>
     <p-tabPanel header="Preview" [rightIcon]="buildResultIcon">
-        <app-sheet-viewer [model]="model" [html]="htmlText" [css]="cssText" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
+        <app-sheet-viewer [model]="model" [html]="htmlText" [css]="cssText" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
     </p-tabPanel>
 </p-tabView>

@@ -70,7 +70,16 @@ export class EditSheetComponent implements OnInit, AfterViewInit {
     }
 
     onBuildCompleted(event: boolean) {
-       this.buildResultIcon = event ? 'ui-icon-check' : 'ui-icon-error';
-      }
+        this.buildResultIcon = event ? 'ui-icon-check' : 'ui-icon-error';
+    }
+
+    onModelUpdated(event: any) {
+        this.entityService.entities.subscribe(ent => {
+            this.entityEnhancerService.getGenesisEntity(ent[0]).subscribe(gen => {
+                let entity = this.sheetEntityService.getEntityFromSimpleEntity(gen, event);
+                console.log('success');
+              });
+          });
+    }
 
 }

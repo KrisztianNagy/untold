@@ -70,19 +70,21 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
         this.createComponentFactory( this.compiler, compMetadata, model )
             .then(factory => {
               this.componentRef = this.div.createComponent(factory);
+
+              this.errorMsg = '';
+              this.onBuildCompleted.emit(true);
+  
+              this.emitterSubscription = this.componentRef.instance.entityChangedEvent.subscribe(entity => {
+                this.entityChangedEvent.emit(entity);
+                console.log('emitter fired');
+              });
             })
             .catch(() => {
               if (this.componentRef) {
                 this.componentRef.destroy();                             }
             });
-            this.errorMsg = '';
-            this.onBuildCompleted.emit(true);
-
-            this.emitterSubscription = this.componentRef.instance.entityChangedEvent.subscribe(entity => {
-              this.entityChangedEvent.emit(entity);
-              console.log('emitter fired');
-            });
         } catch (err) {
+          this.compiler.clearCache();
           this.errorMsg = err.message ? err.message : err.originalStack;
           console.log('Cant compile');
           this.onBuildCompleted.emit(false);
