@@ -29,6 +29,7 @@ export declare namespace Untold {
 		id: number;
 		moduleGuid: System.Guid;
 		name: string;
+		sheetId?: number;
 		users: Untold.ClientUser[];
 	}
 	interface ClientEntityChange {
@@ -124,6 +125,15 @@ export declare namespace Untold {
 		tableGuid: System.Guid;
 		uniqueTableName: string;
 	}
+
+	interface ClientSheet {
+		definition: Untold.ClientDefinition;
+		definitionGuid: System.Guid;
+		id: number;
+		moduleGuid: System.Guid;
+		name: string;
+	}
+
 	interface ClientRuleTableBulkInsert {
 		columns: Untold.ClientRuleTableColumn[];
 		entities: Untold.ClientRuleTableBulkInsertEntity[];

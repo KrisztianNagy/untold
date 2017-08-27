@@ -10,6 +10,7 @@ import { RealmDefinitionService } from '../../store/services/realm-definition.se
 import { Untold } from '../../shared/models/backend-export';
 import { RealmHubSenderService } from '../../shared/services/realm-hub-sender.service';
 import { GameWorkflowEntityService } from '../../shared/services/game-flow/game-workflow-entity.service';
+import { GameWorkflowSheetService } from '../../shared/services/game-flow/game-workflow-sheet.service';
 
 @Component({
   selector: 'app-genesis-definitions',
@@ -33,7 +34,8 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
               private realmDefinitionService: RealmDefinitionService,
               private gameService: GameService,
               private realmHubSenderService: RealmHubSenderService,
-              private gameWorkflowEntityService: GameWorkflowEntityService) {
+              private gameWorkflowEntityService: GameWorkflowEntityService,
+              private gameWorkflowSheetService: GameWorkflowSheetService) {
 
   }
 
@@ -143,6 +145,10 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
 
   createEntity(currentDefinitionNode: TreeNode) {
     this.gameWorkflowEntityService.createEntity(currentDefinitionNode.data);
+  }
+
+  createSheet(currentDefinitionNode: TreeNode) {
+    this.gameWorkflowSheetService.createSheet(currentDefinitionNode.data);
   }
 
   private loadTree() {

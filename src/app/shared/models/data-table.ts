@@ -10,6 +10,11 @@ export class EntityTableRow extends AzureTableRow {
     entity: Object;
 }
 
+export class SheetTableRow extends AzureTableRow {
+    html: string;
+    css: string;
+}
+
 export class DataTable {
     oldColumns: Array<Untold.ClientRuleTableColumn>;
     columns: Array<Untold.ClientRuleTableColumn>;

@@ -1,15 +1,78 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { Router } from '@angular/router';
+
+import { SelectItem } from 'primeng/primeng';
+import { Inplace } from 'primeng/primeng';
+
+import { Untold } from '../../shared/models/backend-export';
+import { Sheet } from '../../store/models/sheet';
+import { RealmDefinitionService } from '../../store/services/realm-definition.service';
+import { SheetService } from '../../store/services/sheet.service';
+import { GameWorkflowSheetService } from '../../shared/services/game-flow/game-workflow-sheet.service';
 
 @Component({
   selector: 'app-genesis-sheets',
   templateUrl: './genesis-sheets.component.html',
   styleUrls: ['./genesis-sheets.component.scss']
 })
-export class GenesisSheetsComponent implements OnInit {
+export class GenesisSheetsComponent implements OnInit, OnDestroy {
+  modules: Array<SelectItem>;
+  selectedModule: Untold.ClientModuleDefinitions;
+  sheets: Sheet[];
+  private definitionSubscription;
 
-  constructor() { }
+  constructor(private realmDefinitionService: RealmDefinitionService,
+              private changeDetectorRef: ChangeDetectorRef,
+              private sheetService: SheetService,
+              private gameWorkflowSheetService: GameWorkflowSheetService) {
 
-  ngOnInit() {
   }
 
+  ngOnInit() {
+    this.sheets = [];
+
+    this.definitionSubscription = this.realmDefinitionService.definitions.subscribe(realmDefinitions => {
+      this.modules = realmDefinitions.map(rd => {
+         return {
+          label: rd.name,
+          value: rd
+        };
+      });
+
+      if (this.selectedModule) {
+        const matching = realmDefinitions.filter(rt => rt.id === this.selectedModule.id);
+        this.selectedModule = matching.length ? matching[0] : null;
+        this.populateSheets();
+      }
+
+      if (!this.selectedModule && this.modules.length ) {
+        this.selectedModule = this.modules[0].value;
+        this.populateSheets();
+      }
+
+      this.changeDetectorRef.markForCheck();
+    });
+  }
+
+  ngOnDestroy() {
+    this.definitionSubscription.unsubscribe();
+  }
+
+  moduleChanged() {
+    this.populateSheets();
+  }
+
+  updateSheetName(sheet: Sheet) {
+        this.gameWorkflowSheetService.saveSheetName(sheet);
+  }
+
+  deleteEntity(sheet: Sheet) {
+    this.gameWorkflowSheetService.deleteSheet(sheet);
+    this.populateSheets();
+  }
+
+  private populateSheets() {
+    this.sheets = this.sheetService.getCurrent().filter(ent => ent.moduleGuid = this.selectedModule.guid);
+    this.changeDetectorRef.markForCheck();
+  }
 }

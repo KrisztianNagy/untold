@@ -1,11 +1,25 @@
 <p-tabView>
     <p-tabPanel header="HTML">
-        <ace-editor [(text)]="htmlText" [mode]="'html'" #editorhtml style="height:400px;"></ace-editor>
+        <ace-editor [(text)]="htmlText" [mode]="'html'" (textChanged)="editorChanged($event)" #editorhtml style="height:400px;"></ace-editor>
     </p-tabPanel>
     <p-tabPanel header="CSS">
-        <ace-editor [(text)]="cssText" [mode]="'css'" #editorcss style="height:400px;"></ace-editor>
+        <ace-editor [(text)]="cssText" [mode]="'css'" (textChanged)="editorChanged($event)" #editorcss style="height:400px;"></ace-editor>
     </p-tabPanel>
     <p-tabPanel header="Preview" [rightIcon]="buildResultIcon">
-        <app-sheet-viewer [model]="model" [html]="htmlText" [css]="cssText" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div *ngIf="!entities || !entities.length">
+                    Please create an entity for this definition first.
+                </div>
+                <div *ngIf="entities && entities.length" class="ui-g">
+                    <div class="ui-g-2">
+                        <p-dropdown [options]="entities"  [(ngModel)]="model"></p-dropdown>
+                    </div>                                 
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <app-sheet-viewer [model]="model" [html]="htmlTextToProcess" [css]="cssTextToProcess" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
+            </div>            
+        </div>
     </p-tabPanel>
 </p-tabView>

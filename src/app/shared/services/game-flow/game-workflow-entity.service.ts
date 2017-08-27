@@ -36,8 +36,10 @@ export class GameWorkflowEntityService {
     };
 
     this.genesisDataService.createEntity(this.gameService.getCurrent().realm.id, entity)
-    .subscribe(() => {
-
+    .subscribe(response => {
+      let responseEntity = JSON.parse(response.json());
+      this.entityService.addEntity(responseEntity);
+        // TODO: Notify others
     });
   }
 
@@ -54,14 +56,20 @@ export class GameWorkflowEntityService {
     });
   }
 
- public saveEntity(entity: Untold.ClientEntity) {
+ public saveEntityValue(entity: Untold.ClientEntity) {
     this.entityEnhancerService.saveEntity(entity, this.gameService.getCurrent().realm)
       .subscribe(() => {
-        this.genesisDataService.saveEntity(this.gameService.getCurrent().realm.id, entity)
-        .subscribe(() => {
+          this.entityService.updateEntity(entity);
           // TODO: Notify other users
-        });
       });
+  }
+
+  public saveEntityName(entity: Untold.ClientEntity) {
+    this.genesisDataService.saveEntity(this.gameService.getCurrent().realm.id, entity)
+    .subscribe(() => {
+      this.entityService.updateEntity(entity);
+      // TODO: Notify other users
+    });
   }
 
   public deleteEntity(entity: Untold.ClientEntity) {

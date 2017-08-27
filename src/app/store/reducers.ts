@@ -10,6 +10,7 @@ import { SelectedGameReducer } from './reducers/selected-game.reducer';
 import { RealmTableReducer } from './reducers/realm-table.reducer';
 import { EntityReducer } from './reducers/entity.reducer';
 import { DefinitonReducer } from './reducers/definition.reducer';
+import { SheetReducer } from './reducers/sheet.reducer';
 
 export const CombinedReducers = {
     GridTiles: GridTileReducer,
@@ -23,5 +24,6 @@ export const CombinedReducers = {
     SelectedGame: SelectedGameReducer,
     RealmTables: RealmTableReducer,
     RealmDefinitions: DefinitonReducer,
-    Entities: EntityReducer
+    Entities: EntityReducer,
+    Sheets: SheetReducer
 };

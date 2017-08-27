@@ -1,1 +1,50 @@
-<app-edit-sheet></app-edit-sheet>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card">
+            <h1>Sheets</h1>     
+            <div *ngIf="!modules || !modules.length">
+                Please create a module first.
+            </div>
+            <div *ngIf="modules && modules.length" class="ui-g">
+                <div class="ui-g-2">
+                    <p-dropdown [options]="modules"  [(ngModel)]="selectedModule" (onChange)="moduleChanged()"></p-dropdown>
+                </div>                                 
+            </div>
+            <p-dataGrid [value]="sheets">
+                <ng-template let-sheet pTemplate="item">
+                    <div class="ui-g-12 ui-md-3">
+                        
+                        <p-panel>
+                            <p-header>
+                                <div class="ui-helper-clearfix">
+                                    <p-inplace closable="closable">
+                                        <span pInplaceDisplay closable="closable">
+                                            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{sheet.name}}</span>                                            
+                                        </span>
+                                        <span pInplaceContent>
+                                            <input type="text" [(ngModel)]="sheet.name" (change)="updateSheetName(sheet)" pInputText>                                            
+                                        </span>
+                                    </p-inplace>
+                                </div>
+                            </p-header>
+                            
+                            <p-footer>
+                                <div class="ui-g">
+                                    <div class="ui-g-4">
+                                        <button pButton type="button" class='blue-btn' [routerLink]="['/game/sheet', sheet.id]" icon="ui-icon-dehaze" ></button>
+                                    </div>
+                                    <div class="ui-g-4">
+                                            
+                                    </div>
+                                    <div class="ui-g-4">
+                                        <button pButton type="button" class='red-btn' (click)="deleteSheet(sheet)" icon="ui-icon-delete-forever" ></button>
+                                    </div>
+                                </div>
+                            </p-footer>
+                        </p-panel>
+                    </div>
+                </ng-template>
+            </p-dataGrid>
+        </div>
+    </div>
+</div>

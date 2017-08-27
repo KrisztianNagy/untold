@@ -6,10 +6,12 @@ import { RealmHubListenerService } from '../realm-hub-listener.service';
 import { GameService } from '../../../store/services/game.service';
 import { GameWorkflowMapService } from './game-workflow-map.service';
 import { GameWorkflowEntityService } from './game-workflow-entity.service';
+import { GameWorkflowSheetService } from './game-workflow-sheet.service';
 import { GenesisDataService } from '../../../shared/services/rest/genesis-data.service';
 import { RealmTableService } from '../../../store/services/realm-table.service';
 import { RealmDefinitionService } from '../../../store/services/realm-definition.service';
 import { EntityService } from '../../../store/services/entity.service';
+import { SheetService } from '../../../store/services/sheet.service';
 import { GrowlService } from '../growl.service';
 import { Untold } from '../../models/backend-export';
 
@@ -26,7 +28,8 @@ export class GameWorkflowRealmService {
               private genesisDataService: GenesisDataService,
               private realmTableService: RealmTableService,
               private realmDefinitionService: RealmDefinitionService,
-              private entityService: EntityService) {
+              private entityService: EntityService,
+              private gameWorkflowSheetService: GameWorkflowSheetService) {
     this.realmHubListenerService.responseJoinRealm.subscribe(rm => {
       this.currentUserJoinsRealm(rm.Data);
     });
@@ -82,6 +85,12 @@ export class GameWorkflowRealmService {
             });
           });
         }
+
+        this.genesisDataService.getSheetsByRealm(game.realm.id).subscribe(sheets => {
+          sheets.forEach(sheet => {
+            this.gameWorkflowSheetService.setEnhancedSheet(sheet);
+          });
+        });
       });
     });
 

@@ -5,6 +5,7 @@ import {Token} from './models/token';
 import {Wall} from './models/wall';
 import {TemplateConfiguration} from './models/template-configuration';
 import {Untold} from '../shared/models/backend-export';
+import { Sheet } from './models/sheet';
 
 export interface AppStore {
     GridTiles: GridTile[];
@@ -19,4 +20,5 @@ export interface AppStore {
     RealmTables: Untold.ClientModuleTables[];
     RealmDefinitions: Untold.ClientModuleDefinitions[];
     Entities: Untold.ClientEntity[];
+    Sheets: Sheet[];
 }

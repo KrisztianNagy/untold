@@ -80,4 +80,21 @@ export class GenesisDataService {
   deleteEntity(entityId: number) {
     return this.webApiService.delete('/api/entity/delete/' + entityId);
   }
+
+  createSheet(realmId: number, clientSheet: Untold.ClientSheet) {
+    return this.webApiService.post('/api/sheet/create/' + realmId, clientSheet);
+  }
+
+  saveSheet(realmId: number, clientSheet: Untold.ClientSheet) {
+    return this.webApiService.post('/api/sheet/save/' + realmId, clientSheet);
+  }
+
+  deleteSheet(sheetId: number) {
+    return this.webApiService.delete('/api/sheet/delete/' + sheetId);
+  }
+
+  getSheetsByRealm(realmId: number): Observable<Array<Untold.ClientSheet>> {
+    return this.webApiService.get('/api/sheet/' + realmId)
+      .map(res => JSON.parse(res));
+  }
 }

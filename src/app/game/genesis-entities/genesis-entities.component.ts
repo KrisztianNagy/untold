@@ -62,8 +62,7 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
   }
 
   updateEntityName(entity: Untold.ClientEntity) {
-        this.entityService.updateEntity(entity);
-        this.gameWorkflowEntityService.saveEntity(entity);
+      this.gameWorkflowEntityService.saveEntityName(entity);
   }
 
   deleteEntity(entity: Untold.ClientEntity) {

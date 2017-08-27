@@ -117,6 +117,7 @@ import { TokenService } from './store/services/token.service';
 import { RealmTableService } from './store/services/realm-table.service';
 import { RealmDefinitionService } from './store/services/realm-definition.service';
 import { EntityService } from './store/services/entity.service';
+import { SheetService } from './store/services/sheet.service';
 import { CalculatedExpressionService } from './shared/services/expressions/calculated-expression.service';
 import { ExpressionEvaluatorService } from './shared/services/expressions/expression-evaluator.service';
 import { ExpressionOperatorService } from './shared/services/expressions/expression-operator.service';
@@ -124,6 +125,7 @@ import { ExpressionFunctionService } from './shared/services/expressions/express
 import { ExpressionTableCacheService } from './shared/services/expressions/expression-table-cache.service';
 import { EntityEnhancerService } from './shared/services/expressions/entity-enhancer.service';
 import { SheetEntityService } from './shared/services/expressions/sheet-entity.service';
+import { SheetEnhancerService } from './shared/services/expressions/sheet-enhancer.service';
 import { CanActivateSelectedRealmGuard } from './shared/guards/can-activate-selected-realm.guard';
 import { CanActivateSelectedRealmOwnerGuard } from './shared/guards/can-activate-selected-realm-owner.guard';
 import { CanActivateAuthenticationGuard } from './shared/guards/can-activate-authentication.guard';
@@ -147,6 +149,7 @@ import { GameWorkflowService } from './shared/services/game-flow/game-workflow.s
 import { GameWorkflowRealmService } from './shared/services/game-flow/game-workflow-realm.service';
 import { GameWorkflowMapService } from './shared/services/game-flow/game-workflow-map.service';
 import { GameWorkflowEntityService } from './shared/services/game-flow/game-workflow-entity.service';
+import { GameWorkflowSheetService } from './shared/services/game-flow/game-workflow-sheet.service';
 import { ToolbarComponent } from './game/board/toolbar/toolbar.component';
 import { RealmImagesComponent } from './game/realm-images/realm-images.component';
 import { LoadQueueService } from './shared/services/load-queue.service';
@@ -335,12 +338,14 @@ import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
         GameWorkflowRealmService,
         GameWorkflowMapService,
         GameWorkflowEntityService,
+        GameWorkflowSheetService,
         VisibleAreaService,
         InteractionService,
         TokenService,
         RealmTableService,
         RealmDefinitionService,
         EntityService,
+        SheetService,
         WallService,
         MapDataService,
         GrowlService,
@@ -356,6 +361,7 @@ import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
         ExpressionFunctionService,
         ExpressionTableCacheService,
         EntityEnhancerService,
+        SheetEnhancerService,
         SheetEntityService,
         CanActivateSelectedRealmGuard,
         CanActivateSelectedRealmOwnerGuard,
