@@ -37,6 +37,13 @@
                     <div class="layout-tabmenu-tooltip-text">Entities</div>
                 </div>
             </li>
+            <li [ngClass]="{'active-item':app.activeTabIndex === 9}" *ngIf="isRealmSelected">
+                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 9)"><i class="material-icons">library_books</i></a>
+                <div class="layout-tabmenu-tooltip">
+                    <div class="layout-tabmenu-tooltip-arrow"></div>
+                    <div class="layout-tabmenu-tooltip-text">Sheet</div>
+                </div>
+            </li>
             <li [ngClass]="{'active-item':app.activeTabIndex === 5}" *ngIf="isRealmSelected">
                 <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 5)"><i class="material-icons">content_copy</i></a>
                 <div class="layout-tabmenu-tooltip">
@@ -65,13 +72,7 @@
                     <div class="layout-tabmenu-tooltip-text">Board</div>
                 </div>
             </li>
-            <li [ngClass]="{'active-item':app.activeTabIndex === 9}" *ngIf="isRealmSelected">
-                    <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 9)"><i class="material-icons">tab</i></a>
-                    <div class="layout-tabmenu-tooltip">
-                        <div class="layout-tabmenu-tooltip-arrow"></div>
-                        <div class="layout-tabmenu-tooltip-text">Sheet</div>
-                    </div>
-                </li>
+           
         </ul>
         <div class="layout-tabmenu-contents">
             <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 0}">
@@ -157,7 +158,7 @@
             </div>     
             <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 9}">
                     <div class="layout-submenu-title clearfix">
-                        <span>Board</span>
+                        <span>Sheets</span>
                         <a href="#" class="menu-button material-icons" (click)="app.closeSidebar($event)">menu</a>
                     </div>
                     <app-sidebarTabContent>

@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/debounce';
 import { Subject } from 'rxjs/Subject';
+
+import { SelectItem } from 'primeng/primeng';
 
 import { Untold } from '../../../shared/models/backend-export';
 import { AceEditorComponent } from 'ng2-ace-editor';
@@ -8,8 +10,10 @@ import { Editor } from 'primeng/primeng';
 import { SheetViewerComponent } from '../../../sheet-viewer/sheet-viewer.component';
 import { EntityService } from '../../../store/services/entity.service';
 import { SheetService } from '../../../store/services/sheet.service';
+import { Sheet } from '../../../store/models/sheet';
 import { EntityEnhancerService } from '../../../shared/services/expressions/entity-enhancer.service';
 import { SheetEntityService } from '../../../shared/services/expressions/sheet-entity.service';
+import { GameWorkflowSheetService } from '../../../shared/services/game-flow/game-workflow-sheet.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -22,8 +26,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('editorcss') editorcss;
   @ViewChild(SheetViewerComponent) sheetViewer: SheetViewerComponent;
 
-  private htmlText = '';
-  private cssText = '';
+  private sheet: Sheet;
   private htmlTextToProcess = '';
   private cssTextToProcess = '';
   private model: any;
@@ -33,45 +36,56 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   private sheetSub: any;
   private textChangeSub: Subject<boolean>;
   private textChangeDelaySub: any;
-  private entities: Untold.ClientEntity[] = [];
+  private entities: Array<SelectItem>;
+  private selectedEntity: Untold.ClientEntity;
 
   constructor(private sheetService: SheetService,
               private entityEnhancerService: EntityEnhancerService,
               private sheetEntityService: SheetEntityService,
               private entityService: EntityService,
+              private gameWorkflowSheetService: GameWorkflowSheetService,
               private route: ActivatedRoute,
               private router: Router,
               private changeDetectorRef: ChangeDetectorRef) {
    }
 
   ngOnInit() {
-    /* this.entityService.entities.subscribe(ent => {
-    this.entityEnhancerService.getGenesisEntity(ent[0]).subscribe(gen => {
-        let simple = this.sheetEntityService.getSimpleEntityFromGenesisEntity(gen);
-        this.model = simple;
-        });
-    });*/
-
     this.textChangeSub = new Subject<boolean>();
 
-    this.textChangeDelaySub = this.textChangeSub.delay(5000).subscribe(() => {
-        this.htmlTextToProcess = this.htmlText;
-        this.cssTextToProcess = this.cssText;
+    this.textChangeDelaySub = this.textChangeSub.debounceTime(5000).subscribe(() => {
+        this.htmlTextToProcess = this.sheet.html;
+        this.cssTextToProcess = this.sheet.css;
+        this.changeDetectorRef.markForCheck();
     });
 
     this.routeSub = this.route.params.subscribe(params => {
     if (params['id']) {
         this.id = parseInt(params['id'], 10);
-
+        console.log(this.id);
         this.sheetSub = this.sheetService.sheets
         .subscribe(sheets =>
-            sheets.filter(sh => sh.id === this.id)
+             sheets.filter(sh => sh.id === this.id)
             .forEach(sh => {
-                this.htmlText = sh.html;
-                this.cssText = sh.css;
-                this.sheetSub.unsubscribe();
+                this.sheet = sh;
 
-                this.entities = this.entityService.getCurrent();
+                if (this.sheetSub) {
+                    this.sheetSub.unsubscribe();
+                }
+
+                this.entities = this.entityService.getCurrent().map(ent => {
+                    return {
+                        label: ent.name,
+                        value: ent
+                      };
+                });
+
+                if (this.entities.length) {
+                    this.selectedEntity = this.entities[0].value;
+                }
+
+                this.setModel();
+
+                this.textChangeSub.next(true);
             }));
         }
     });
@@ -86,6 +100,10 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.textChangeDelaySub) {
         this.textChangeDelaySub.unsubscribe();
+    }
+
+    if (this.sheetSub){
+        this.sheetSub.unsubscribe();
     }
   }
 
@@ -121,7 +139,25 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
         this.buildResultIcon = event ? 'ui-icon-check' : 'ui-icon-error';
     }
 
-    onModelUpdated(event: any) {
+    private entityChanged() {
+        this.setModel();
+    }
+
+    private setModel() {
+        if (this.selectedEntity) {
+            this.entityEnhancerService.getGenesisEntity(this.selectedEntity).subscribe(gen => {
+                let simple = this.sheetEntityService.getSimpleEntityFromGenesisEntity(gen);
+                this.model = simple;
+
+                this.changeDetectorRef.markForCheck();
+            });
+        } else {
+            this.model = {};
+        }
+    }
+
+    private saveSheet() {
+        this.gameWorkflowSheetService.saveSheetContent(this.sheet);
     }
 
     editorChanged(event) {

@@ -1,9 +1,14 @@
 <p-tabView>
     <p-tabPanel header="HTML">
-        <ace-editor [(text)]="htmlText" [mode]="'html'" (textChanged)="editorChanged($event)" #editorhtml style="height:400px;"></ace-editor>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <button pButton type="button" class='green-btn' (click)="saveSheet()" label="Save"></button>
+            </div>
+        </div>
+        <ace-editor [(text)]="sheet.html" [mode]="'html'" (textChanged)="editorChanged($event)" #editorhtml style="height:400px;"></ace-editor>
     </p-tabPanel>
     <p-tabPanel header="CSS">
-        <ace-editor [(text)]="cssText" [mode]="'css'" (textChanged)="editorChanged($event)" #editorcss style="height:400px;"></ace-editor>
+        <ace-editor [(text)]="sheet.css" [mode]="'css'" (textChanged)="editorChanged($event)" #editorcss style="height:400px;"></ace-editor>
     </p-tabPanel>
     <p-tabPanel header="Preview" [rightIcon]="buildResultIcon">
         <div class="ui-g">
@@ -13,7 +18,7 @@
                 </div>
                 <div *ngIf="entities && entities.length" class="ui-g">
                     <div class="ui-g-2">
-                        <p-dropdown [options]="entities"  [(ngModel)]="model"></p-dropdown>
+                        <p-dropdown [options]="entities"  [(ngModel)]="selectedEntity" (onChange)="entityChanged()"></p-dropdown>
                     </div>                                 
                 </div>
             </div>

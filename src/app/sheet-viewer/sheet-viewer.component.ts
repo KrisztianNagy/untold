@@ -51,6 +51,8 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
         return;
       }
 
+      model = model ? model : {};
+
       const compMetadata = new Component({
           selector: 'dynamic-html',
           template: html,

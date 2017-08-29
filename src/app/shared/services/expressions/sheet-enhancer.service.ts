@@ -23,7 +23,7 @@ export class SheetEnhancerService {
       css: sheet.css
     };
 
-    return this.storageDataService.delete(tableRow, 'RM' + realm.id + 'Sheets', realm.entityEditorAcccessSignature);
+    return this.storageDataService.delete(tableRow, 'RM' + realm.id + 'Sheets', realm.sheetEditorAcccessSignature);
   }
 
   getClientSheet(sheet: Sheet): Untold.ClientSheet {
@@ -33,17 +33,25 @@ export class SheetEnhancerService {
 
     return clientSheet;
   }
-  
+
   saveSheetContent(sheet: Sheet, realm: Untold.ClientRealm) {
+
+    const htmlChunks = this.splitTextContent(sheet.html, 30000);
+    const cssChunks = this.splitTextContent(sheet.css, 30000);
+
     const tableRow: SheetTableRow = {
       PartitionKey: 'sheet',
       RowKey: sheet.id.toString(),
       rowStatus: 1,
-      html: sheet.html,
-      css: sheet.css
+      html1: htmlChunks.length ? htmlChunks[0] : '',
+      html2: htmlChunks.length > 1 ? htmlChunks[1] : '',
+      html3: htmlChunks.length > 2 ? htmlChunks[2] : '',
+      html4: htmlChunks.length > 3 ? htmlChunks[3] : '',
+      css1: cssChunks.length ? cssChunks[0] : '',
+      css2: cssChunks.length > 1 ? cssChunks[1] : '',
     };
 
-    return this.storageDataService.insertOrUpdate(tableRow, 'RM' + realm.id + 'Sheets', realm.entityEditorAcccessSignature);
+    return this.storageDataService.insertOrUpdate(tableRow, 'RM' + realm.id + 'Sheets', realm.sheetEditorAcccessSignature);
   }
 
   loadSheet(sheet: Untold.ClientSheet, realm: Untold.ClientRealm): AsyncSubject<Sheet> {
@@ -53,17 +61,21 @@ export class SheetEnhancerService {
       PartitionKey: 'sheet',
       RowKey: sheet.id.toString(),
       rowStatus: 1,
-      html: '',
-      css: ''
+      html1: '',
+      html2: '',
+      html3: '',
+      html4: '',
+      css1: '',
+      css2: ''
     };
 
-    this.storageDataService.readRow('RM' + realm.id + 'Sheets', 'sheet', sheet.id.toString(), realm.entityReaderAcccessSignature)
+    this.storageDataService.readRow('RM' + realm.id + 'Sheets', 'sheet', sheet.id.toString(), realm.sheetReaderAcccessSignature)
       .subscribe(res => {
         const storageSheet = JSON.parse(res);
 
         const loadedSheet: Sheet = JSON.parse(JSON.stringify(sheet));
-        loadedSheet.html = storageSheet && storageSheet['html'] ? storageSheet['html'] : '';
-        loadedSheet.css = storageSheet && storageSheet['css'] ? storageSheet['css'] : '';
+        loadedSheet.html = this.mergeTableProperties(storageSheet, 'html', 4);
+        loadedSheet.css = this.mergeTableProperties(storageSheet, 'css', 2);
 
         subject.next(loadedSheet);
         subject.complete();
@@ -77,6 +89,28 @@ export class SheetEnhancerService {
       });
 
     return subject;
+  }
+
+  mergeTableProperties(storageSheet: any, propertyName: string, length: number) {
+    let result = '';
+
+    for (let i = 0; i < length; i++) {
+      result += storageSheet && storageSheet[propertyName + i] ? storageSheet[propertyName + i] : '';
+    }
+
+    return result;
+  }
+
+  splitTextContent(content: string, maxSize: number): Array<string> {
+    let result = [];
+    let pos = 0;
+
+    while (pos < content.length) {
+      result.push( content.substring(pos, pos + maxSize));
+      pos += maxSize;
+    }
+
+    return result;
   }
 
 }
