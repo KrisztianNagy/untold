@@ -1,9 +1,12 @@
 import {Component, Directive, Injectable, ElementRef, NgModule, Input, ViewContainerRef, Compiler, ComponentFactory,
   ModuleWithComponentFactories, ComponentRef, ReflectiveInjector, OnInit, OnDestroy, ComponentFactoryResolver,
-  EmbeddedViewRef, ViewChild, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
+  EmbeddedViewRef, ViewChild, OnChanges, SimpleChanges, Output, EventEmitter, DoCheck } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+import 'rxjs/add/operator/debounce';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-sheet-viewer',
@@ -106,8 +109,10 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
   private createComponentFactory( compiler: Compiler, metadata: Component, model: Object ) {
       @Component( metadata )
-      class DynamicComponent implements OnChanges {
+      class DynamicComponent implements DoCheck, OnDestroy, OnInit  {
         @Output() entityChangedEvent = new EventEmitter<any>();
+        private changeSub: Subject<boolean>;
+        private changeDelaySub: any;
         oldEntity: any;
         entity: any;
 
@@ -116,11 +121,28 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
           this.oldEntity = JSON.parse(JSON.stringify(this.entity));
         }
 
-        ngOnChanges(changes: SimpleChanges): void {
-          if (JSON.parse(JSON.stringify(this.entity)) !== JSON.parse(JSON.stringify(this.oldEntity))) {
-            this.oldEntity = JSON.parse(JSON.stringify(this.entity));
-            this.entityChangedEvent.emit(JSON.parse(JSON.stringify(this.entity)));
+        ngOnInit() {
+          this.changeSub = new Subject<boolean>();
+              this.changeDelaySub = this.changeSub.debounceTime(500).subscribe(() => {
+                if (JSON.stringify(this.entity) !== JSON.stringify(this.oldEntity)) {
+                  this.oldEntity = JSON.parse(JSON.stringify(this.entity));
+                  this.entityChangedEvent.emit(JSON.parse(JSON.stringify(this.entity)));
+                }
+              });
+        }
+
+        ngOnDestroy(): void {
+          if (this.changeSub) {
+              this.changeSub.unsubscribe();
           }
+
+          if (this.changeDelaySub) {
+              this.changeDelaySub.unsubscribe();
+          }
+        }
+
+        ngDoCheck () {
+          this.changeSub.next(true);
         }
 
         pushChanges(pushModel: Object) {
