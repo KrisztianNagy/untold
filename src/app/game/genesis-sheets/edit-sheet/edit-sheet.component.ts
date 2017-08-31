@@ -38,6 +38,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   private textChangeDelaySub: any;
   private entities: Array<SelectItem>;
   private selectedEntity: Untold.ClientEntity;
+  private sheetVisible: boolean;
 
   constructor(private sheetService: SheetService,
               private entityEnhancerService: EntityEnhancerService,
@@ -53,6 +54,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
     this.textChangeSub = new Subject<boolean>();
 
     this.textChangeDelaySub = this.textChangeSub.debounceTime(5000).subscribe(() => {
+        this.sheetVisible = true;
         this.htmlTextToProcess = this.sheet.html;
         this.cssTextToProcess = this.sheet.css;
         this.changeDetectorRef.markForCheck();
@@ -136,7 +138,9 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     onBuildCompleted(event: boolean) {
+        console.log('sheet completed');
         this.buildResultIcon = event ? 'ui-icon-check' : 'ui-icon-error';
+        this.changeDetectorRef.markForCheck();
     }
 
     private entityChanged() {
@@ -161,6 +165,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     editorChanged(event) {
+        this.buildResultIcon = 'ui-icon-autorenew';
         this.textChangeSub.next(true);
     }
 

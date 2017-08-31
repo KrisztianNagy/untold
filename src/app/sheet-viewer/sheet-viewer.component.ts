@@ -34,14 +34,23 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    let modelChange = false;
+    let contentChange = false;
+
     for (const propName in changes) {
       if (propName === 'entity') {
         if (this.componentRef) {
-          this.componentRef.instance.pushChanges(this.model);
+          modelChange = true;
         }
       } else if (propName === 'html' || propName === 'css') {
-        this.createWidget(this.html, this.css, this.model);
+        contentChange = true;
       }
+    }
+
+    if (contentChange) {
+      this.createWidget(this.html, this.css, this.model);
+    } else if (modelChange) {
+      this.componentRef.instance.pushChanges(this.model);
     }
   }
 
@@ -60,6 +69,7 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
       });
 
       if (this.componentRef) {
+        console.log('destroy previous');
         this.componentRef.destroy();
       }
 
@@ -75,7 +85,7 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
               this.errorMsg = '';
               this.onBuildCompleted.emit(true);
-  
+
               this.emitterSubscription = this.componentRef.instance.entityChangedEvent.subscribe(entity => {
                 this.entityChangedEvent.emit(entity);
                 console.log('emitter fired');

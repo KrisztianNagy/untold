@@ -27,7 +27,8 @@
                                     </p-inplace>
                                 </div>
                             </p-header>
-                            
+                                    Sheet: {{entity.sheetId ? sheetNames[entity.sheetId] : 'No sheet selected' }}   
+                                    <button type="button" pButton (click)="showSheetSelectorPopup(entity)" label="Change"></button>                                         
                             <p-footer>
                                 <div class="ui-g">
                                     <div class="ui-g-4">
@@ -47,4 +48,13 @@
             </p-dataGrid>
         </div>
     </div>
+    <p-dialog header="Select sheet" [(visible)]="displaySheetPicker">
+        <p-dropdown [options]="availableSheets"  [(ngModel)]="selectedSheetId" *ngIf="displaySheetPicker"></p-dropdown>
+        <br/><br/>
+        test        
+        <p-footer>
+            <button type="button" pButton icon="fa-check" (click)="saveSheetChange()" label="Save"></button>
+            <button type="button" pButton icon="fa-close" (click)="displaySheetPicker=false" label="Cancel"></button>
+        </p-footer>
+    </p-dialog>
 </div>

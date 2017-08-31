@@ -58,7 +58,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
 
         this.entityEnhancerService.recalculate(ent).subscribe(calculated => {
           this.entityService.updateEntity(calculated);
-          this.gameWorkflowEntityService.saveEntity(calculated);
+          this.gameWorkflowEntityService.saveEntityValue(calculated);
       });
     });
   }
