@@ -1,5 +1,5 @@
-import {Routes, RouterModule} from '@angular/router';
-import {ModuleWithProviders} from '@angular/core';
+import {Routes, RouterModule, RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle} from '@angular/router';
+import {ModuleWithProviders, Injectable} from '@angular/core';
 import { GameComponent } from './game/game.component';
 import { BoardComponent } from './game/board/board.component';
 import { MyRealmsComponent } from './my-realms/my-realms.component';
@@ -45,4 +45,33 @@ export const routes: Routes = [
     { path: '**', redirectTo: 'realms' }
 ];
 
-export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes);
+export const RouteVariables = {
+    hasRootError: false
+};
+
+@Injectable()
+export class PreventErrorRouteReuseStrategy implements RouteReuseStrategy {
+
+    shouldDetach(route: ActivatedRouteSnapshot): boolean { return false; }
+    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void {}
+    shouldAttach(route: ActivatedRouteSnapshot): boolean { return false; }
+    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle|null { return null; }
+    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
+      return false;
+    }
+  }
+
+  export function MyRouterErrorHandler(error: any) {
+    console.log('RouterErrorHandler: ' + error);
+    RouteVariables.hasRootError = true;
+    throw error;
+  }
+
+export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, {
+    errorHandler: MyRouterErrorHandler,
+    enableTracing: true
+});
+
+
+
+

@@ -1,9 +1,16 @@
 <p-tabView>
+    
     <p-tabPanel header="HTML">
         <div class="ui-g">
-            <div class="ui-g-12">
+            <div class="ui-g-2">
                 <button pButton type="button" class='green-btn' (click)="saveSheet()" label="Save"></button>
             </div>
+            <div class="ui-g-2">
+                <p-dropdown [options]="modelMappings" [(ngModel)]="selectedMapping" [autoWidth]="false"></p-dropdown>
+            </div>
+            <div class="ui-g-2">
+                <button pButton type="button" class="green-btn" (click)="insertMapping()" label="Insert" [disabled]="!selectedMapping" ></button>
+            </div>    
         </div>
         <ace-editor [(text)]="sheet.html" [mode]="'html'" (textChanged)="editorChanged($event)" #editorhtml style="height:400px;"></ace-editor>
     </p-tabPanel>
@@ -22,8 +29,9 @@
                     </div>                                 
                 </div>
             </div>
-            <div class="ui-g-12">
-                <app-sheet-viewer *ngIf="sheetVisible" [model]="model" [html]="htmlTextToProcess" [css]="cssTextToProcess" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
+            shet visible: {{sheetVisible}}
+            <div class="ui-g-12" *ngIf="sheetVisible">                
+                <app-sheet-viewer [model]="model" [html]="htmlTextToProcess" [css]="cssTextToProcess" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
             </div>            
         </div>
     </p-tabPanel>

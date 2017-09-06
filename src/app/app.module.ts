@@ -1,10 +1,11 @@
 import {NgModule, ErrorHandler} from '@angular/core';
+import {RouteReuseStrategy} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
-import {AppRoutes} from './app.routes';
+import {AppRoutes , PreventErrorRouteReuseStrategy} from './app.routes';
 import {StoreModule} from '@ngrx/store';
 import 'rxjs/add/operator/toPromise';
 
@@ -185,6 +186,7 @@ import { EditSheetComponent } from './game/genesis-sheets//edit-sheet/edit-sheet
 import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
 
 
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -320,7 +322,8 @@ import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
-        // {provide: ErrorHandler, useClass: UntoldErrorHandler},
+        {provide: ErrorHandler, useClass: UntoldErrorHandler},
+        { provide: RouteReuseStrategy, useClass: PreventErrorRouteReuseStrategy },
         WebApiService,
         TemplateConfigurationService,
         SignalRService,
@@ -371,4 +374,5 @@ import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
     ],
     bootstrap:[AppComponent]
 })
-export class AppModule { }
+export class AppModule {    
+}

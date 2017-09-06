@@ -29,5 +29,4 @@ export class DefinitionEnhancerService {
 
     return chain;
   }
-
 }

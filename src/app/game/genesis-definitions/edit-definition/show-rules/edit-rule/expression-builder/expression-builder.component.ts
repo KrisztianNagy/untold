@@ -13,7 +13,7 @@ import { ExpressionTableCacheService } from '../../../../../../shared/services/e
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExpressionBuilderComponent implements OnInit {
-  @Input() editedDefinition: Untold.ClientInnerDefinition; 
+  @Input() editedDefinition: Untold.ClientInnerDefinition;
   @Output() onInsert = new EventEmitter<string>();
 
   simpleDefinitions: Array<SelectItem>;

@@ -1,6 +1,6 @@
 import {Component, Directive, Injectable, ElementRef, NgModule, Input, ViewContainerRef, Compiler, ComponentFactory,
   ModuleWithComponentFactories, ComponentRef, ReflectiveInjector, OnInit, OnDestroy, ComponentFactoryResolver,
-  EmbeddedViewRef, ViewChild, OnChanges, SimpleChanges, Output, EventEmitter, DoCheck } from '@angular/core';
+  EmbeddedViewRef, ViewChild, OnChanges, SimpleChanges, Output, EventEmitter, DoCheck, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,8 @@ import { Subject } from 'rxjs/Subject';
 @Component({
   selector: 'app-sheet-viewer',
   templateUrl: './sheet-viewer.component.html',
-  styleUrls: ['./sheet-viewer.component.scss']
+  styleUrls: ['./sheet-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() html: string;
@@ -23,8 +24,11 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
   componentRef: any;
   errorMsg = '';
   private emitterSubscription;
+  private errorSubscription;
 
-  constructor(public compiler: Compiler, public vcRef: ViewContainerRef) {
+  constructor(public compiler: Compiler,
+              public vcRef: ViewContainerRef,
+              private changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -33,6 +37,10 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy() {
     if (this.emitterSubscription) {
       this.emitterSubscription.unsubscribe();
+    }
+
+    if (this.errorSubscription) {
+      this.errorSubscription.unsubscribe();
     }
   }
 
@@ -54,6 +62,7 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
       this.createWidget(this.html, this.css, this.model);
     } else if (modelChange) {
       this.componentRef.instance.pushChanges(this.model);
+      this.changeDetectorRef.markForCheck();
     }
   }
 
@@ -63,12 +72,16 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
         return;
       }
 
+      this.div.clear();
+
       model = model ? model : {};
+      this.errorMsg = '';
 
       const compMetadata = new Component({
           selector: 'dynamic-html',
           template: html,
-          styles: style ? [style] : []
+          styles: style ? [style] : [],
+          changeDetection: ChangeDetectionStrategy.OnPush
       });
 
       if (this.componentRef) {
@@ -88,37 +101,63 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
               this.errorMsg = '';
               this.onBuildCompleted.emit(true);
+              this.changeDetectorRef.markForCheck();
 
               this.emitterSubscription = this.componentRef.instance.entityChangedEvent.subscribe(entity => {
                 this.entityChangedEvent.emit(entity);
                 console.log('emitter fired');
               });
+
+              this.errorSubscription = this.componentRef.instance.runtimeErrorOccuredEvent.subscribe(error => {
+                if (this.componentRef) {
+                  this.componentRef.destroy();
+                  console.log('destroyed');
+                }
+
+                this.div.clear();
+                this.compiler.clearCache();
+                this.errorMsg = error.message ? error.message : error.originalStack;
+
+                this.onBuildCompleted.emit(false);
+                this.changeDetectorRef.markForCheck();
+              });
             })
             .catch(() => {
               if (this.componentRef) {
-                this.componentRef.destroy();                             }
+                this.componentRef.destroy();
+              }
+
+              this.changeDetectorRef.markForCheck();
             });
         } catch (err) {
           this.compiler.clearCache();
           this.errorMsg = err.message ? err.message : err.originalStack;
           console.log('Cant compile');
           this.onBuildCompleted.emit(false);
+          this.changeDetectorRef.markForCheck();
         }
 
+        this.changeDetectorRef.markForCheck();
+  }
+
+  private destroyAll() {
+  
   }
 
   private createComponentFactory( compiler: Compiler, metadata: Component, model: Object ) {
       @Component( metadata )
       class DynamicComponent implements DoCheck, OnDestroy, OnInit  {
         @Output() entityChangedEvent = new EventEmitter<any>();
+        @Output() runtimeErrorOccuredEvent = new EventEmitter<any>();
         private changeSub: Subject<boolean>;
         private changeDelaySub: any;
         oldEntity: any;
         entity: any;
 
-        constructor() {
+        constructor(private changeDetectorRef: ChangeDetectorRef) {
           this.entity = JSON.parse(JSON.stringify(model));
           this.oldEntity = JSON.parse(JSON.stringify(this.entity));
+          this.changeDetectorRef.markForCheck();
         }
 
         ngOnInit() {
@@ -148,6 +187,11 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
         pushChanges(pushModel: Object) {
           this.oldEntity = JSON.parse(JSON.stringify(pushModel));
           this.entity = JSON.parse(JSON.stringify(pushModel));
+          this.changeDetectorRef.markForCheck();
+        }
+
+        handleRuntimeError(error: any) {
+          this.runtimeErrorOccuredEvent.emit(error);
         }
       };
 

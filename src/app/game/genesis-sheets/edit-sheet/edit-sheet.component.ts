@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import 'rxjs/add/operator/debounce';
 import { Subject } from 'rxjs/Subject';
 
@@ -11,6 +11,7 @@ import { SheetViewerComponent } from '../../../sheet-viewer/sheet-viewer.compone
 import { EntityService } from '../../../store/services/entity.service';
 import { SheetService } from '../../../store/services/sheet.service';
 import { Sheet } from '../../../store/models/sheet';
+import { RealmDefinitionService } from '../../../store/services/realm-definition.service';
 import { EntityEnhancerService } from '../../../shared/services/expressions/entity-enhancer.service';
 import { SheetEntityService } from '../../../shared/services/expressions/sheet-entity.service';
 import { GameWorkflowSheetService } from '../../../shared/services/game-flow/game-workflow-sheet.service';
@@ -19,12 +20,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-edit-sheet',
   templateUrl: './edit-sheet.component.html',
-  styleUrls: ['./edit-sheet.component.scss']
+  styleUrls: ['./edit-sheet.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('editorhtml') editorhtml;
   @ViewChild('editorcss') editorcss;
   @ViewChild(SheetViewerComponent) sheetViewer: SheetViewerComponent;
+  private previewVisible: boolean;
 
   private sheet: Sheet;
   private htmlTextToProcess = '';
@@ -39,11 +42,14 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   private entities: Array<SelectItem>;
   private selectedEntity: Untold.ClientEntity;
   private sheetVisible: boolean;
+  private modelMappings: Array<SelectItem>;
+  private selectedMapping: string;
 
   constructor(private sheetService: SheetService,
               private entityEnhancerService: EntityEnhancerService,
               private sheetEntityService: SheetEntityService,
               private entityService: EntityService,
+              private realmDefinitionService: RealmDefinitionService,
               private gameWorkflowSheetService: GameWorkflowSheetService,
               private route: ActivatedRoute,
               private router: Router,
@@ -51,7 +57,9 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
    }
 
   ngOnInit() {
+      throw Error('Fuck you');
     this.textChangeSub = new Subject<boolean>();
+    this.modelMappings = [{label: 'Select mapping', value: null}];
 
     this.textChangeDelaySub = this.textChangeSub.debounceTime(5000).subscribe(() => {
         this.sheetVisible = true;
@@ -84,7 +92,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (this.entities.length) {
                     this.selectedEntity = this.entities[0].value;
                 }
-
+                this.populateModelMappings();
                 this.setModel();
 
                 this.textChangeSub.next(true);
@@ -94,7 +102,10 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.routeSub) {
     this.routeSub.unsubscribe();
+    }
+    
 
     if (this.textChangeSub) {
         this.textChangeSub.unsubscribe();
@@ -140,6 +151,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
     onBuildCompleted(event: boolean) {
         console.log('sheet completed');
         this.buildResultIcon = event ? 'ui-icon-check' : 'ui-icon-error';
+        this.sheetVisible = event;
         this.changeDetectorRef.markForCheck();
     }
 
@@ -160,8 +172,58 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    private populateModelMappings() {
+        this.modelMappings = [{label: 'Select mapping', value: null}];
+        const modules = this.realmDefinitionService.getCurrent();
+
+        modules.forEach(mod => {
+            mod.definitions.forEach(def => {
+                if (def.definitionGuid === this.sheet.definitionGuid) {
+                    this.addDefinitionPartsToDropDown(<Untold.ClientInnerDefinition> def, '', false, true);
+                }
+            });
+        });
+    }
+
+    private addDefinitionPartsToDropDown(definition: Untold.ClientInnerDefinition, displayName: string, inList: boolean, root: boolean) {
+        if (definition) {
+            if (!root) {
+
+                displayName += '[\'' + definition.name + '\']';
+
+                if (!definition.isList && !inList) {
+                    this.modelMappings.push({label: displayName, value: displayName});
+                } else {
+
+                }
+            }
+
+            if (definition.definitions) {
+                definition.definitions
+                    .forEach(def => this.addDefinitionPartsToDropDown(def, displayName, definition.isList || inList, false));
+            }
+        }
+    }
+
     private saveSheet() {
         this.gameWorkflowSheetService.saveSheetContent(this.sheet);
+    }
+
+    private insertMapping() {
+        try {
+            const cursorPosition = this.editorhtml._editor.getCursorPosition();
+            const rows = this.sheet.html.split('\n');
+
+            let selectedRow = rows[cursorPosition.row];
+            let textToInsert = '[(ngModel)]="entity' + this.selectedMapping + '"';
+            rows[cursorPosition.row]  =
+                [selectedRow.slice(0, cursorPosition.column), textToInsert, selectedRow.slice(cursorPosition.column)].join('');
+
+            this.sheet.html = rows.join('\n');
+        } catch(err) {
+            console.log('Insert failed');
+        }
+
     }
 
     editorChanged(event) {
