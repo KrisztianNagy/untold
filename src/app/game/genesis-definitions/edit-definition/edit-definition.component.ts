@@ -28,6 +28,9 @@ export class EditDefinitionComponent implements OnInit {
   showOwnMembers: boolean;
   memberFilterText: string;
   busy: boolean;
+  displayChoiceConfig: boolean;
+  displayListConfig: boolean;
+  memberBeingConfigured: Untold.ClientInnerDefinition;
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private treeNodeService: TreeNodeService,
@@ -111,6 +114,21 @@ export class EditDefinitionComponent implements OnInit {
     this.changeDetectorRef.markForCheck();
   }
 
+  showChoiceConfig(member: Untold.ClientInnerDefinition) {
+    this.memberBeingConfigured = member;
+    this.displayChoiceConfig = true;
+  }
+
+  showListConfig(member: Untold.ClientInnerDefinition) {
+    this.memberBeingConfigured = member;
+    this.displayListConfig = true;
+  }
+
+  hideConfiguration(event) {
+    this.displayChoiceConfig = false;
+    this.displayListConfig = false;
+  }
+
   onRuleCompleted(event) {
     if (event) {
       this.editedDefinitionDraft.rules = event;
@@ -135,6 +153,12 @@ export class EditDefinitionComponent implements OnInit {
         label: 'yes/no',
         value: {
           dataType: 'bool'
+        }
+      },
+      {
+        label: 'choice',
+        value: {
+          dataType: 'choice'
         }
       }];
 

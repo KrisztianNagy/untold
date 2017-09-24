@@ -12,24 +12,46 @@ export class SheetEntityService {
     entity.entity = entity.entity || {};
 
         if (entity.definition.isList) {
-          let simpleEntity = [];
-          const listElements: Array<any> = entity.entity.listElements;
 
-          if (listElements && listElements.length > 0) {
-              const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
-              childDef.isList = false;
+            if (entity.definition.isPredefinedList) {
+                let simpleEntity = {};
 
-              listElements.forEach(element => {
-                  const nextEntity: GenesisEntity = {
-                      definition: childDef,
-                      entity: element
-                  };
+                if (entity.definition.isPredefinedList && entity.definition.predefinedListItems) {
+                    const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
+                    childDef.isList = false;
 
-                  simpleEntity.push(this.getSimpleEntityFromGenesisEntity(nextEntity));
-              });
-          }
+                    entity.definition.predefinedListItems.forEach((element, index) => {
+                        const connectedElement = entity.entity.listElements[index];
+                        const nextEntity: GenesisEntity = {
+                            definition: childDef,
+                            entity: connectedElement
+                        };
 
-          return simpleEntity;
+                        simpleEntity[element] = this.getSimpleEntityFromGenesisEntity(nextEntity);
+                    });
+                }
+
+                return simpleEntity;
+            } else {
+                let simpleEntity = [];
+                const listElements: Array<any> = entity.entity.listElements;
+
+                if (listElements && listElements.length > 0) {
+                    const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
+                    childDef.isList = false;
+
+                    listElements.forEach(element => {
+                        const nextEntity: GenesisEntity = {
+                            definition: childDef,
+                            entity: element
+                        };
+
+                        simpleEntity.push(this.getSimpleEntityFromGenesisEntity(nextEntity));
+                    });
+                }
+
+                return simpleEntity;
+                }
         } else if (entity.definition.definitions) {
           let simpleEntity = {};
           entity.definition.definitions.forEach(def => {
@@ -60,22 +82,43 @@ export class SheetEntityService {
     let entityValue: GenesisEntityValue = {};
 
         if (entity.definition.isList) {
-            let entityObject = [];
-            const listElements: Array<any> = entity.entity.listElements;
-            entityValue.listElements = [];
 
-            if (listElements && listElements.length > 0) {
-                const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
-                childDef.isList = false;
+            if (entity.definition.isPredefinedList) {
+                let entityObject = [];
+                const listElements: Array<any> = entity.entity.listElements;
+                entityValue.listElements = [];
 
-                listElements.forEach((element, index) => {
-                    const nextEntity: GenesisEntity = {
-                        definition: childDef,
-                        entity: element
-                    };
+                if (entity.definition.predefinedListItems && entity.definition.predefinedListItems.length > 0) {
+                    const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
+                    childDef.isList = false;
 
-                    entityValue.listElements .push(this.getEntityFromSimpleEntity(nextEntity, simpleObject[index]));
-                });
+                    entity.definition.predefinedListItems.forEach((element, index) => {
+                        const nextEntity: GenesisEntity = {
+                            definition: childDef,
+                            entity: entity.entity.listElements[index]
+                        };
+
+                        entityValue.listElements.push(this.getEntityFromSimpleEntity(nextEntity, simpleObject[element]));
+                    });
+                }
+            } else {
+                let entityObject = [];
+                const listElements: Array<any> = entity.entity.listElements;
+                entityValue.listElements = [];
+
+                if (listElements && listElements.length > 0) {
+                    const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
+                    childDef.isList = false;
+
+                    listElements.forEach((element, index) => {
+                        const nextEntity: GenesisEntity = {
+                            definition: childDef,
+                            entity: element
+                        };
+
+                        entityValue.listElements.push(this.getEntityFromSimpleEntity(nextEntity, simpleObject[index]));
+                    });
+                }
             }
         } else if (entity.definition.definitions) {
             entity.definition.definitions.forEach(def => {

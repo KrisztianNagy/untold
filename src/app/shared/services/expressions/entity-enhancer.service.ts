@@ -9,7 +9,7 @@ import { RealmDefinitionService } from '../../../store/services/realm-definition
 import { StorageDataService } from '../rest/storage-data.service';
 import { EntityTableRow } from '../../models/data-table';
 import { RuleDefinition } from '../../models/rule-definition';
-import { GenesisEntity } from '../../models/genesis-entity';
+import { GenesisEntity, GenesisEntityValue } from '../../models/genesis-entity';
 import { CalculatedExpressionService } from './calculated-expression.service';
 import { ExpressionEvaluatorService } from './expression-evaluator.service';
 
@@ -250,25 +250,61 @@ export class EntityEnhancerService {
     }
 
     definition.definitions.forEach(def => {
-      const exist = targetEntity[<string> def.occurrenceGuid];
+      const existingObject: GenesisEntityValue = targetEntity[<string> def.occurrenceGuid];
+      const exist = typeof existingObject !== 'undefined';
 
       if (!exist) {
         if (def.isList) {
-          targetEntity[<string> def.occurrenceGuid] = [];
+          targetEntity[<string> def.occurrenceGuid] = {listElements: []};
+
+          if (def.isPredefinedList && def.predefinedListItems) {
+            const inner = {};
+            this.ensureEntityStructure(inner, def);
+
+            def.predefinedListItems.forEach(item => {
+              targetEntity[<string> def.occurrenceGuid].listElements.push(JSON.parse(JSON.stringify(inner)));
+            });
+          }
         } else if (def.dataType === 'Definition') {
           targetEntity[<string> def.occurrenceGuid] = {};
+          this.ensureEntityStructure(targetEntity[<string> def.occurrenceGuid], def);
         } else {
           targetEntity[<string> def.occurrenceGuid] = '';
         }
       } else {
         if (def.isList) {
-          if (exist.length > 0) {
-            (<Array<any>> exist).forEach(val => this.ensureEntityStructure(val, def));
+          existingObject.listElements = existingObject.listElements || [];
+          if (def.isPredefinedList) {
+            if (def.predefinedListItems && def.predefinedListItems.length) {
+              if (existingObject.listElements.length > def.predefinedListItems.length) {
+                existingObject.listElements = existingObject.listElements.slice(0, def.predefinedListItems.length);
+              } else if (existingObject.listElements.length < def.predefinedListItems.length) {
+                for (let i = 0; i < def.predefinedListItems.length - existingObject.listElements.length; i++) {
+                  existingObject.listElements.push({});
+                }
+              }
+
+              existingObject.listElements.forEach(val => this.ensureEntityStructure(val, def));
+            } else {
+              existingObject.listElements = [];
+            }
+          } else {
+            if (existingObject.listElements.length > 0) {
+              existingObject.listElements.forEach(val => this.ensureEntityStructure(val, def));
+            }
           }
+        } else if (def.dataType === 'Definition') {
+          this.ensureEntityStructure(targetEntity[<string> def.occurrenceGuid], def);
         }
       }
-
-      this.ensureEntityStructure(targetEntity[<string> def.occurrenceGuid], def);
     });
+
+    for (const key of Object.keys(targetEntity)){
+     const foundInDefinition = definition.definitions.some(def => def.occurrenceGuid === key);
+
+     if (!foundInDefinition) {
+        delete targetEntity[key];
+     }
+   }
   }
 }

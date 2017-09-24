@@ -38,7 +38,7 @@
             </div>            
         </div>
         <div class="ui-g-6">
-            <app-entity-editor *ngIf="testEntity" [entity]="testEntity" (entityChanged)="updateTestEntity($event)"></app-entity-editor>
+            <app-entity-editor *ngIf="testEntity" [entity]="testEntity" (entityChanged)="updateTestEntity($event)" [testMode]="true"></app-entity-editor>
         </div>
     </div>
 </div>

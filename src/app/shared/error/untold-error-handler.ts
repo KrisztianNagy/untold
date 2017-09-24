@@ -14,17 +14,6 @@ export class UntoldErrorHandler implements ErrorHandler {
         error.ngDebugContext.component.handleRuntimeError(error);
       }
       console.error(error.message);
-
-     // if(RouteVariables.hasRootError) {
-        let router = this.inj.get(Router);
-        router.navigated = false;
-        router.resetConfig(routes);
-        router.navigate(['realms']);
-      //}
-
-      //this.router.navigate(['realms']);
-
-      //(<any>window).appInsights.trackException(error);
   }
 }
 

@@ -59,6 +59,8 @@ export declare namespace Untold {
 		inherited: boolean;
 		isCalculated: boolean;
 		isList: boolean;
+		isPredefinedList?: boolean;
+		predefinedListItems?: string[];
 		occurrenceGuid: System.Guid;
 	}
 	interface ClientMap {

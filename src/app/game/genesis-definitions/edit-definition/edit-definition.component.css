@@ -1,0 +1,4 @@
+p-dialog .ui-dialog {
+    overflow: scroll;
+    max-height: 70%;
+  }

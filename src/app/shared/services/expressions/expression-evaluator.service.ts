@@ -139,12 +139,42 @@ export class ExpressionEvaluatorService {
     const memberSub = new AsyncSubject<any>();
 
     this.processNode(memberExpression.object, entity).subscribe(res => {
-      this.processNode(memberExpression.property, res).subscribe(res2 => {
-        memberSub.next(res2);
-        memberSub.complete();
-      }, err => {
-        memberSub.error(err);
-      });
+      if (memberExpression.computed && res.definition.isList) {
+        if (res.definition.isPredefinedList) {
+          const pos = res.definition.predefinedListItems.indexOf(memberExpression.property.value);
+
+          if (pos > -1) {
+            if (res.entity.listElements && res.entity.listElements.length > pos) {
+              const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(res.definition));
+              childDef.isPredefinedList = false;
+              childDef.isList = false;
+              childDef.predefinedListItems = null;
+
+              const nextGenesisEntity: GenesisEntity = {
+                entity: res.entity.listElements[pos],
+                definition: childDef
+              };
+
+              memberSub.next(nextGenesisEntity);
+              memberSub.complete();
+            } else {
+              memberSub.error(new Error('Predifined list structure error'));
+            }
+          } else {
+            memberSub.error(
+              new Error('Predifined list item(' + memberExpression.property.value + ') does not exist in ' + res.definition.name));
+          }
+        } else {
+          memberSub.error(new Error('Only predifened list can have direct access to its members'));
+        }
+      } else {
+        this.processNode(memberExpression.property, res).subscribe(res2 => {
+          memberSub.next(res2);
+          memberSub.complete();
+        }, err => {
+          memberSub.error(err);
+        });
+      }
     }, err => {
       memberSub.error(err);
     });
@@ -294,6 +324,14 @@ export class ExpressionEvaluatorService {
               binarySub.complete();
             }, (err) => binarySub.error(err) );
           }
+        }, (err) => binarySub.error(err) );
+      break;
+      case '>>':
+        this.processNode(binaryExpression.left, entity).subscribe(lRes => {
+          console.log(lRes);
+            this.processNode(binaryExpression.right, entity).subscribe(rRes => {
+             console.log(rRes);
+            }, (err) => binarySub.error(err) );
         }, (err) => binarySub.error(err) );
       break;
       case '==':

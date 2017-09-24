@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" [hidden]="displayChoiceConfig || displayListConfig">
   <h1>Edit Definition</h1> 
   <div class="ui-g form-group" >                  
       <div class="ui-g-12">
@@ -36,7 +36,7 @@
                       </span>
                   </div>
                   <div class="ui-g-2">
-                      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="addedMemberIsCalculated" [disabled]="selectedDataType.dataType === 'Definition'"></p-checkbox>
+                      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="addedMemberIsCalculated" *ngIf="selectedDataType.dataType !== 'Definition' && selectedDataType.dataType !== 'choice'"></p-checkbox>
                   </div>
                   <div class="ui-g-1">
                       <p-checkbox label="Is list?" binary="true" [(ngModel)]="addedMemberIsList"></p-checkbox>
@@ -59,7 +59,9 @@
                       </span>
                   </div>
                   <div class="ui-g-2">
-                      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="member.isCalculated" [disabled]="true"></p-checkbox>
+                      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="member.isCalculated"  *ngIf="member.dataType !== 'choice' && !member.isList" [disabled]="true"></p-checkbox>
+                      <button pButton type="button" class='blue-btn' label="Config" *ngIf="member.dataType === 'choice'" (click)="showChoiceConfig(member)"></button>
+                      <button pButton type="button" class='blue-btn' label="Config" *ngIf="member.isList" (click)="showListConfig(member)"></button>  
                   </div>
                   <div class="ui-g-1">
                       <p-checkbox label="Is list?" binary="true" [(ngModel)]="member.isList" [disabled]="true"></p-checkbox>
@@ -86,7 +88,7 @@
                       </span>
                   </div>
                   <div class="ui-g-2">
-                      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="member.isCalculated" [disabled]="true"></p-checkbox>
+                      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="member.isCalculated" [disabled]="true"></p-checkbox>                     
                   </div>
                   <div class="ui-g-1">
                       <p-checkbox label="Is list?" binary="true" [(ngModel)]="member.isList" [disabled]="true"></p-checkbox>
@@ -100,6 +102,13 @@
       <p-tabPanel header="Rules">
           <app-show-rules [editedDefinition]="editedDefinition" (onCompleted)="onRuleCompleted($event)" [modules]="modules"></app-show-rules>
       </p-tabPanel>
-  </p-tabView>
+    </p-tabView>    
+</div>
+
+<div *ngIf="displayChoiceConfig && memberBeingConfigured">
+    <app-definition-choice-config></app-definition-choice-config>
+</div>
+<div *ngIf="displayListConfig && memberBeingConfigured">
+    <app-definition-list-config [definition]="memberBeingConfigured" (onCompleted)="hideConfiguration($event)"></app-definition-list-config>
 </div>
 

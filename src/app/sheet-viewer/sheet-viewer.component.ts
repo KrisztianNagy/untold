@@ -1,6 +1,7 @@
 import {Component, Directive, Injectable, ElementRef, NgModule, Input, ViewContainerRef, Compiler, ComponentFactory,
   ModuleWithComponentFactories, ComponentRef, ReflectiveInjector, OnInit, OnDestroy, ComponentFactoryResolver,
-  EmbeddedViewRef, ViewChild, OnChanges, SimpleChanges, Output, EventEmitter, DoCheck, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+  EmbeddedViewRef, ViewChild, OnChanges, SimpleChanges, Output, EventEmitter, DoCheck, ChangeDetectorRef,
+  ChangeDetectionStrategy } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -49,7 +50,7 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
     let contentChange = false;
 
     for (const propName in changes) {
-      if (propName === 'entity') {
+      if (propName === 'model') {
         if (this.componentRef) {
           modelChange = true;
         }
@@ -141,7 +142,7 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private destroyAll() {
-  
+
   }
 
   private createComponentFactory( compiler: Compiler, metadata: Component, model: Object ) {

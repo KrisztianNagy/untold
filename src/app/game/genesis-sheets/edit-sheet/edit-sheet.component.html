@@ -29,8 +29,7 @@
                     </div>                                 
                 </div>
             </div>
-            shet visible: {{sheetVisible}}
-            <div class="ui-g-12" *ngIf="sheetVisible">                
+            <div class="ui-g-12">                
                 <app-sheet-viewer [model]="model" [html]="htmlTextToProcess" [css]="cssTextToProcess" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
             </div>            
         </div>

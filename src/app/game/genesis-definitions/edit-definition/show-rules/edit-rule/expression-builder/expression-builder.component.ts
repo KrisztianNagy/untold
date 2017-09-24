@@ -45,7 +45,7 @@ export class ExpressionBuilderComponent implements OnInit {
     this.matchColumns = [{label: 'Select match column', value: null}];
     this.targetColumns = [{label: 'Select target column', value: null}];
 
-    this.processDefinition(this.editedDefinition, '', false, true);
+    this.processDefinition(this.editedDefinition, '', false, false, false, '', true);
     this.populateFunctions();
     this.populateModules();
 
@@ -122,24 +122,50 @@ export class ExpressionBuilderComponent implements OnInit {
   }
 
   private processDefinition(definition: Untold.ClientInnerDefinition,
-                            displayName: string, inList: boolean, root: boolean) {
+                            oldDisplayName: string, inUserList: boolean,
+                            inPredefinedList: boolean, parentIsPredefinedList: boolean, predifinedListName: string, root: boolean) {
     if (definition) {
       if (!root) {
-        if (displayName) {
-          displayName += '.';
-        }
-        displayName += definition.name;
 
-        if (!definition.isList && !inList) {
-          this.simpleDefinitions.push({label: displayName, value: displayName});
+        if (definition.isPredefinedList && !parentIsPredefinedList) {
+          if (definition.predefinedListItems && definition.predefinedListItems.length) {
+            definition.predefinedListItems.forEach(listItemName => {
+              this.processDefinition(definition, oldDisplayName, inUserList, inPredefinedList, true, listItemName, false);
+            });
+          }
         } else {
-          this.listDefinitions.push({label: displayName, value: displayName});
-        }
-      }
+          let nextDisplayName = oldDisplayName;
+          if (nextDisplayName) {
+            nextDisplayName += '.';
+          }
+          nextDisplayName += definition.name;
 
-      if (definition.definitions) {
-        definition.definitions
-          .forEach(def => this.processDefinition(def, displayName, definition.isList || inList, false));
+          if (parentIsPredefinedList) {
+            nextDisplayName = nextDisplayName + '["' + predifinedListName + '"]';
+          }
+
+          if (!definition.isList && !inUserList) {
+            this.simpleDefinitions.push({label: nextDisplayName, value: nextDisplayName});
+          }
+
+          if (definition.isList || inUserList) {
+              this.listDefinitions.push({label: nextDisplayName, value: nextDisplayName});
+          }
+
+         if (definition.definitions) {
+            definition.definitions
+              .forEach(def =>
+                this.processDefinition(def, nextDisplayName, (definition.isList && !definition.isPredefinedList) || inUserList,
+                                      inPredefinedList, definition.isPredefinedList && !parentIsPredefinedList, '', false));
+          }
+        }
+      } else {
+        if (definition.definitions) {
+          definition.definitions
+            .forEach(def =>
+              this.processDefinition(def, oldDisplayName, (definition.isList && !definition.isPredefinedList) || inUserList,
+                                    inPredefinedList, definition.isPredefinedList && !parentIsPredefinedList, '', false));
+        }
       }
     }
   }
@@ -181,7 +207,7 @@ export class ExpressionBuilderComponent implements OnInit {
         });
   }
 
-  private populateModules(){
+  private populateModules() {
     const realmModules = this.realmTableService.getCurrent().map(rt => {
       return {
         label: rt.name,

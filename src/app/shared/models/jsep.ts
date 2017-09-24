@@ -1,5 +1,6 @@
 export interface IExpression {
   type: string;
+  value?: string;
 }
 
 export interface ILiteral extends IExpression {

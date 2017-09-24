@@ -7,6 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {AppRoutes , PreventErrorRouteReuseStrategy} from './app.routes';
 import {StoreModule} from '@ngrx/store';
+import {enableProdMode} from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 
 // PrimeNG components
@@ -184,9 +185,12 @@ import { SheetSideBarComponent } from './side-bar/sheet-side-bar/sheet-side-bar.
 import { GenesisSheetsComponent } from './game/genesis-sheets/genesis-sheets.component';
 import { EditSheetComponent } from './game/genesis-sheets//edit-sheet/edit-sheet.component';
 import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
+// tslint:disable-next-line:max-line-length
+import { DefinitionListConfigComponent } from './game/genesis-definitions/edit-definition/definition-list-config/definition-list-config.component';
+import { DefinitionChoiceConfigComponent } from './game/genesis-definitions/edit-definition/definition-choice-config/definition-choice-config.component';
 
 
-
+enableProdMode();
 @NgModule({
     imports: [
         BrowserModule,
@@ -318,11 +322,13 @@ import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
         GenesisSheetsComponent,
         EditSheetComponent,
         SheetViewerComponent,
+        DefinitionListConfigComponent,
+        DefinitionChoiceConfigComponent,
         //AceEditorComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
-        {provide: ErrorHandler, useClass: UntoldErrorHandler},
+        //{provide: ErrorHandler, useClass: UntoldErrorHandler},
         { provide: RouteReuseStrategy, useClass: PreventErrorRouteReuseStrategy },
         WebApiService,
         TemplateConfigurationService,

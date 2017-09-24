@@ -50,7 +50,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
                   if (ent.sheetId) {
                     this.hasSheet = true;
                     let simple = this.sheetEntityService.getSimpleEntityFromGenesisEntity(gen);
-                    this.model = simple;
+                    this.model = JSON.parse(JSON.stringify(simple));
 
                     this.sheetService.getCurrent().filter(sh => sh.id === ent.sheetId)
                       .forEach(sheet => {
@@ -79,7 +79,6 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
         ent.entity = event.entity;
 
         this.entityEnhancerService.recalculate(ent).subscribe(calculated => {
-          this.entityService.updateEntity(calculated);
           this.gameWorkflowEntityService.saveEntityValue(calculated);
       });
     });

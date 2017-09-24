@@ -31,6 +31,7 @@ export class EditRuleComponent implements OnInit {
   selectedTargetDefinition: string;
   resolvedExpresion: string;
   isReadOnly: boolean;
+  expressionInvokeKey: number = 1;
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private calculatedExpressionService: CalculatedExpressionService,
@@ -87,6 +88,9 @@ export class EditRuleComponent implements OnInit {
   }
 
   expressionChanged() {
+    this.expressionInvokeKey++;
+    let currKey = this.expressionInvokeKey;
+    console.log('Subscription started - ' + currKey);
     setTimeout(() => {
       this.resolvedExpresion = '';
 
@@ -140,13 +144,26 @@ export class EditRuleComponent implements OnInit {
           return;
         }
 
-        this.expressionEvaluatorService.processExpression(this.result.tree, this.testEntity).subscribe(res => {
-          this.testResult = typeof(res) === 'boolean' ? (res ? 'true' : 'false') : res;
-          this.changeDetectorRef.markForCheck();
-        }, err => {
-          this.testResult = err;
-          this.changeDetectorRef.markForCheck();
-        });
+        this.expressionEvaluatorService.processExpression(this.result.tree, this.testEntity)
+        .subscribe(res => {
+            if (currKey !== this.expressionInvokeKey) {
+              console.log('Subscription dropped - ' + currKey);
+              return;
+            }
+
+            this.testResult = typeof(res) === 'boolean' ? (res ? 'true' : 'false') : res;
+            this.changeDetectorRef.markForCheck();
+            console.log('Subscription completed - ' + currKey);
+          }, err => {
+            if (currKey !== this.expressionInvokeKey) {
+              return;
+            }
+
+            this.testResult = err;
+            this.changeDetectorRef.markForCheck();
+          });
+
+          
       }
     }, 0);
   }

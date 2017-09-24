@@ -57,7 +57,7 @@ export class TreeNodeService {
 
     if (definition.definitions) {
         tree.children = definition.definitions
-            .filter(def => !def.isList)
+            //.filter(def => !def.isList)
             .map(def => this.getDefinitionMemberTree(def));
     }
 
@@ -67,28 +67,40 @@ export class TreeNodeService {
   getEmptyGenesisEntityFromDefinitionTree(tree: GenesisTreeNode): GenesisEntityValue {
       let entity: GenesisEntityValue = {};
 
-      if (tree.children) {
-          tree.children.forEach( child => {
-              const data: Untold.ClientInnerDefinition = child.data;
+      if (tree.data.isList) {
+          entity.listElements = [];
 
-              entity[<string> data.occurrenceGuid] = this.getEmptyGenesisEntityFromDefinitionTree(<GenesisTreeNode>child);
-          });
-      } else if (tree.data.isList) {
-          entity = [];
-      } else if (tree.data.dataType !== 'Definition') {
+          if (tree.data.isPredefinedList && tree.data.predefinedListItems.length && tree.children) {
+              console.log('definition tree');
+                const temp = {};
+
+                tree.children.forEach( child => {
+                    const data: Untold.ClientInnerDefinition = child.data;
+                    temp[<string> data.occurrenceGuid] = this.getEmptyGenesisEntityFromDefinitionTree(<GenesisTreeNode>child);
+                });
+
+                entity.listElements = tree.data.predefinedListItems.map(item => JSON.parse(JSON.stringify(temp)));
+          }
+      } else if (tree.children) {
+        tree.children.forEach( child => {
+            const data: Untold.ClientInnerDefinition = child.data;
+
+            entity[<string> data.occurrenceGuid] = this.getEmptyGenesisEntityFromDefinitionTree(<GenesisTreeNode>child);
+        });
+    } else if (tree.data.dataType !== 'Definition') {
             entity = tree.data.temp ? tree.data.temp : null;
       }
 
       return entity;
   }
 
-  getTreeFromGenesisEntity(entity: GenesisEntity): GenesisTreeNode {
+  getTreeFromGenesisEntity(entity: GenesisEntity, customLabel?: string): GenesisTreeNode {
     entity.entity = entity.entity || {};
 
     const tree: GenesisTreeNode = {
         data: entity.definition,
         children: null,
-        label : entity.definition.name
+        label : customLabel || entity.definition.name
     };
 
     if (entity.definition.isList) {
@@ -101,13 +113,20 @@ export class TreeNodeService {
             const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
             childDef.isList = false;
 
-            listElements.forEach(element => {
+            listElements.forEach((element, index) => {
                 const nextEntity: GenesisEntity = {
                     definition: childDef,
                     entity: element
                 };
 
-                tree.children.push(this.getTreeFromGenesisEntity(nextEntity));
+                if (entity.definition.isPredefinedList) {
+                    const nextLabel = (entity.definition.predefinedListItems && entity.definition.predefinedListItems.length > index) ?
+                        entity.definition.predefinedListItems[index] : index.toString();
+
+                    tree.children.push(this.getTreeFromGenesisEntity(nextEntity, nextLabel));
+                } else {
+                    tree.children.push(this.getTreeFromGenesisEntity(nextEntity));
+                }
             });
         }
     } else if (entity.definition.definitions) {

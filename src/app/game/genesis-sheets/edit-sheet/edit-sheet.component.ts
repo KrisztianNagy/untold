@@ -57,7 +57,6 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
    }
 
   ngOnInit() {
-      throw Error('Fuck you');
     this.textChangeSub = new Subject<boolean>();
     this.modelMappings = [{label: 'Select mapping', value: null}];
 

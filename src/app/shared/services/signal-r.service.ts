@@ -25,9 +25,11 @@ export class SignalRService {
     }
 
     this.connection.disconnected(() => {
+      console.log('Disconnected');
       this.connectionSubject.next(false);
 
       setTimeout(() => {
+        console.log('Trying to reconnect');
         this.start();
       }, 5000);
     });
