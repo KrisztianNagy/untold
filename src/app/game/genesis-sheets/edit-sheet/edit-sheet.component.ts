@@ -154,7 +154,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
         this.changeDetectorRef.markForCheck();
     }
 
-    private entityChanged() {
+    private onModelUpdated() {
         this.setModel();
     }
 

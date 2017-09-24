@@ -106,17 +106,17 @@ export class SheetEntityService {
                 const listElements: Array<any> = entity.entity.listElements;
                 entityValue.listElements = [];
 
-                if (listElements && listElements.length > 0) {
+                if (simpleObject && simpleObject.length > 0) {
                     const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
                     childDef.isList = false;
 
-                    listElements.forEach((element, index) => {
+                    simpleObject.forEach((element, index) => {
                         const nextEntity: GenesisEntity = {
                             definition: childDef,
-                            entity: element
+                            entity: (listElements && listElements.length > index) ? listElements[index] : {}
                         };
 
-                        entityValue.listElements.push(this.getEntityFromSimpleEntity(nextEntity, simpleObject[index]));
+                        entityValue.listElements.push(this.getEntityFromSimpleEntity(nextEntity, element));
                     });
                 }
             }

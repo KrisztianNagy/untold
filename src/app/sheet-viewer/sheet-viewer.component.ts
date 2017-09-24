@@ -194,6 +194,22 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
         handleRuntimeError(error: any) {
           this.runtimeErrorOccuredEvent.emit(error);
         }
+
+        addItem(list: Array<any>) {
+          list.push({});
+        }
+
+        removeItem(list: Array<any>, item: any) {
+          const index = list.indexOf(item);
+
+          if (index > -1) {
+            for (let i = index; i < list.length - 1; i++) {
+              list[i] = list[i + 1];
+            }
+
+            list.pop();
+          }
+        }
       };
 
       @NgModule({
