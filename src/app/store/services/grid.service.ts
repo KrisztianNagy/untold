@@ -37,7 +37,7 @@ export class GridService {
   loadBlankGrid(): Array<GridTile> {
     const gridSize = 100;
 
-    let grid: Array<GridTile> = [];
+    const grid: Array<GridTile> = [];
     for (let i = 1; i <= gridSize; i++) {
       for (let j = 1; j <= gridSize; j++) {
         grid.push({
@@ -52,7 +52,7 @@ export class GridService {
   }
 
   loadTilesFromMaster(gridJson: string) {
-     let grid = this.loadBlankGrid();
+     const grid = this.loadBlankGrid();
       const blocks: Array<GridTile> = gridJson ? JSON.parse(gridJson) : [];
 
       blocks.forEach(tile => {

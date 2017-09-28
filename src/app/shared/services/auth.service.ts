@@ -1,4 +1,4 @@
-import { Injectable }      from '@angular/core';
+import { Injectable } from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt';
 import { AsyncSubject } from 'rxjs/AsyncSubject';
 import { Location } from '@angular/common';

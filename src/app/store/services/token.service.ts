@@ -63,10 +63,10 @@ export class TokenService {
   }
 
   addToLocalStore(clientTokens: Array<Untold.ClientToken>) {
-    let tokens: Array<Token> = [];
+    const tokens: Array<Token> = [];
 
     clientTokens.forEach(clientToken => {
-      let token: Token = JSON.parse(clientToken.data);
+      const token: Token = JSON.parse(clientToken.data);
 
       if (token.id === 0) {
         token.id = clientToken.id;
@@ -126,7 +126,7 @@ export class TokenService {
   }
 
   private tokenToJson(token: Token): string {
-    let prepared = JSON.parse(JSON.stringify(token));
+    const prepared = JSON.parse(JSON.stringify(token));
 
     delete(prepared.beingDragged);
     delete(prepared.loadCompleted);

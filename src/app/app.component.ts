@@ -1,4 +1,5 @@
-import {Component, AfterViewInit, ElementRef, Renderer, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import {Component, AfterViewInit, ElementRef, Renderer, ViewChild,
+        ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 
 import { TemplateConfigurationService } from './store/services/template-configuration.service';
@@ -19,7 +20,7 @@ enum MenuOrientation {
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, OnDestroy {
     authenticated: boolean;
     msgs: Array<any>;
 

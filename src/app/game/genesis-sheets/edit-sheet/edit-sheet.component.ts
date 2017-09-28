@@ -102,9 +102,8 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.routeSub) {
-    this.routeSub.unsubscribe();
+        this.routeSub.unsubscribe();
     }
-    
 
     if (this.textChangeSub) {
         this.textChangeSub.unsubscribe();
@@ -114,34 +113,34 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
         this.textChangeDelaySub.unsubscribe();
     }
 
-    if (this.sheetSub){
+    if (this.sheetSub) {
         this.sheetSub.unsubscribe();
     }
   }
 
   ngAfterViewInit() {
-    this.editorhtml.setTheme("eclipse");
+    this.editorhtml.setTheme('eclipse');
 
     this.editorhtml.getEditor().setOptions({
         enableBasicAutocompletion: true
     });
 
     this.editorhtml.getEditor().commands.addCommand({
-        name: "showOtherCompletions",
-        bindKey: "Ctrl-.",
+        name: 'showOtherCompletions',
+        bindKey: 'Ctrl-.',
         exec: function (editor) {
         }
     });
 
-    this.editorcss.setTheme("eclipse");
+    this.editorcss.setTheme('eclipse');
 
         this.editorcss.getEditor().setOptions({
             enableBasicAutocompletion: true
         });
 
         this.editorcss.getEditor().commands.addCommand({
-            name: "showOtherCompletions",
-            bindKey: "Ctrl-.",
+            name: 'showOtherCompletions',
+            bindKey: 'Ctrl-.',
             exec: function (editor) {
             }
         });
@@ -161,7 +160,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
     private setModel() {
         if (this.selectedEntity) {
             this.entityEnhancerService.getGenesisEntity(this.selectedEntity).subscribe(gen => {
-                let simple = this.sheetEntityService.getSimpleEntityFromGenesisEntity(gen);
+                const simple = this.sheetEntityService.getSimpleEntityFromGenesisEntity(gen);
                 this.model = simple;
 
                 this.changeDetectorRef.markForCheck();
@@ -213,13 +212,13 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
             const cursorPosition = this.editorhtml._editor.getCursorPosition();
             const rows = this.sheet.html.split('\n');
 
-            let selectedRow = rows[cursorPosition.row];
-            let textToInsert = '[(ngModel)]="entity' + this.selectedMapping + '"';
+            const selectedRow = rows[cursorPosition.row];
+            const textToInsert = '[(ngModel)]="entity' + this.selectedMapping + '"';
             rows[cursorPosition.row]  =
                 [selectedRow.slice(0, cursorPosition.column), textToInsert, selectedRow.slice(cursorPosition.column)].join('');
 
             this.sheet.html = rows.join('\n');
-        } catch(err) {
+        } catch (err) {
             console.log('Insert failed');
         }
 
@@ -229,5 +228,4 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
         this.buildResultIcon = 'ui-icon-autorenew';
         this.textChangeSub.next(true);
     }
-
 }

@@ -10,8 +10,8 @@ export class SimpleDungeonService {
 
 
   generate(width: number, height: number): Array<Array<number>> {
-    let map = [];
-    let rooms: Array<AreaBox> = [];
+    const map = [];
+    const rooms: Array<AreaBox> = [];
 
     for (let x = 0; x < width; x++) {
         map[x] = [];
@@ -29,7 +29,7 @@ export class SimpleDungeonService {
       const roomY = this.getRandom(1, height - max_size - 1);
       const roomWidth = this.getRandom(min_size, max_size);
       const roomHeight = this.getRandom(min_size, max_size);
-        let room: AreaBox = {
+      const room: AreaBox = {
           fromX : roomX,
           fromY : roomY,
           toX : roomX + roomWidth,
@@ -49,7 +49,7 @@ export class SimpleDungeonService {
     this.squashRooms(rooms);
 
     for (let i = 0; i < roomCount; i++) {
-        let roomA = rooms[i];
+        const roomA = rooms[i];
         const roomB = this.findClosestRoom(rooms, roomA);
 
         const pointA = new createjs.Point(this.getRandom(roomA.fromX, roomA.toX), this.getRandom(roomA.fromY, roomA.toY));
@@ -115,7 +115,7 @@ export class SimpleDungeonService {
     let closest_distance = 1000;
 
     for (let i = 0; i < rooms.length; i++) {
-        let check = rooms[i];
+        const check = rooms[i];
         if (check === room) {
           continue;
         }
@@ -141,9 +141,9 @@ export class SimpleDungeonService {
   private squashRooms(rooms: Array<AreaBox>) {
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < rooms.length; j++) {
-            let room = rooms[j];
+            const room = rooms[j];
             while (true) {
-                let old_position = {
+                const old_position = {
                     x: room.fromX,
                     y: room.fromY
                 };

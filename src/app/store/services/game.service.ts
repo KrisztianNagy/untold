@@ -19,13 +19,11 @@ export class GameService {
     this.selectedGame.subscribe(game => {
       this.current = game;
     });
- 
-    //const gameValue: ClientGae = JSON.parse(localStorage.getItem(this.AUTHKEY));
   }
 
   updateUserStatus(userName: string, isOnline: boolean) {
     if (this.current) {
-      let game: Untold.ClientGameRealmDetails = JSON.parse(JSON.stringify(this.current));
+      const game: Untold.ClientGameRealmDetails = JSON.parse(JSON.stringify(this.current));
 
       game.members.forEach(member => {
         if (member.user.userName === userName) {
@@ -39,7 +37,7 @@ export class GameService {
 
   updateMemberMap(map: Untold.ClientMap, member: Untold.ClientUserRealmMembership) {
     if (this.current) {
-      let game: Untold.ClientGameRealmDetails = JSON.parse(JSON.stringify(this.current));
+      const game: Untold.ClientGameRealmDetails = JSON.parse(JSON.stringify(this.current));
 
       if (!member) {
         game.localMembership.activeMap = map;

@@ -1,6 +1,7 @@
 /* tslint:disable:indent */
 
 export declare module System {
+	// tslint:disable-next-line:no-empty-interface
 	interface Guid {
 	}
 }

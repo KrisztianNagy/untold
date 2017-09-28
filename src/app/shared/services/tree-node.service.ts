@@ -15,7 +15,7 @@ export class TreeNodeService {
     let tree: TreeNode;
 
     if (parentNode) {
-        tree = parentNode; // JSON.parse(JSON.stringify(parentNode));
+        tree = parentNode;
         tree.children = [];
     } else {
         tree = {};
@@ -57,7 +57,6 @@ export class TreeNodeService {
 
     if (definition.definitions) {
         tree.children = definition.definitions
-            //.filter(def => !def.isList)
             .map(def => this.getDefinitionMemberTree(def));
     }
 
@@ -202,7 +201,6 @@ export class TreeNodeService {
     return entity;
   }
 
-  
   addListItemToTreeNode(tree: GenesisTreeNode): GenesisTreeNode {
     if (tree.data.isList) {
         const def: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(tree.data));
@@ -235,7 +233,7 @@ export class TreeNodeService {
 
   getValidMembersFrom(definition: Untold.ClientDefinition,
                   definitions: Array<Untold.ClientDefinition>): Array<Untold.ClientDefinition> {
-      let invalidDefinitions: Array<Untold.ClientDefinition> = [];
+      const invalidDefinitions: Array<Untold.ClientDefinition> = [];
       let validDefinitions: Array<Untold.ClientDefinition> = [];
 
       invalidDefinitions.push(definition);
@@ -296,7 +294,7 @@ export class TreeNodeService {
     }).length > 0;
 
     if (reachedValid) {
-        return []; // This branch has been succesful in a previous run. 
+        return []; // This branch has been succesful in a previous run.
     }
 
     if (targetDefinition.parentDefinitionGuid) {

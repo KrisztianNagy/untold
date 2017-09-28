@@ -14,7 +14,7 @@ export class SheetEntityService {
         if (entity.definition.isList) {
 
             if (entity.definition.isPredefinedList) {
-                let simpleEntity = {};
+                const simpleEntity = {};
 
                 if (entity.definition.isPredefinedList && entity.definition.predefinedListItems) {
                     const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
@@ -33,7 +33,7 @@ export class SheetEntityService {
 
                 return simpleEntity;
             } else {
-                let simpleEntity = [];
+                const simpleEntity = [];
                 const listElements: Array<any> = entity.entity.listElements;
 
                 if (listElements && listElements.length > 0) {
@@ -53,8 +53,8 @@ export class SheetEntityService {
                 return simpleEntity;
                 }
         } else if (entity.definition.definitions) {
-          let simpleEntity = {};
-          entity.definition.definitions.forEach(def => {
+            const simpleEntity = {};
+            entity.definition.definitions.forEach(def => {
                 const nextEntity: GenesisEntity = {
                     definition: def,
                     entity: entity.entity[<string> def.occurrenceGuid]
@@ -84,7 +84,7 @@ export class SheetEntityService {
         if (entity.definition.isList) {
 
             if (entity.definition.isPredefinedList) {
-                let entityObject = [];
+                const entityObject = [];
                 const listElements: Array<any> = entity.entity.listElements;
                 entityValue.listElements = [];
 
@@ -102,7 +102,7 @@ export class SheetEntityService {
                     });
                 }
             } else {
-                let entityObject = [];
+                const entityObject = [];
                 const listElements: Array<any> = entity.entity.listElements;
                 entityValue.listElements = [];
 

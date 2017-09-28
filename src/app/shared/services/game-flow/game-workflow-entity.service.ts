@@ -37,7 +37,7 @@ export class GameWorkflowEntityService {
 
     this.genesisDataService.createEntity(this.gameService.getCurrent().realm.id, entity)
     .subscribe(response => {
-      let responseEntity = JSON.parse(response.json());
+      const responseEntity = JSON.parse(response.json());
       this.entityService.addEntity(responseEntity);
         // TODO: Notify others
     });

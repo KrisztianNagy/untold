@@ -33,7 +33,7 @@
           "../node_modules/fullcalendar/dist/fullcalendar.js",
           "../node_modules/quill/dist/quill.js",
           "vendor/jsep.min.js",
-          "vendor/papaparse.min",
+          "vendor/papaparse.min.js",
           "../node_modules/ace-builds/src-min/ace.js",
           "../node_modules/ace-builds/src-min/theme-eclipse.js"
       ],

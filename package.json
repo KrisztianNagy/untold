@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "^4.2.0",
     "@angular/router": "^4.2.0",
     "@ngrx/store": "^4.0.2",
-    "@ngtools/webpack": "^1.2.4",
+    
     "@types/createjs": "0.0.29",
     "@types/filesaver": "0.0.30",
     "@types/papaparse": "4.1.28",
@@ -43,7 +43,7 @@
     "zone.js": "^0.8.5"
   },
   "devDependencies": {
-    "@angular/cli": "^1.0.0",
+    "@angular/cli": "^1.4.3",
     "@angular/compiler-cli": "^4.2.0",
     "@types/jasmine": "2.5.47",
     "@types/node": "~7.0.12",
@@ -58,7 +58,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.0",
     "ts-node": "~3.0.2",
-    "tslint": "~4.0.0",
+    "tslint": "~4.5.0",
     "typescript": "~2.4.0"
   }
 }

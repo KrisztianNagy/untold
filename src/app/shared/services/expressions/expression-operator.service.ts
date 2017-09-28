@@ -6,8 +6,8 @@ export class ExpressionOperatorService {
         const isString = typeof(left) === 'string' || typeof(right) === 'string';
 
         if (!isString) {
-        left = left ? left : 0;
-        right = right ? right : 0;
+            left = left ? left : 0;
+            right = right ? right : 0;
         }
 
         return left + right;

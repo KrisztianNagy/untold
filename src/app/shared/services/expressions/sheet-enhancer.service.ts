@@ -19,15 +19,19 @@ export class SheetEnhancerService {
       PartitionKey: 'sheet',
       RowKey: sheet.id.toString(),
       rowStatus: 1,
-      html: sheet.html,
-      css: sheet.css
+      html1: sheet.html,
+      css1: sheet.css,
+      html2: '',
+      html3: '',
+      css2: '',
+      html4: ''
     };
 
     return this.storageDataService.delete(tableRow, 'RM' + realm.id + 'Sheets', realm.sheetEditorAcccessSignature);
   }
 
   getClientSheet(sheet: Sheet): Untold.ClientSheet {
-    let clientSheet = JSON.parse(JSON.stringify(sheet));
+    const clientSheet = JSON.parse(JSON.stringify(sheet));
     delete clientSheet.html;
     delete clientSheet.css;
 
@@ -102,7 +106,7 @@ export class SheetEnhancerService {
   }
 
   splitTextContent(content: string, maxSize: number): Array<string> {
-    let result = [];
+    const result = [];
     let pos = 0;
 
     while (pos < content.length) {
@@ -112,5 +116,4 @@ export class SheetEnhancerService {
 
     return result;
   }
-
 }
