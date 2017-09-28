@@ -10,6 +10,10 @@
                     <input [(ngModel)]="node.data.temp" (change)="updateEntity()" [type]="node.data.dataType" [disabled]="!testMode && node.data.isCalculated" width="100px">
                     <label style="top: -20px; font-size: 12px; color: #1976d2;">{{node.label}}</label>
                 </span>
+                <span class="md-inputfield" *ngIf="node.data.dataType &&  node.data.dataType ==='choice'">
+                    {{node.label}} &nbsp;&nbsp;
+                    <p-dropdown [options]="getOptions(node.data.occurrenceGuid)" [(ngModel)]="node.data.temp"></p-dropdown>                    
+                </span>
                 <p-checkbox [(ngModel)]="node.data.temp" (onChange)="updateEntity()" binary="true" *ngIf="node.data.dataType && node.data.dataType ==='bool'" label="{{node.label}}" [disabled]="!testMode && node.data.isCalculated"></p-checkbox>
                 <span style="padding-left: 10px" *ngIf="node.data.isList || (node.parent && node.parent.data.isList)">
                     <a (click)="addChild(node)" *ngIf="node.data.isList && !node.data.isPredefinedList" style="font-size: x-small; color: green;">Add child</a>

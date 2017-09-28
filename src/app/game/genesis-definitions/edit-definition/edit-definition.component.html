@@ -106,7 +106,7 @@
 </div>
 
 <div *ngIf="displayChoiceConfig && memberBeingConfigured">
-    <app-definition-choice-config></app-definition-choice-config>
+    <app-definition-choice-config [definition]="memberBeingConfigured" (onCompleted)="hideConfiguration($event)"></app-definition-choice-config>
 </div>
 <div *ngIf="displayListConfig && memberBeingConfigured">
     <app-definition-list-config [definition]="memberBeingConfigured" (onCompleted)="hideConfiguration($event)"></app-definition-list-config>

@@ -137,6 +137,42 @@ export class ExpressionTableCacheService {
         return subject;
     }
 
+    getTableColumnValues (tableName: string, fieldName: string, moduleName: string): AsyncSubject<any> {
+        const subject = new AsyncSubject<any>();
+
+        this.getCachedTable(tableName, moduleName).subscribe(table => {
+            const column = table.columns.filter(col => col.name.toLowerCase().trim() === fieldName.toLowerCase().trim());
+
+            if (column.length === 0) {
+                subject.error('Column ' + column + ' does not exist');
+            } else {
+                const access = this.getRuleTableFromStore(tableName, moduleName).readAccessSignature;
+
+                this.storageDataService.readRows(table.tableUniqueName, access)
+                    .subscribe(res => {
+                        const rows: any = JSON.parse(res);
+
+                        if (rows) {
+                            const mappedRows: Array<any> = rows.value;
+                            const id = 'c' + column[0].id;
+
+                            const columnValues = mappedRows.map(mappedRow => mappedRow[id]);
+
+                            subject.next(columnValues);
+                            subject.complete();
+                        } else {
+                            subject.next(null);
+                            subject.complete();
+                        }
+                    });
+            }
+        }, err => {
+            subject.error(err);
+        });
+
+        return subject;
+    }
+
     private getRuleTableFromStore(tableName: string, moduleName: string): Untold.ClientRuleTable {
         const module = this.realmTableService.getCurrent().filter(md => moduleName === md.name);
 

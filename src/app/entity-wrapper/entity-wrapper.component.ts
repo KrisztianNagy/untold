@@ -2,12 +2,14 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRe
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EntityEnhancerService } from '../shared/services/expressions/entity-enhancer.service';
+import { DefinitionEnhancerService } from '../shared/services/expressions/definition-enhancer.service';
 import { GenesisEntity, GenesisTreeNode } from '../shared/models/genesis-entity';
 import { EntityService } from '../store/services/entity.service';
 import { SheetService } from '../store/services/sheet.service';
 import { GameWorkflowEntityService } from '../shared/services/game-flow/game-workflow-entity.service';
 import { SheetEntityService } from '../shared/services/expressions/sheet-entity.service';
 import { Sheet } from '../store/models/sheet';
+import { Untold } from '../shared/models/backend-export';
 
 @Component({
   selector: 'app-entity-wrapper',
@@ -21,12 +23,14 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
   entity: GenesisEntity;
   model: any;
   sheet: Sheet;
+  choiceOptions: object;
   private entitySub: any;
   private routeSub: any;
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private entityService: EntityService,
               private entityEnhancerService: EntityEnhancerService,
+              private definitionEnhancerService: DefinitionEnhancerService,
               private gameWorkflowEntityService: GameWorkflowEntityService,
               private sheetEntityService: SheetEntityService,
               private sheetService: SheetService,
@@ -60,6 +64,14 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
                     this.hasSheet = false;
                   }
 
+                  if (!this.choiceOptions) {
+                    this.definitionEnhancerService.getAllChoiceOptions(gen.definition)
+                      .subscribe(choiceOptions => {
+                      this.choiceOptions = choiceOptions;
+                      this.changeDetectorRef.markForCheck();
+                      });
+                  }
+
                   this.changeDetectorRef.markForCheck();
                 });
             }));
@@ -68,8 +80,13 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.entitySub.unsubscribe();
-    this.routeSub.unsubscribe();
+    if (this.entitySub) {
+      this.entitySub.unsubscribe();
+    }
+
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
   }
 
   updateEntity(event: GenesisEntity) {

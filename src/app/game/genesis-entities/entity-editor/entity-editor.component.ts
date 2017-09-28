@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter,
          ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
+
 import { TreeNode } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 
 import { TreeNodeService } from '../../../shared/services/tree-node.service';
 import { GenesisEntity, GenesisTreeNode } from '../../../shared/models/genesis-entity';
@@ -15,8 +17,8 @@ import { Untold } from '../../../shared/models/backend-export';
 export class EntityEditorComponent implements OnInit, OnChanges {
   @Input() testMode: boolean;
   @Input() entity: GenesisEntity;
+  @Input() choiceOptions: any;
   @Output() entityChanged = new EventEmitter<GenesisEntity>();
-
   tree: TreeNode[];
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
@@ -57,5 +59,20 @@ export class EntityEditorComponent implements OnInit, OnChanges {
   remove(selectedNode: GenesisTreeNode) {
     selectedNode.parent.children = this.treeNodeService.removeListItemFromTreeNode(selectedNode.parent, selectedNode);
     selectedNode = null;
+  }
+
+  getOptions(occurenceGuid: string): Array<SelectItem> {
+    if (this.choiceOptions[occurenceGuid]) {
+      const selectedOptions = this.choiceOptions[occurenceGuid].map(op => {
+        return {
+         label: op,
+         value: op
+       };
+     });
+
+     return selectedOptions;
+    }
+
+    return [];
   }
 }

@@ -155,6 +155,11 @@ export class TreeNodeService {
                 tree.collapsedIcon = 'ui-icon-text-format';
                 tree.data.temp = typeof entity.entity === 'string' ? entity.entity : '';
             break;
+            case 'choice':
+                tree.expandedIcon = 'ui-icon-arrow-drop-down';
+                tree.collapsedIcon = 'ui-icon-arrow-drop-down';
+                tree.data.temp = typeof entity.entity === 'string' ? entity.entity : '';
+            break;
             case 'bool':
                 tree.expandedIcon = 'ui-icon-check-box-outline-blank';
                 tree.collapsedIcon = 'ui-icon-check-box-outline-blank';

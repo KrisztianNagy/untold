@@ -1,3 +1,70 @@
-<p>
-  definition-choice-config works!
-</p>
+<div class="ui-g" style="width:250px;margin-bottom:10px">
+  <div class="ui-g-12"><p-radioButton name="choiceOptions" value="table" label="From table" [(ngModel)]="optionChoice" inputId="preopt1"></p-radioButton></div>
+  <div class="ui-g-12"><p-radioButton name="choiceOptions" value="collection" label="Pre-Defined" [(ngModel)]="optionChoice" inputId="preopt2"></p-radioButton></div>
+</div>
+
+<div class="card" *ngIf="optionChoice === 'table'">
+  The list of options are being loaded from a table.
+  <div class="ui-g form-group">          
+    <div class="ui-g-12">
+      <p-dropdown [options]="modules" [(ngModel)]="selectedModule" (onChange)="onModuleSelect()"[autoWidth]="false"></p-dropdown>
+    </div>
+    <div class="ui-g-12">
+      <p-dropdown [options]="tables" [(ngModel)]="selectedTable" (onChange)="onTableSelect()"[autoWidth]="false" [disabled]="!selectedModule"></p-dropdown>
+    </div>
+    <div class="ui-g-12">
+      <p-dropdown [options]="columns" [(ngModel)]="selectedColumn" [autoWidth]="false" [disabled]="!selectedTable || columns.length === 1"></p-dropdown>
+    </div>  
+  </div> 
+  <br/><br/>
+  <div class="ui-g-12">
+      <div class="ui-g-4">
+              <button type="button" pButton  label="Update" icon="ui-icon-check"  (click)="update(i)"></button>
+      </div>
+      <div class="ui-g-4">
+      </div>
+      <div class="ui-g-4">
+          <button type="button" pButton  label="Cancel" icon="ui-icon-check"  (click)="cancel(i)"></button>
+      </div>
+  </div>   
+</div>
+<div class="card" *ngIf="optionChoice === 'collection'">
+  You define the list of options now.
+  <div class="ui-g form-group" > 
+      <div class="ui-g-12">
+          <div class="ui-g-8">
+              <span class="md-inputfield">
+                  <input type="text" pInputText [(ngModel)]="addedItemName" >
+                  <label>Item name</label>
+              </span>
+          </div>
+          <div class="ui-g-4">
+              <button pButton type="button" class='green-btn' label="Add" (click)="addItemToCollection()" [disabled]="!addedItemName || listItems.indexOf(addedItemName) !== -1"></button>
+          </div>                          
+      </div>
+      <div class="ui-g-12" *ngFor="let item of listItems; let i = index; let last = last; let first = first;"> 
+          <div class="ui-g-8">
+              <span class="md-inputfield">
+                  <input type="text" pInputText [(ngModel)]="item.text">
+                  <label>Item name</label>
+              </span>
+          </div>
+          <div class="ui-g-4">
+              <button type="button" pButton *ngIf="!first" icon="ui-icon-arrow-upward" (click)="moveUp(i)"></button>
+              <button type="button" pButton *ngIf="!last"  icon="ui-icon-arrow-downward"  (click)="moveDown(i)"></button>
+          </div>           
+      </div>            
+  </div>
+  <br/><br/>
+  <div class="ui-g-12">
+      <div class="ui-g-4">
+              <button type="button" pButton  label="Update" icon="ui-icon-check"  (click)="update(i)"></button>
+      </div>
+      <div class="ui-g-4">
+      </div>
+      <div class="ui-g-4">
+          <button type="button" pButton  label="Cancel" icon="ui-icon-check"  (click)="cancel(i)"></button>
+      </div>
+  </div>
+</div>
+

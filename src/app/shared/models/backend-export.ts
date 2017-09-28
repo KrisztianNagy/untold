@@ -61,6 +61,11 @@ export declare namespace Untold {
 		isList: boolean;
 		isPredefinedList?: boolean;
 		predefinedListItems?: string[];
+		isCollectionChoice?: boolean;
+		collectionChoiceList: string[];
+		choiceModule: System.Guid;
+		choiceTable: System.Guid;
+		choiceColumn: string;
 		occurrenceGuid: System.Guid;
 	}
 	interface ClientMap {
