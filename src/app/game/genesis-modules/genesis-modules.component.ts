@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
@@ -14,7 +14,7 @@ import { Untold } from '../../shared/models/backend-export';
   styleUrls: ['./genesis-modules.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GenesisModulesComponent implements OnInit {
+export class GenesisModulesComponent implements OnDestroy {
   modules: Array<Untold.ClientModuleDefinitions>;
   selectedModule: Untold.ClientModuleDefinitions;
   createVisible: boolean;
@@ -24,6 +24,7 @@ export class GenesisModulesComponent implements OnInit {
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private genesisDataService: GenesisDataService,
               private realmDefinitionService: RealmDefinitionService,
+              private realmHubSenderService: RealmHubSenderService,
               private gameService: GameService) {
     this.moduleSubscription = this.realmDefinitionService.definitions.subscribe(realmDefinitions => {
       this.modules = realmDefinitions;
@@ -31,7 +32,7 @@ export class GenesisModulesComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnDestroy() {
     this.moduleSubscription.unsubscribe();
   }
 
@@ -48,9 +49,14 @@ export class GenesisModulesComponent implements OnInit {
       realmId: this.gameService.getCurrent().realm.id,
       definitions: []
     }).subscribe(() => {
+      const moduleReference: Untold.ClientModuleReference = {
+        moduleId: 0,
+        realmId: this.gameService.getCurrent().realm.id,
+      };
+      this.realmHubSenderService.reloadRealmDefinitionModules(moduleReference);
       this.moduleName = '';
       this.createVisible = false;
-      // reload everything
+
     });
   }
 
@@ -58,7 +64,12 @@ export class GenesisModulesComponent implements OnInit {
     if (this.selectedModule) {
       this.genesisDataService.deleteModule(this.selectedModule.id).
         subscribe(() => {
-          // TODO: reload everything
+          const moduleReference: Untold.ClientModuleReference = {
+            moduleId: 0,
+            realmId: this.gameService.getCurrent().realm.id,
+          };
+
+          this.realmHubSenderService.reloadRealmDefinitionModules(moduleReference);
         });
     }
   }
