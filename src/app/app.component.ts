@@ -18,7 +18,7 @@ enum MenuOrientation {
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
     authenticated: boolean;
@@ -59,7 +59,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         this.msgs = [];
 
         this.growlService.messageSubject.subscribe(msg => {
-        this.msgs.push(msg);
+            this.msgs = [...this.msgs, msg];
         });
     }
 

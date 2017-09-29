@@ -3,6 +3,8 @@ import {Observable} from 'rxjs/Observable';
 import {Router} from '@angular/router';
 import 'rxjs/add/operator/first';
 
+import {PanelModule} from 'primeng/primeng';
+
 import { RealmHubSenderService } from '../shared/services/realm-hub-sender.service';
 import { AuthService } from '../shared/services/auth.service';
 import { RealmHubListenerService } from '../shared/services/realm-hub-listener.service';
@@ -44,12 +46,13 @@ export class MyRealmsComponent implements OnInit, OnDestroy {
           this.router.navigateByUrl('game');
         });
       }
-    })
-    
+    });
   }
 
   ngOnDestroy() {
-    this.responseJoinRealmSubscription.unsubscribe();
+    if (this.responseJoinRealmSubscription) {
+      this.responseJoinRealmSubscription.unsubscribe();
+    }
   }
 
   deleteSelectedRealm() {
@@ -101,7 +104,14 @@ export class MyRealmsComponent implements OnInit, OnDestroy {
 
   private loadMyCreatedRealms() {
     this.realmDataService.getMyCreatedRealms().subscribe(realms => {
-      this.myCreatedRealms = realms;
+      this.myCreatedRealms = realms.map((realm: any) => {
+        try {
+          realm.createdString = new Date(realm.created).toDateString();
+        } catch (ex) {
+          realm.createdString = '';
+        }
+        return realm;
+      });
       this.changeDetectorRef.markForCheck();
     });
   }

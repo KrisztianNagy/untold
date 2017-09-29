@@ -1,11 +1,21 @@
 <div class="ui-g">
     <div class="ui-g-12">
+      <div class="card card-w-title">
+        <p-panel header="Quick Help" [toggleable]="true" [collapsed]="true">
+            You have to join a realm in order to play. <br/><br/>
+            You can be a game master and use the <b>My Created Realms</b> to host your own game. You will be able to create your own rules, maps, characters and invite players to participate. <br/>
+            The <b>My Player Realms</b> is the list of games by other game masters who invited you.<br/><br/>
+            Select your realm and click Start to join.
+        </p-panel>
+      </div>
+    </div>
+    <div class="ui-g-12">
         <div class="card card-w-title">
             <h1>My Created Realms</h1>
             <p-dataTable [value]="myCreatedRealms" selectionMode="single" [(selection)]="selectedCreatedRealm" 
                 [paginator]="false" [rows]="100" [responsive]="true">                
                 <p-column field="name" header="Realm Name"></p-column>
-                <p-column field="created" header="Created"> </p-column>               
+                <p-column field="createdString" header="Created"> </p-column>               
             </p-dataTable>
             <div class="ui-g">
               <div class="ui-g-3">

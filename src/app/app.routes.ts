@@ -68,8 +68,7 @@ export class PreventErrorRouteReuseStrategy implements RouteReuseStrategy {
   }
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, {
-    errorHandler: MyRouterErrorHandler,
-    enableTracing: true
+    errorHandler: MyRouterErrorHandler
 });
 
 
