@@ -14,18 +14,20 @@ export class RealmWelcomeComponent implements OnInit, OnDestroy {
   game: Untold.ClientGameRealmDetails;
   memberCount: number;
   onlineCount: number;
+  members: Array<Untold.ClientUserRealmMembership>;
 
   private gameSubscription;
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private gameService: GameService,
               private realmHubSenderService: RealmHubSenderService) {
+      this.members = [];
   }
 
   ngOnInit() {
     this.game = this.gameService.getCurrent();
     this.gameSubscription = this.gameService.selectedGame.subscribe(game => {
       this.game = game;
-
+      this.members = game.members;
       this.memberCount = game.members.length;
       this.onlineCount = game.members.filter(mem => {
         return mem.isOnline;

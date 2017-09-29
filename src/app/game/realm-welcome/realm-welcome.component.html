@@ -1,14 +1,85 @@
-<div class="ui-g">
-    <div class="ui-g-12">
+<div class="ui-g dashboard">
+    <div class="ui-g-12  ui-lg-8">
         <div class="card">
             <h1>{{game.realm.name}}</h1>
 
             <p>The owner of this realm is {{game.realm.owner.displayName}}.</p>
-            <p>Members online: {{onlineCount}} / {{memberCount}}</p>
-            <p>Custom things</p>
-            <div class="ui-g-3">
-                <button pButton type="button" class='red-btn' (click)="disconnect()" label="Disconnect" ></button>
-            </div>
+                        
+            <button pButton type="button" class='red-btn' (click)="disconnect()" label="Disconnect" ></button>               
+        </div>
+    </div>
+    <div class="ui-g-12 ui-lg-4 contacts">
+        <p-panel header="Members" [style]="{'min-height':'360px'}" styleClass="ui-shadow-content">
+            <ul>
+                <li class="clearfix" *ngFor="let member of members">
+                     <div class="contact-info">
+                        <span class="name">{{member.user.displayName}}</span>
+                    </div>
+                    <div class="contact-actions" *ngIf="member.isOnline">
+                        <span class="connection-status online">online</span>
+                    </div>
+                    <div class="contact-actions" *ngIf="!member.isOnline">
+                        <span class="connection-status offine">offline</span>
+                    </div>
+                </li>                
+            </ul>
+        </p-panel>
+    </div>
+    <div class="ui-g-12">
+        <div class="card">
+            <p-panel header="Quick Help" [toggleable]="true" [collapsed]="true">
+                This is the welcome page of the realm. You can see all the other players. The realm owner can edit the realm description and it willl be visible for all realm users.<br/><br/>
+
+                <h3>How to use the left menu?</h3>
+                <div *ngIf="game && game.realm">
+                    <div *ngIf="game.realm.isCurrentUserOwner">                        
+                        <i class="material-icons">view_module</i><b style="vertical-align: super;">Modules</b><br/>
+                        Modules are the way we group everything else. Characters, sheets, maps, images... everything belongs to a module. This should be your first thing to visit when you create a new realm.
+                        <br/><br/>
+                    </div>
+                    <div *ngIf="game.realm.isCurrentUserOwner">                        
+                        <i class="material-icons">layers</i><b style="vertical-align: super;">Definition</b><br/>
+                        This is the page where you can describe the characters in your game. You tell us all the properties an entity has (name, attributes, gear) and later on your players will be able to use them.
+                        <br/><br/>
+                    </div>
+                    <div *ngIf="game.realm.isCurrentUserOwner">                        
+                        <i class="material-icons">crop_paste</i><b style="vertical-align: super;">Templates</b><br/>
+                        Templates are the way to create lot of characters easily. You provide the default values and we will create entities using them.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">person_pin</i><b style="vertical-align: super;">Entities</b><br/>
+                        These are the characters in the game. The game master creates them from definitions or templates, and the players can use them. 
+                        <br/><br/>
+                    </div>
+                    <div *ngIf="game.realm.isCurrentUserOwner">                        
+                        <i class="material-icons">library_books</i><b style="vertical-align: super;">Sheet</b><br/>
+                        The built-in entity viewer gets the job done but every game deserves a nice character sheet. Use you html and css skills to create your own.
+                        <br/><br/>
+                    </div>
+                    <div *ngIf="game.realm.isCurrentUserOwner">                        
+                        <i class="material-icons">content_copy</i><b style="vertical-align: super;">Tables</b><br/>
+                        Checking rules, calculating treasures and xp. You can store everything you need in tables. The best part? You can use tables to calculate modifiers, bonuses seemlessly!
+                        <br/><br/>
+                    </div>
+                    <div *ngIf="game.realm.isCurrentUserOwner">                        
+                        <i class="material-icons">image</i><b style="vertical-align: super;">Images</b><br/>
+                        Player tokens, a nice looking chair, stone background for the caves? You store them here. You can use our image finder or upload your own.
+                        <br/><br/>
+                    </div>
+                    <div *ngIf="game.realm.isCurrentUserOwner">                        
+                        <i class="material-icons">map</i><b style="vertical-align: super;">Maps</b><br/>
+                        You will create different maps for your encounters and dungeons. You will be able to send the players to those maps.
+                        <br/><br/>
+                    </div>
+                    <div *ngIf="game.realm.isCurrentUserOwner">                        
+                        <i class="material-icons">tab</i><b style="vertical-align: super;">Board</b><br/>
+                        This is where you play. Navigate to this page when you are ready to investigate the maps ceated by the dungeon master.
+                        <br/><br/>
+                    </div>
+                </div> 
+                
+            </p-panel>
         </div>
     </div>
 </div>
