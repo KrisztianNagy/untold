@@ -1,0 +1,37 @@
+<div class="ui-g" style="width:250px;margin-bottom:10px">
+    
+    <div class="ui-g-6">
+        <button pButton type="button" (click)="changeOption('user')" icon="ui-icon-accessibility" [disabled]="optionChoice === 'user'" label="User editable"></button>
+    </div>
+
+    <div class="ui-g-6">
+        <button pButton type="button" (click)="changeOption('collection')" icon="ui-icon-accessibility" [disabled]="optionChoice === 'collection'" label="Master"></button>
+    </div>
+    <div class="card" *ngIf="optionChoice === 'user'">
+        The player will be able to add new items to the list during the game. For example items.
+    </div>
+    <div class="card" *ngIf="optionChoice === 'collection'">
+        A set of items defined by the game master to ensure things like abilities, skills, etc. 
+        <div class="ui-g form-group" > 
+            <div class="ui-g-12">            
+                <span class="md-inputfield">
+                    <input type="text" pInputText [(ngModel)]="addedItemName" >
+                </span>
+            </div>
+            <div class="ui-g-12">
+                <button pButton type="button" class='green-btn' label="Add" (click)="addItemToCollection()" [disabled]="!addedItemName || listItems.indexOf(addedItemName) !== -1"></button>
+            </div>                          
+            
+            <div class="ui-g-12"> 
+                <p-orderList [(value)]="listItems" dragdrop="true">
+                    <ng-template let-listItem pTemplate="item">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [(ngModel)]="listItem.text" (change)="update()">
+                            
+                        </span>
+                    </ng-template>
+                </p-orderList>               
+            </div>        
+    </div>
+</div>
+

@@ -1,0 +1,17 @@
+<div class="ui-g form-group" >                  
+  <div class="ui-g-12">
+    <p-dropdown [options]="availableDataTypes" [(ngModel)]="selectedDataType" (change)="dataTypeChanged()"></p-dropdown>
+  </div>
+  <div class="ui-g-12">
+      <span class="md-inputfield">
+          <input type="text" pInputText [(ngModel)]="draftDefinition.name" (change)="updateDraftItem($event)">
+          <label>Member name</label>
+      </span>
+  </div>
+  <div class="ui-g-12">
+      <p-checkbox label="Calculated?" binary="true" [(ngModel)]="draftDefinition.isCalculated" *ngIf="selectedDataType" [disabled]="selectedDataType.dataType === 'Definition' || selectedDataType.dataType === 'choice'"></p-checkbox>
+  </div>
+  <div class="ui-g-12">
+      <p-checkbox label="Is list?" binary="true" *ngIf="selectedDataType" [(ngModel)]="draftDefinition.isList" [disabled]="selectedDataType.dataType  === 'choice'"></p-checkbox>
+  </div>
+</div>

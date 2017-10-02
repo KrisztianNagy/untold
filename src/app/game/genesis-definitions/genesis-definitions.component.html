@@ -1,6 +1,6 @@
 <div class="ui-g">
     <div class="ui-g-12">
-        <div class="card" *ngIf="!editedDefinition || !createVisible">
+        <div class="card">
             <h1>Definitions</h1>     
             <div *ngIf="!modules || !modules.length">
                 Please create a module first.
@@ -8,6 +8,9 @@
             <div *ngIf="modules && modules.length" class="ui-g">
                     <div class="ui-g-2">
                         <p-dropdown [options]="modules"  [(ngModel)]="selectedModule" (onChange)="moduleChanged()"></p-dropdown>
+                    </div>
+                    <div class="ui-g-2">
+                        <p-dropdown [options]="moduleDefinitions"  [(ngModel)]="selectedDefinition" (onChange)="definitionChanged()" *ngIf="moduleDefinitions"></p-dropdown>
                     </div>
                     <div class="ui-g-2">
                          <button pButton type="button" class='green-btn' (click)="createEntity(selectedNode)" label="Create entity" [disabled]="!selectedNode"></button>
@@ -32,7 +35,15 @@
                     </div>
             </div>
         </div>
-        <app-edit-definition [editedDefinition]="editedDefinition" (onSaved)="onSaved($event)" [modules]="modules" *ngIf="editedDefinition && createVisible">
-        </app-edit-definition>
+
+        <app-genesis-definitions-chart *ngIf="selectedDefinition" [realmDefinitions]="realmDefinitions" [definition]="selectedDefinition" (onDefinitionClick)="onDefinitionClick($event)"></app-genesis-definitions-chart>
+
+        <div class="ui-g-12" *ngIf="!createVisible">
+            <div class="card">
+                <p-panel header="Quick Help" [toggleable]="true" [collapsed]="true">
+                    D
+                </p-panel>
+            </div>
+        </div>
     </div>
 </div>

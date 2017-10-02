@@ -74,6 +74,7 @@ import {ToolbarModule} from 'primeng/primeng';
 import {TooltipModule} from 'primeng/primeng';
 import {TreeModule} from 'primeng/primeng';
 import {TreeTableModule} from 'primeng/primeng';
+import {OrganizationChartModule} from 'primeng/primeng';
 import {InplaceModule} from 'primeng/primeng';
 import {AceEditorModule} from 'ng2-ace-editor';
 
@@ -186,8 +187,11 @@ import { GenesisSheetsComponent } from './game/genesis-sheets/genesis-sheets.com
 import { EditSheetComponent } from './game/genesis-sheets//edit-sheet/edit-sheet.component';
 import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
 // tslint:disable-next-line:max-line-length
-import { DefinitionListConfigComponent } from './game/genesis-definitions/edit-definition/definition-list-config/definition-list-config.component';
-import { DefinitionChoiceConfigComponent } from './game/genesis-definitions/edit-definition/definition-choice-config/definition-choice-config.component';
+import { DefinitionListConfigComponent } from './game/genesis-definitions/genesis-definitions-chart/definition-list-config/definition-list-config.component';
+import { DefinitionChoiceConfigComponent } from './game/genesis-definitions/genesis-definitions-chart/definition-choice-config/definition-choice-config.component';
+import { GenesisDefinitionsChartComponent } from './game/genesis-definitions/genesis-definitions-chart/genesis-definitions-chart.component';
+// tslint:disable-next-line:max-line-length
+import { GenesisDefinitionsAddFormComponent } from './game/genesis-definitions/genesis-definitions-chart/genesis-definitions-add-form/genesis-definitions-add-form.component';
 
 
 enableProdMode();
@@ -261,6 +265,7 @@ enableProdMode();
         TooltipModule,
         TreeModule,
         TreeTableModule,
+        OrganizationChartModule,
         InplaceModule,
         AceEditorModule,
         StoreModule.forRoot(CombinedReducers)
@@ -324,6 +329,8 @@ enableProdMode();
         SheetViewerComponent,
         DefinitionListConfigComponent,
         DefinitionChoiceConfigComponent,
+        GenesisDefinitionsChartComponent,
+        GenesisDefinitionsAddFormComponent,
         //AceEditorComponent
     ],
     providers: [

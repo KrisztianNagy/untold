@@ -1,0 +1,76 @@
+<p-organizationChart [value]="organizationTree" *ngIf="organizationTree" styleClass="definition">
+    <ng-template let-node pTemplate="definition">
+        <div class="node-header ui-corner-top" [style.background-color]="getColor(node.data)" >
+          <span (click)="definitionClick(node.data)">{{node.label}}</span>
+          <i class="material-icons" (click)="editName(node.data)" *ngIf="(node.data.definitionGuid && node.data.definitionGuid === definition.definitionGuid) || getIfFirstChild(node.data)" style="float: right; vertical-align: super; font-size: inherit;">edit</i>
+          <hr *ngIf="node.data.isList" />
+          <span *ngIf="node.data.isList">
+            List
+          </span>
+        </div>
+        <div class="node-content">
+          <span *ngIf="node.data && node.data.dataType && node.data.dataType !== 'Definition'"> 
+            {{node.data.dataType}}
+          </span>
+          <div *ngIf="node.data.definitionGuid && node.data.definitionGuid === draftDefinition.definitionGuid">
+            <button pButton type="button" class='green-btn'  label="Add child definition" icon="ui-icon-plus-one" (click)="clickAddChild()"></button> 
+            <br/><br/>
+            <button pButton type="button" class='blue-btn'  label="Reorder" icon="ui-icon-compare-arrows" (click)="clickOrder(node.data)"></button>
+            <br/> <br/>
+            <button pButton type="button" class='blue-btn'  label="Rules ({{node.data.rules ? node.data.rules.length : 0 }})" icon="ui-icon-work"></button> 
+          </div>
+          <div *ngIf="node.data.isList">
+            <br/>
+            <button pButton type="button" class='green-blue'  label="Config" icon="ui-icon-format-list-bulleted" (click)="clickList(node.data)" ></button> 
+          </div>
+          <div *ngIf="node.data.dataType === 'choice'">
+            <br/>
+            <button pButton type="button" class='blue-btn'  label="Config" icon="ui-icon-select-all" (click)="clickChoice(node.data)"></button> 
+          </div>
+          <div *ngIf="getIfFirstChild(node.data)">
+            <br/>
+            <button pButton type="button" class='red-btn'  label="Remove" icon="ui-icon-clear" (click)="clickRemove(node.data)"></button> 
+          </div>         
+        </div>
+    </ng-template>
+</p-organizationChart>
+
+<p-dialog header="Edit Name" [visible]="editNameDefinition !== null" modal="modal" width="300" [responsive]="true" [closable]="false">
+    <input type="text" pInputText [(ngModel)]="editNameDefinition.name" *ngIf="editNameDefinition">
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-check" (click)="closeNameEditor(true)" label="Update"></button>
+        <button type="button" pButton icon="ui-icon-close" (click)="closeNameEditor(false)" label="Cancel"></button>
+    </p-footer>
+</p-dialog>
+<p-dialog header="Add member" [visible]="displayAddForm" modal="modal" width="300" [responsive]="true" [closable]="false">
+    <app-genesis-definitions-add-form *ngIf="displayAddForm" [definition]="draftDefinition" [realmDefinitions]="realmDefinitions" (onUpdated)="addFormUpdated($event)"></app-genesis-definitions-add-form>
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-check" (click)="closeAddMember(true)" [disabled]="!addedMemberDefinition || !getIsUniqueName(addedMemberDefinition.name)" label="Update"></button>
+        <button type="button" pButton icon="ui-icon-close" (click)="closeAddMember(false)" label="Cancel"></button>
+    </p-footer>
+</p-dialog>
+<p-dialog header="Reorder" [visible]="orderedDefinitions" modal="modal" width="300" [responsive]="true" [closable]="false">
+  <p-orderList [(value)]="orderedDefinitions" dragdrop="true">
+      <ng-template let-ordereddef pTemplate="item">
+          {{ordereddef.name}}
+      </ng-template>
+  </p-orderList> 
+  <p-footer>
+      <button type="button" pButton icon="ui-icon-check" (click)="closeOrder(true)" label="Add"></button>
+      <button type="button" pButton icon="ui-icon-close" (click)="closeOrder(false)" label="Cancel"></button>
+  </p-footer>
+</p-dialog>
+<p-dialog header="Choice" [visible]="choiceDefinition" modal="modal" width="300" [responsive]="true" [closable]="false">
+  <app-definition-choice-config *ngIf="choiceDefinition" [definition]="choiceDefinition" (onUpdated)="choiceConfigUpdated($event)"></app-definition-choice-config>
+  <p-footer>
+      <button type="button" pButton icon="ui-icon-check" (click)="closeChoiceConfig(true)" [disabled]="!choiceDefinitionResponse" label="Update"></button>
+      <button type="button" pButton icon="ui-icon-close" (click)="closeChoiceConfig(false)" label="Cancel"></button>
+  </p-footer>
+</p-dialog>
+<p-dialog header="List" [visible]="listDefinition" modal="modal" width="300" [responsive]="true" [closable]="false">
+    <app-definition-list-config *ngIf="listDefinition" [definition]="listDefinition" (onUpdated)="listConfigUpdated($event)"></app-definition-list-config>
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-check" (click)="closeListConfig(true)" [disabled]="!listDefinitionResponse" label="Update"></button>
+        <button type="button" pButton icon="ui-icon-close" (click)="closeListConfig(false)" label="Cancel"></button>
+    </p-footer>
+  </p-dialog>

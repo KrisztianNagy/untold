@@ -15,7 +15,8 @@ import { RealmTableService } from '../../../../store/services/realm-table.servic
 })
 export class DefinitionChoiceConfigComponent implements OnInit {
   @Input() definition: Untold.ClientInnerDefinition;
-  @Output() onCompleted = new EventEmitter<boolean>();
+  @Output() onUpdated = new EventEmitter<Untold.ClientInnerDefinition>();
+  draftDefinition: Untold.ClientInnerDefinition;
   optionChoice: string = 'table';
   listItems: Array<any>;
   addedItemName: string;
@@ -31,11 +32,12 @@ export class DefinitionChoiceConfigComponent implements OnInit {
               private realmTableService: RealmTableService) { }
 
   ngOnInit() {
+    this.draftDefinition = JSON.parse(JSON.stringify(this.definition));
 
-    if (typeof this.definition.isCollectionChoice === 'undefined') {
-      this.definition.isCollectionChoice = true;
+    if (typeof this.draftDefinition.isCollectionChoice === 'undefined') {
+      this.draftDefinition.isCollectionChoice = true;
     }
-    this.optionChoice = this.definition.isCollectionChoice ? 'collection' : 'table';
+    this.optionChoice = this.draftDefinition.isCollectionChoice ? 'collection' : 'table';
     this.tables = [{label: 'Select table', value: null}];
     this.columns = [{label: 'Select column', value: null}];
 
@@ -48,26 +50,26 @@ export class DefinitionChoiceConfigComponent implements OnInit {
 
     this.modules = [{label: 'Select module', value: null}, ...this.modules];
 
-    if (this.definition.isCollectionChoice) {
-      this.listItems = this.definition.collectionChoiceList ? this.definition.collectionChoiceList.map(item => {
+    if (this.draftDefinition.isCollectionChoice) {
+      this.listItems = this.draftDefinition.collectionChoiceList ? this.draftDefinition.collectionChoiceList.map(item => {
         return {text: item};
       }) : [];
     } else {
       this.listItems = [];
 
-      const loadedModule = this.modules.filter(mod => mod.value && mod.value.guid === this.definition.choiceModule);
+      const loadedModule = this.modules.filter(mod => mod.value && mod.value.guid === this.draftDefinition.choiceModule);
 
       if (loadedModule.length) {
         this.selectedModule = loadedModule[0].value;
-        this.onModuleSelect();
+        this.onModuleSelect(false);
 
-        const loadedTable = this.tables.filter(table => table.value && table.value.tableGuid === this.definition.choiceTable);
+        const loadedTable = this.tables.filter(table => table.value && table.value.tableGuid === this.draftDefinition.choiceTable);
 
         if (loadedTable.length) {
           this.selectedTable = loadedTable[0].value;
-          this.onTableSelect();
+          this.onTableSelect(false);
 
-          const loadedColumn = this.columns.filter(column => column.value === this.definition.choiceColumn);
+          const loadedColumn = this.columns.filter(column => column.value === this.draftDefinition.choiceColumn);
 
           if (loadedColumn.length) {
             this.selectedColumn = loadedColumn[0].value;
@@ -77,7 +79,7 @@ export class DefinitionChoiceConfigComponent implements OnInit {
     }
   }
 
-  onModuleSelect() {
+  onModuleSelect(update: boolean) {
     if (this.selectedModule) {
       const parsedModule = <Untold.ClientModuleTables> (<any> this.selectedModule);
       const moduleTables = parsedModule.tables.map(mt => {
@@ -93,9 +95,13 @@ export class DefinitionChoiceConfigComponent implements OnInit {
       this.selectedTable = null;
       this.tables = [this.tables[0]];
     }
+
+    if (update) {
+      this.update();
+    }
   }
 
-  onTableSelect() {
+  onTableSelect(update: boolean) {
     if (this.selectedTable) {
       const parsedTable = <Untold.ClientRuleTable> (<any> this.selectedTable);
 
@@ -117,52 +123,49 @@ export class DefinitionChoiceConfigComponent implements OnInit {
     } else {
       this.selectedColumn = null;
     }
+
+    if (update) {
+      this.update();
+    }
+  }
+
+  onColumnSelect() {
+    this.update();
   }
 
   addItemToCollection() {
-    this.listItems.push({ text: this.addedItemName});
+    this.listItems = [...this.listItems, { text: this.addedItemName}];
     this.addedItemName = '';
+    this.update();
   }
 
-  moveUp(index: number) {
-    const temp = this.listItems[index];
-    this.listItems[index] = this.listItems[index - 1];
-    this.listItems[index - 1] = temp;
-  }
-
-  moveDown(index: number) {
-    const temp = this.listItems[index];
-    this.listItems[index] = this.listItems[index + 1];
-    this.listItems[index + 1] = temp;
+  changeOption(value: string) {
+    this.optionChoice = value;
+    this.update();
   }
 
   update() {
     if (this.optionChoice === 'table') {
-      this.definition.isCollectionChoice = false;
-      this.definition.collectionChoiceList = null;
-      this.definition.choiceModule = this.selectedModule.guid;
-      this.definition.choiceTable = this.selectedTable.tableGuid;
-      this.definition.choiceColumn = this.selectedColumn;
+      this.draftDefinition.isCollectionChoice = false;
+      this.draftDefinition.collectionChoiceList = null;
+      this.draftDefinition.choiceModule = this.selectedModule ? this.selectedModule.guid : null;
+      this.draftDefinition.choiceTable = this.selectedTable ? this.selectedTable.tableGuid : null;
+      this.draftDefinition.choiceColumn = this.selectedColumn;
 
     } else {
-      this.definition.isCollectionChoice = true;
-      this.definition.collectionChoiceList = [];
-      this.definition.choiceModule = null;
-      this.definition.choiceTable = null;
-      this.definition.choiceColumn = null;
+      this.draftDefinition.isCollectionChoice = true;
+      this.draftDefinition.collectionChoiceList = [];
+      this.draftDefinition.choiceModule = null;
+      this.draftDefinition.choiceTable = null;
+      this.draftDefinition.choiceColumn = null;
 
       this.listItems.forEach(item => {
-        if (item.text && this.definition.collectionChoiceList.indexOf(item.text) === -1) {
-          this.definition.collectionChoiceList.push(item.text);
+        if (item.text && this.draftDefinition.collectionChoiceList.indexOf(item.text) === -1) {
+          this.draftDefinition.collectionChoiceList.push(item.text);
         }
       });
     }
 
-    this.onCompleted.emit(true);
+    this.onUpdated.emit(this.draftDefinition);
   }
-
-  cancel() {
-    this.onCompleted.emit(false);
-  }
-
 }

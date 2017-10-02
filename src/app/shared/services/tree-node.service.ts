@@ -11,42 +11,43 @@ export class TreeNodeService {
 
   }
 
-  getTreeLayerFromDefinitions(parentNode: TreeNode, definitions: Array<Untold.ClientDefinition>): TreeNode {
-    let tree: TreeNode;
+  getOrganizationChartFromDefinitions(definition: Untold.ClientDefinition) {
+    const organizationTree =  [{
+        label: definition.name,
+        data: definition,
+        expanded: true,
+        type: 'definition',
+      }];
 
-    if (parentNode) {
-        tree = parentNode;
-        tree.children = [];
-    } else {
-        tree = {};
-        tree.data = [];
-    }
+      this.updateTreeLayerFromDefinitions(organizationTree[0], definition.definitions);
+      return organizationTree;
+  }
 
-    definitions.filter(definition => {
-        return  (!parentNode  && !definition.parentDefinitionGuid) ||
-                (parentNode && parentNode.data.definitionGuid === definition.parentDefinitionGuid);
-    }).forEach(definition => {
+  updateTreeLayerFromDefinitions(parentNode: TreeNode, definitions: Array<Untold.ClientDefinition>) {
+    parentNode.children = [];
 
+    definitions.forEach(definition => {
         const hasChildren = definitions.filter(def => {
-            return def.parentDefinitionGuid === definition.definitionGuid;
+            return def.parentDefinitionGuid && def.definitionGuid && def.parentDefinitionGuid === definition.definitionGuid;
         }).length > 0;
 
         const node: TreeNode = {
             label: definition.name,
             data: definition,
+            expanded: true,
+            type: 'definition',
             'leaf': !hasChildren,
             'expandedIcon': 'ui-icon-folder-open',
             'collapsedIcon': 'ui-icon-folder',
+            parent: parentNode
         };
 
-        if (parentNode) {
-            tree.children.push(node);
-        } else {
-            tree.data.push(node);
+        if (definition.definitions && definition.definitions) {
+            this.updateTreeLayerFromDefinitions(node, definition.definitions);
         }
-    });
 
-    return tree;
+        parentNode.children.push(node);
+    });
   }
 
   getDefinitionMemberTree(definition: Untold.ClientInnerDefinition): TreeNode {
