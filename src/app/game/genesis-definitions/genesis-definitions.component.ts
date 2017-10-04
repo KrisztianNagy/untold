@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRe
 
 import { TreeNode } from 'primeng/primeng';
 import { SelectItem } from 'primeng/primeng';
+import { MenuItem } from 'primeng/primeng';
 
 import { TreeNodeService } from '../../shared/services/tree-node.service';
 import { GenesisDataService } from '../../shared/services/rest/genesis-data.service';
@@ -19,16 +20,17 @@ import { GameWorkflowSheetService } from '../../shared/services/game-flow/game-w
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
-  definitions: TreeNode[];
-  selectedNode: TreeNode;
   modules: Array<SelectItem>;
   moduleDefinitions: Array<SelectItem>;
   selectedModule: Untold.ClientModuleDefinitions;
   selectedDefinition: Untold.ClientDefinition;
-  editedDefinition: Untold.ClientDefinition;
+  draftDefinition: Untold.ClientDefinition;
   createVisible: boolean;
-  busy: boolean;
   realmDefinitions:  Array<Untold.ClientModuleDefinitions>;
+  saveItems: MenuItem[];
+  definitionName: string;
+  showAddDefinition: boolean;
+  addDefinitionParent: Untold.ClientDefinition;
   private definitionSubscription;
 
   constructor(private treeNodeService: TreeNodeService,
@@ -43,9 +45,24 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.saveItems = [
+      {label: 'Create Entity', icon: 'ui-icon-person-pin', command: () => {
+        this.gameWorkflowEntityService.createEntity(this.selectedDefinition);
+      }},
+      {label: 'Create Sheet', icon: 'ui-icon-library-books', command: () => {
+        this.gameWorkflowSheetService.createSheet(this.selectedDefinition);
+      }},
+      {label: 'Inherit', icon: 'ui-icon-cloud-download', command: () => {
+        this.showDefinitionForm(this.selectedDefinition);
+      }},
+    ];
+
     this.definitionSubscription = this.realmDefinitionService.definitions.subscribe(realmDefinitions => {
+      this.showAddDefinition = false;
+      this.addDefinitionParent = null;
+      this.definitionName = '';
       this.realmDefinitions = realmDefinitions;
-     this.prepareDropdowns();
+      this.prepareDropdowns();
     });
   }
 
@@ -108,46 +125,9 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
   nodeSelect(event) {
   }
 
-  showEdit(parentDefinitionNode: TreeNode, currentDefinitionNode: TreeNode) {
-    this.createVisible = true;
-
-    if (parentDefinitionNode) {
-       this.editedDefinition = <Untold.ClientDefinition> {
-         parentDefinitionGuid: parentDefinitionNode.data.definitionGuid
-       };
-
-       this.editedDefinition.definitions = JSON.parse(JSON.stringify(parentDefinitionNode.data.definitions));
-
-       this.editedDefinition.definitions.forEach(def => {
-         def.inherited = true;
-       });
-
-    } else if (currentDefinitionNode) {
-       this.editedDefinition = currentDefinitionNode.data;
-    } else {
-       this.editedDefinition = <Untold.ClientDefinition> {};
-       this.editedDefinition.definitions  = [];
-    }
-
-    this.editedDefinition.moduleGuid = this.selectedModule.guid;
-    this.changeDetectorRef.markForCheck();
-  }
-
-  loadNode(event) {
-    console.log('Opening');
-    if (event.node) {
-      this.treeNodeService.getTreeLayerFromDefinitions(event.node, this.selectedModule.definitions);
-      this.changeDetectorRef.markForCheck();
-    }
-  }
-
-  deleteNode(currentDefinitionNode: TreeNode) {
-    this.genesisDataService.deleteDefinition(<string> currentDefinitionNode.data.definitionGuid, this.selectedModule.id )
+  delete() {
+    this.genesisDataService.deleteDefinition(<string> this.selectedDefinition.definitionGuid, this.selectedModule.id )
       .subscribe(() => {
-        this.selectedNode = null;
-        this.createVisible = false;
-        this.busy = false;
-
         this.genesisDataService.getDefinitionsByRealm(this.gameService.getCurrent().realm.id)
           .subscribe(defs => {
             this.realmDefinitionService.setDefinitions(defs.moduleDefinitions);
@@ -160,10 +140,6 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   onSaved(updated: boolean) {
-      this.selectedNode = null;
-      this.createVisible = false;
-      this.busy = false;
-
     if (updated) {
      this.genesisDataService.getDefinitionsByRealm(this.gameService.getCurrent().realm.id)
           .subscribe(defs => {
@@ -183,19 +159,39 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
     this.prepareDropdowns();
   }
 
-  createEntity(currentDefinitionNode: TreeNode) {
-    this.gameWorkflowEntityService.createEntity(currentDefinitionNode.data);
+  onDraftUpdated(definition: Untold.ClientDefinition) {
+    this.draftDefinition = definition;
   }
 
-  createSheet(currentDefinitionNode: TreeNode) {
-    this.gameWorkflowSheetService.createSheet(currentDefinitionNode.data);
+  showDefinitionForm(parent: Untold.ClientDefinition) {
+    this.showAddDefinition = true;
+    this.definitionName = '';
+    this.addDefinitionParent = parent;
   }
 
-  private loadTree() {
-    if (!this.selectedModule) {
-      return;
+  closeAddDefinition(decision: true) {
+    if (decision) {
+      const definition: Untold.ClientDefinition = <Untold.ClientDefinition> {
+        name: this.definitionName,
+        moduleGuid: this.selectedModule.guid
+      };
+
+      if (this.addDefinitionParent) {
+        definition.parentDefinitionGuid = this.addDefinitionParent.definitionGuid;
+        definition.definitions = JSON.parse(JSON.stringify(this.addDefinitionParent.definitions));
+        definition.definitions.forEach(def => def.inherited = true);
+      }
+
+      this.genesisDataService.saveDefinition(definition, this.gameService.getCurrent().realm.id)
+        .subscribe(() => {
+          this.onSaved(true);
+        }, () => {
+          this.onSaved(false);
+        });
     }
 
-    this.definitions = this.treeNodeService.getTreeLayerFromDefinitions(null, this.selectedModule.definitions).data;
+    this.definitionName = '';
+    this.showAddDefinition = false;
+    this.addDefinitionParent = null;
   }
 }

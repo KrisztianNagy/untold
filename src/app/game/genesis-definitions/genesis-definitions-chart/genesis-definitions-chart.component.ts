@@ -22,6 +22,7 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
   @Input() realmDefinitions: Array<Untold.ClientModuleDefinitions>;
   @Output() onSaved = new EventEmitter<boolean>();
   @Output() onDefinitionClick = new EventEmitter<Untold.ClientDefinition>();
+  @Output() onDraftUpdated = new EventEmitter<Untold.ClientDefinition>();
 
   organizationTree: TreeNode[];
   draftDefinition: Untold.ClientDefinition;
@@ -32,6 +33,10 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
   listDefinition: Untold.ClientInnerDefinition;
   listDefinitionResponse: Untold.ClientInnerDefinition;
   addedMemberDefinition: Untold.ClientInnerDefinition;
+  ruleDefinition: Untold.ClientInnerDefinition;
+  ruleDefinitionResponse: Untold.ClientInnerDefinition;
+  editedRule: Untold.ClientDefinitionRule;
+  rulePosition?: number;
   displayAddForm: boolean;
 
   constructor(private treeNodeService: TreeNodeService,
@@ -49,6 +54,9 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
     this.choiceDefinitionResponse = null;
     this.listDefinition = null;
     this.listDefinitionResponse = null;
+    this.ruleDefinition = null;
+    this.ruleDefinitionResponse = null;
+    this.editedRule = null;
     this.draftDefinition = JSON.parse(JSON.stringify(this.definition));
     this.loadChart();
   }
@@ -56,6 +64,7 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
   loadChart() {
     this.organizationTree = null;
     this.changeDetectorRef.markForCheck();
+    this.onDraftUpdated.emit(this.draftDefinition);
 
     setTimeout(() => {
       this.organizationTree = this.treeNodeService.getOrganizationChartFromDefinitions(this.draftDefinition);
@@ -173,6 +182,54 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
 
     this.listDefinition = null;
     this.listDefinitionResponse = null;
+    this.changeDetectorRef.markForCheck();
+  }
+
+  clickRule(definition: Untold.ClientInnerDefinition) {
+    this.ruleDefinition = definition;
+  }
+
+  ruleConfigUpdated(definition: Untold.ClientInnerDefinition) {
+    this.ruleDefinitionResponse = definition;
+  }
+
+  closeRuleConfig(decision: boolean) {
+
+    if (decision) {
+      this.ruleDefinition.rules = this.ruleDefinitionResponse.rules;
+      this.loadChart();
+    }
+
+    this.ruleDefinition = null;
+    this.ruleDefinitionResponse = null;
+    this.changeDetectorRef.markForCheck();
+  }
+
+  editRule(rule?: Untold.ClientDefinitionRule) {
+    if (rule) {
+      this.closeRuleConfig(true);
+      this.rulePosition = this.draftDefinition.rules.indexOf(rule);
+      this.editedRule = rule;
+    } else {
+      this.closeRuleConfig(false);
+      this.rulePosition = null;
+      this.editedRule = {
+        expression: '',
+        target: ''
+      };
+    }
+  }
+
+  closeRuleEditor(rule?: Untold.ClientDefinitionRule) {
+    if (rule) {
+      if (this.rulePosition && this.rulePosition > -1) {
+        this.draftDefinition.rules[this.rulePosition] = rule;
+      } else {
+        this.draftDefinition.rules.push(rule);
+      }
+    }
+
+    this.editedRule = null;
     this.changeDetectorRef.markForCheck();
   }
 

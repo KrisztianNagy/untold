@@ -13,37 +13,94 @@
                         <p-dropdown [options]="moduleDefinitions"  [(ngModel)]="selectedDefinition" (onChange)="definitionChanged()" *ngIf="moduleDefinitions"></p-dropdown>
                     </div>
                     <div class="ui-g-2">
-                         <button pButton type="button" class='green-btn' (click)="createEntity(selectedNode)" label="Create entity" [disabled]="!selectedNode"></button>
-                    </div>
-                    <div class="ui-g-2">
-                        <button pButton type="button" class='green-btn' (click)="createSheet(selectedNode)" label="Create sheet" [disabled]="!selectedNode"></button>
-                   </div>
-                    <div class="ui-g-2">
-                         <button pButton type="button" class='green-btn' (click)="showEdit()" label="Create root definition" ></button>
-                    </div>
-                    <div class="ui-g-2">
-                        <button pButton type="button" class='green-btn' (click)="showEdit(null, selectedNode)" label="Edit" [disabled]="!selectedNode" ></button>
-                    </div>
-                    <div class="ui-g-2">
-                        <button pButton type="button" class='green-btn' (click)="showEdit(selectedNode)" label="Add child definition" [disabled]="!selectedNode" ></button>
+                        <button pButton type="button" class='green-btn' (click)="showDefinitionForm()" label="Add" icon="ui-icon-exposure-plus-1" [disabled]="!selectedModule"></button>
                     </div>                    
                     <div class="ui-g-2">
-                        <button pButton type="button" class='red-btn' (click)="deleteNode(selectedNode)" label="Delete" [disabled]="!selectedNode"></button>
+                        <p-splitButton label="Save" icon="check" [disabled]="!selectedDefinition" (onClick)="save()" [model]="saveItems" [disabled]="!selectedDefinition" icon="ui-icon-check"></p-splitButton>
                     </div>
-                    <div class="ui-g-12">
-                        <p-tree [value]="definitions" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)" (onNodeExpand)="loadNode($event)"></p-tree>
+                    <div class="ui-g-2">
                     </div>
+                    <div class="ui-g-2">
+                        <button pButton type="button" class='red-btn' (click)="delete(selectedDefinition)" label="Delete" [disabled]="!selectedDefinition"></button>
+                    </div>                   
             </div>
         </div>
-
-        <app-genesis-definitions-chart *ngIf="selectedDefinition" [realmDefinitions]="realmDefinitions" [definition]="selectedDefinition" (onDefinitionClick)="onDefinitionClick($event)"></app-genesis-definitions-chart>
-
+        <div class="card">
+            <app-genesis-definitions-chart *ngIf="selectedDefinition" [realmDefinitions]="realmDefinitions" [definition]="selectedDefinition" (onDefinitionClick)="onDefinitionClick($event)" (onDraftUpdated)="onDraftUpdated($event)"></app-genesis-definitions-chart>
+        </div>
         <div class="ui-g-12" *ngIf="!createVisible">
             <div class="card">
                 <p-panel header="Quick Help" [toggleable]="true" [collapsed]="true">
-                    D
+                    This is the page where you can create your own definitions. Select the target module from the modules list. This will populate the definition list and also enables the <b>Add</b> button.
+                    <br/><br/>
+
+                    <h3>What are the main options?</h3>
+                    <div>                        
+                        <i class="material-icons">exposure_plus_1</i><b style="vertical-align: super;">Add</b><br/>
+                        You have to provide a unique name. Then you will be able to edit your new definition.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">check</i><b style="vertical-align: super;">Save</b><br/>
+                        Saves your current changes.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">person_pin</i><b style="vertical-align: super;">Create Entity</b><br/>
+                        Creates a new entity from the current definition. The new entity will be available in the <i class="material-icons">person_pin</i><b style="vertical-align: super;">Entities</b>.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">library_books</i><b style="vertical-align: super;">Create Sheet</b><br/>
+                        Creates a new sheet based on the definition. The new sheet will be available in the <i class="material-icons">library_books</i><b style="vertical-align: super;">Sheets</b>.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">cloud_download</i><b style="vertical-align: super;">Inherit</b><br/>
+                        Creates a new definition inheriting everything from the current one.
+                        <br/><br/>
+                    </div>
+
+                    <h3>What are the chart options?</h3>
+                    <div>                        
+                        <b>Clicking on the title of the child definition</b><br/>
+                        Navigates to the definition.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">edit</i><b style="vertical-align: super;">Edit Name</b><br/>
+                        Clicking on the pencil will let's you edit the name of the definition or the child property.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">exposure_plus_1</i><b style="vertical-align: super;">Add child definition</b><br/>
+                        Adds a new property to the current definition. This can be a simple type (text, number, YesNo, choice) or a previously created definition. Also the property can be a list which means that it will contain multiple values. Finally, you can set it to calculated. Calculated values are being computed by rules on the fly.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">compare_arrows</i><b style="vertical-align: super;">Reorder</b><br/>
+                        Let's you change the order of properties.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">work</i><b style="vertical-align: super;">Rules</b><br/>
+                        Rules are the way to populate calculated fields.
+                        <br/><br/>
+                    </div>
+                    <div>                        
+                        <i class="material-icons">format_list_bulleted</i><b style="vertical-align: super;">Config</b><br/>
+                        Choice types and list can be configured.
+                        <br/><br/>
+                    </div>
                 </p-panel>
             </div>
         </div>
     </div>
 </div>
+<p-dialog header="New Definition" [visible]="showAddDefinition" modal="modal" width="300" [responsive]="true" [closable]="false">
+        <input type="text" pInputText [(ngModel)]="definitionName" >
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-check" (click)="closeAddDefinition(true)" [disabled]="!definitionName" label="Add"></button>
+        <button type="button" pButton icon="ui-icon-close" (click)="closeAddDefinition(false)" label="Cancel"></button>
+    </p-footer>
+</p-dialog>

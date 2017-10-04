@@ -165,13 +165,13 @@ import { MenuVisibilityPipe } from './shared/pipes/menu-visibility.pipe';
 import { GenesisRuleTablesComponent } from './game/genesis-rule-tables/genesis-rule-tables.component';
 import { RuleTableImportWizardComponent } from './game/genesis-rule-tables/rule-table-import-wizard/rule-table-import-wizard.component';
 import { EditDefinitionComponent } from './game/genesis-definitions/edit-definition/edit-definition.component';
-import { EditRuleComponent } from './game/genesis-definitions/edit-definition/show-rules/edit-rule/edit-rule.component';
-import { ShowRulesComponent } from './game/genesis-definitions/edit-definition/show-rules/show-rules.component';
+import { EditRuleComponent } from './game/genesis-definitions/genesis-definitions-chart/edit-rule/edit-rule.component';
+import { ShowRulesComponent } from './game/genesis-definitions/genesis-definitions-chart/show-rules/show-rules.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { EntityEditorComponent } from './game/genesis-entities/entity-editor/entity-editor.component';
 // tslint:disable-next-line:max-line-length
-import { ExpressionBuilderComponent } from './game/genesis-definitions/edit-definition/show-rules/edit-rule/expression-builder/expression-builder.component';
+import { ExpressionBuilderComponent } from './game/genesis-definitions/genesis-definitions-chart/edit-rule/expression-builder/expression-builder.component';
 import { HomeSideBarComponent } from './side-bar/home-side-bar/home-side-bar.component';
 import { TemplateSideBarComponent } from './side-bar/template-side-bar/template-side-bar.component';
 import { DefinitionSideBarComponent } from './side-bar/definition-side-bar/definition-side-bar.component';

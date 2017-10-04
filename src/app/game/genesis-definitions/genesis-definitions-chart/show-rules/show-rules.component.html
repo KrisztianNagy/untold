@@ -1,0 +1,23 @@
+<div class="ui-g">
+    <div class="card">
+        <div class="ui-g form-group" > 
+            <div class="ui-g-12"> 
+                <p-orderList [(value)]="draftDefinition.rules" dragdrop="true">
+                    <ng-template let-listItem pTemplate="item">
+                        <div class="ui-g-8">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText [(ngModel)]="ruleNames[listItem.target]" (change)="update()" [readonly]="true">                        
+                            </span>
+                        </div>
+                        <div class="ui-g-2">
+                            <button pButton type="button" class='green-btn' icon="ui-icon-create" (click)="editRule(listItem)"></button>
+                        </div> 
+                        <div class="ui-g-2">
+                            <button pButton type="button" class='red-btn'  icon="ui-icon-delete" (click)="deleteRule(listItem)"></button>
+                        </div>
+                    </ng-template>
+                </p-orderList>             
+            </div>            
+        </div>
+    </div>
+</div>

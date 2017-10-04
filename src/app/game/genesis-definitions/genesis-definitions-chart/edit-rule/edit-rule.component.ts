@@ -3,12 +3,12 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy
 import { SelectItem } from 'primeng/primeng';
 import { TreeNode } from 'primeng/primeng';
 
-import { TreeNodeService } from '../../../../../shared/services/tree-node.service';
-import { Untold } from '../../../../../shared/models/backend-export';
-import { ExpressionResult } from '../../../../../shared/models/expression-result';
-import { CalculatedExpressionService } from '../../../../../shared/services/expressions/calculated-expression.service';
-import { ExpressionEvaluatorService } from '../../../../../shared/services/expressions/expression-evaluator.service';
-import { GenesisEntity, GenesisTreeNode } from '../../../../../shared/models/genesis-entity';
+import { TreeNodeService } from '../../../../shared/services/tree-node.service';
+import { Untold } from '../../../../shared/models/backend-export';
+import { ExpressionResult } from '../../../../shared/models/expression-result';
+import { CalculatedExpressionService } from '../../../../shared/services/expressions/calculated-expression.service';
+import { ExpressionEvaluatorService } from '../../../../shared/services/expressions/expression-evaluator.service';
+import { GenesisEntity, GenesisTreeNode } from '../../../../shared/models/genesis-entity';
 
 @Component({
   selector: 'app-edit-rule',
@@ -17,9 +17,8 @@ import { GenesisEntity, GenesisTreeNode } from '../../../../../shared/models/gen
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditRuleComponent implements OnInit {
-  @Input() editedDefinition: Untold.ClientInnerDefinition;
+  @Input() definition: Untold.ClientInnerDefinition;
   @Input() rule: Untold.ClientDefinitionRule;
-  @Input() modules: Array<SelectItem>;
   @Output() onCompleted = new EventEmitter<Untold.ClientDefinitionRule>();
 
   result: ExpressionResult;
@@ -40,8 +39,8 @@ export class EditRuleComponent implements OnInit {
 
   ngOnInit() {
     this.targetDefinitions = [{label: 'Select rule target', value: null}];
-    this.processDefinition(this.editedDefinition, '', true);
-    this.tree = [this.treeNodeService.getDefinitionMemberTree(<Untold.ClientInnerDefinition> this.editedDefinition)];
+    this.processDefinition(this.definition, '', true);
+    this.tree = [this.treeNodeService.getDefinitionMemberTree(<Untold.ClientInnerDefinition> this.definition)];
 
     if (this.rule.target) {
       const match = this.targetDefinitions.filter(def => def.value === this.rule.target);
@@ -53,7 +52,7 @@ export class EditRuleComponent implements OnInit {
     }
 
     this.testEntity = {
-      definition: <Untold.ClientInnerDefinition> this.editedDefinition,
+      definition: <Untold.ClientInnerDefinition> this.definition,
       entity: this.treeNodeService.getEmptyGenesisEntityFromDefinitionTree(<GenesisTreeNode> this.tree[0])
     };
 
@@ -130,7 +129,7 @@ export class EditRuleComponent implements OnInit {
         this.testResult = '';
         this.changeDetectorRef.markForCheck();
       } else {
-        if (this.calculatedExpressionService.resolveNode(this.result.tree, <any> this.editedDefinition) === null) {
+        if (this.calculatedExpressionService.resolveNode(this.result.tree, <any> this.definition) === null) {
 
           this.result = {
             error: true,

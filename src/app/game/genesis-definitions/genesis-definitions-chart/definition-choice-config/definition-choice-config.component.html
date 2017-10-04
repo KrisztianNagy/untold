@@ -22,26 +22,26 @@
     <br/><br/>
     </div>
     <div class="card" *ngIf="optionChoice === 'collection'">
-    Provide your choice options.
-    <div class="ui-g form-group" > 
-        <div class="ui-g-12">
-            <span class="md-inputfield">
-                <input type="text" pInputText [(ngModel)]="addedItemName" >
-            </span>
+        Provide your choice options.
+        <div class="ui-g form-group" > 
+            <div class="ui-g-12">
+                <span class="md-inputfield">
+                    <input type="text" pInputText [(ngModel)]="addedItemName" >
+                </span>
+            </div>
+            <div class="ui-g-12">
+                <button pButton type="button" class='green-btn' label="Add" (click)="addItemToCollection()" [disabled]="!addedItemName || listItems.indexOf(addedItemName) !== -1"></button>
+            </div>                          
+            <div class="ui-g-12"> 
+                <p-orderList [(value)]="listItems" dragdrop="true">
+                    <ng-template let-listItem pTemplate="item">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [(ngModel)]="listItem.text" (change)="update()">                        
+                        </span>
+                    </ng-template>
+                </p-orderList>             
+            </div>            
         </div>
-        <div class="ui-g-12">
-            <button pButton type="button" class='green-btn' label="Add" (click)="addItemToCollection()" [disabled]="!addedItemName || listItems.indexOf(addedItemName) !== -1"></button>
-        </div>                          
-        <div class="ui-g-12"> 
-            <p-orderList [(value)]="listItems" dragdrop="true">
-                <ng-template let-listItem pTemplate="item">
-                    <span class="md-inputfield">
-                        <input type="text" pInputText [(ngModel)]="listItem.text" (change)="update()">                        
-                    </span>
-                </ng-template>
-            </p-orderList>             
-        </div>            
-    </div>
     </div>
 </div>
 

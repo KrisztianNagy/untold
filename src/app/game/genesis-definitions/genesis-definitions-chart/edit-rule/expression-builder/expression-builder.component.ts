@@ -2,10 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy
 
 import { SelectItem } from 'primeng/primeng';
 
-import { Untold } from '../../../../../../shared/models/backend-export';
-import { GenesisEntity } from '../../../../../../shared/models/genesis-entity';
-import { RealmTableService } from '../../../../../../store/services/realm-table.service';
-import { ExpressionTableCacheService } from '../../../../../../shared/services/expressions/expression-table-cache.service';
+import { Untold } from '../../../../../shared/models/backend-export';
+import { GenesisEntity } from '../../../../../shared/models/genesis-entity';
+import { RealmTableService } from '../../../../../store/services/realm-table.service';
+import { ExpressionTableCacheService } from '../../../../../shared/services/expressions/expression-table-cache.service';
 @Component({
   selector: 'app-expression-builder',
   templateUrl: './expression-builder.component.html',

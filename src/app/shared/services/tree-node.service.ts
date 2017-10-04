@@ -98,7 +98,7 @@ export class TreeNodeService {
     entity.entity = entity.entity || {};
 
     const tree: GenesisTreeNode = {
-        data: entity.definition,
+        data: JSON.parse(JSON.stringify(entity.definition)),
         children: null,
         label : customLabel || entity.definition.name
     };
@@ -109,25 +109,36 @@ export class TreeNodeService {
         tree.children = [];
         const listElements: Array<any> = entity.entity.listElements;
 
-        if (listElements && listElements.length > 0) {
+        if (entity.definition.isPredefinedList) {
+
+            const predefinedListItems = entity.definition.predefinedListItems ? entity.definition.predefinedListItems : [];
             const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
             childDef.isList = false;
 
-            listElements.forEach((element, index) => {
-                const nextEntity: GenesisEntity = {
-                    definition: childDef,
-                    entity: element
-                };
+            predefinedListItems.forEach((element, index) => {
+                if (listElements && listElements.length > index) {
+                    const nextEntity: GenesisEntity = {
+                        definition: childDef,
+                        entity: listElements[index]
+                    };
 
-                if (entity.definition.isPredefinedList) {
-                    const nextLabel = (entity.definition.predefinedListItems && entity.definition.predefinedListItems.length > index) ?
-                        entity.definition.predefinedListItems[index] : index.toString();
-
-                    tree.children.push(this.getTreeFromGenesisEntity(nextEntity, nextLabel));
-                } else {
-                    tree.children.push(this.getTreeFromGenesisEntity(nextEntity));
+                    tree.children.push(this.getTreeFromGenesisEntity(nextEntity, element));
                 }
             });
+        } else {
+            if (listElements && listElements.length > 0) {
+                const childDef: Untold.ClientInnerDefinition = JSON.parse(JSON.stringify(entity.definition));
+                childDef.isList = false;
+
+                listElements.forEach((element, index) => {
+                    const nextEntity: GenesisEntity = {
+                        definition: childDef,
+                        entity: element
+                    };
+
+                    tree.children.push(this.getTreeFromGenesisEntity(nextEntity));
+                });
+            }
         }
     } else if (entity.definition.definitions) {
         tree.expandedIcon = 'ui-icon-layers';

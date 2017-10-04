@@ -1,0 +1,50 @@
+<p-tabView>
+    <p-tabPanel header="Build">
+        <div class="ui-g form-group">     
+            <div class="ui-g-12">  
+                <div class="ui-g-12">
+                    <app-expression-builder [editedDefinition]="definition" (onInsert)="insertBuilderScript($event)"></app-expression-builder>
+                </div>
+                <div class="ui-g-12">
+                    Target: &nbsp;
+                    <p-dropdown [options]="targetDefinitions" [(ngModel)]="selectedTargetDefinition" [autoWidth]="false" [readonly]="isReadOnly"></p-dropdown>
+                </div>
+                    <div class="ui-g-12">             
+                        <textarea pInputTextarea #scriptTextArea (click)="getCaretPos(scriptTextArea)" (keyup)="getCaretPos(scriptTextArea)" [(ngModel)]="rule.expression" (keypress)="expressionChanged($event)"  autoResize="autoResize" style="width: 100%" placeholder="Insert script..."></textarea>
+                    </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-3">
+                        Syntax:
+                    </div>
+                    <div class="ui-g-9">
+                        {{ result && result.ErrorMessage ? result.errorMessage : 'No syntax errors.'}}
+                    </div>
+                </div>
+                        
+            </div>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Test">
+        <div class="ui-g-12">
+            <div class="ui-g-3">
+                Test result:
+            </div>
+            <div class="ui-g-9">
+                {{testResult ? testResult : ''}}
+            </div>
+        </div>   
+        <div class="ui-g-12"> 
+            <app-entity-editor *ngIf="testEntity" [entity]="testEntity" (entityChanged)="updateTestEntity($event)" [testMode]="true" [choiceOptions]="{}"></app-entity-editor>
+        </div>
+    </p-tabPanel>
+</p-tabView>
+<div class="ui-g-12">
+    <div class="ui-g-4">
+    </div>
+    <div class="ui-g-4">
+        <button pButton type="button" class="green-btn" (click)="update()" label="Update" [disabled]="!selectedTargetDefinition"  ></button>
+    </div>
+    <div class="ui-g-4">
+        <button pButton type="button" class="blue-btn" (click)="cancel()" label="Cancel"></button>
+    </div>
+</div>
