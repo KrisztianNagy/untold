@@ -17,28 +17,20 @@
                         <p-panel>
                             <p-header>
                                 <div class="ui-helper-clearfix">
-                                    <p-inplace closable="closable">
-                                        <span pInplaceDisplay closable="closable">
-                                            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{entity.name}}</span>                                            
-                                        </span>
-                                        <span pInplaceContent>
-                                            <input type="text" [(ngModel)]="entity.name" (change)="updateEntityName(entity)" pInputText>                                            
-                                        </span>
-                                    </p-inplace>
+                                    <span class="ui-panel-title" [routerLink]="['/game/entity', entity.id]" style="cursor: pointer; font-size:16px;display:inline-block;margin-top:2px">{{entity.name}}</span>
+                                    <i class="material-icons" (click)="editName(entity)" style="float: right; cursor: pointer;">edit</i>
                                 </div>
                             </p-header>
-                                    Sheet: {{entity.sheetId ? sheetNames[entity.sheetId] : 'No sheet selected' }}   
-                                    <button type="button" pButton (click)="showSheetSelectorPopup(entity)" label="Change"></button>                                         
+                                    <span  (click)="showSheetSelectorPopup(entity)" style="cursor: pointer">Sheet: {{entity.sheetId ? sheetNames[entity.sheetId] : 'No sheet selected' }}</span>   
                             <p-footer>
                                 <div class="ui-g">
-                                    <div class="ui-g-4">
-                                        <button pButton type="button" class='blue-btn' [routerLink]="['/game/entity', entity.id]" icon="ui-icon-dehaze" ></button>
+                                    <div class="ui-g-2">
                                     </div>
-                                    <div class="ui-g-4">
-                                            
+                                    <div class="ui-g-8">
+                                            <button pButton type="button" class='red-btn' (click)="deleteEntity(entity)" label="Delete" icon="ui-icon-delete-forever" ></button>
                                     </div>
-                                    <div class="ui-g-4">
-                                        <button pButton type="button" class='red-btn' (click)="deleteEntity(entity)" icon="ui-icon-delete-forever" ></button>
+                                    <div class="ui-g-2">
+                                       
                                     </div>
                                 </div>
                             </p-footer>
@@ -48,13 +40,33 @@
             </p-dataGrid>
         </div>
     </div>
-    <p-dialog header="Select sheet" [(visible)]="displaySheetPicker">
+    <p-dialog header="Edit Name" [visible]="editNameEntity" modal="modal" width="300" [responsive]="true" [closable]="false">
+            <input type="text" pInputText [(ngModel)]="editNameEntity.name" *ngIf="editNameEntity">
+            <p-footer>
+                <button type="button" pButton icon="ui-icon-check" (click)="closeNameEditor(true)" label="Update"></button>
+                <button type="button" pButton icon="ui-icon-close" (click)="closeNameEditor(false)" label="Cancel"></button>
+            </p-footer>
+        </p-dialog>
+    <p-dialog header="Select sheet" [(visible)]="displaySheetPicker" width="300" [responsive]="true" [closable]="false">
         <p-dropdown [options]="availableSheets"  [(ngModel)]="selectedSheetId" *ngIf="displaySheetPicker"></p-dropdown>
         <br/><br/>
-        test        
+        Please select a sheet. This sheet will be used whenever someone opens the entity. <br/><br/>
+        Selecting the default <b>No Sheet</b> will use the out-of-box entity viewer which displays all properties and their connections as a tree.        
         <p-footer>
             <button type="button" pButton icon="fa-check" (click)="saveSheetChange()" label="Save"></button>
             <button type="button" pButton icon="fa-close" (click)="displaySheetPicker=false" label="Cancel"></button>
         </p-footer>
     </p-dialog>
+    <div class="ui-g-12">
+        <div class="card">
+            <p-panel header="Quick Help" [toggleable]="true" [collapsed]="true">
+                Entities are actors (characters, monsters, etc) in your game. These are created from definitions. One definition can be used to create multiple entities.<br>
+
+                To create a new entity you must go to the definition page and select your definition. Choose the <b>Create Entity</b> from the dropdown menu<br/><br/>
+                Clicking on the title will open the entity. <br/>
+                The pencil let's you change the name.<br/>
+                Clicking on the sheet in the middle will open the sheet picker<br/>
+            </p-panel>
+        </div>
+    </div>
 </div>

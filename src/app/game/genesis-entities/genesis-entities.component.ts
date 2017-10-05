@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewEncapsulation} from '@angular/core';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/merge';
 
 import { SelectItem } from 'primeng/primeng';
 import { Inplace } from 'primeng/primeng';
@@ -15,7 +16,9 @@ import { DefinitionEnhancerService } from '../../shared/services/expressions/def
 @Component({
   selector: 'app-genesis-entities',
   templateUrl: './genesis-entities.component.html',
-  styleUrls: ['./genesis-entities.component.css']
+  styleUrls: ['./genesis-entities.component.css'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GenesisEntitiesComponent implements OnInit, OnDestroy {
   modules: Array<SelectItem>;
@@ -27,6 +30,7 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
   availableSheets: Array<SelectItem>;
   selectedSheetId: number;
   displaySheetPicker: boolean;
+  editNameEntity: Untold.ClientEntity;
   private definitionSubscription;
 
   constructor(private realmDefinitionService: RealmDefinitionService,
@@ -44,29 +48,34 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
     this.sheetNames = {};
     this.selectedSheetId = 0;
 
-    this.definitionSubscription = this.realmDefinitionService.definitions.subscribe(realmDefinitions => {
-      this.modules = realmDefinitions.map(rd => {
-         return {
-          label: rd.name,
-          value: rd
-        };
+    this.definitionSubscription = this.realmDefinitionService.definitions
+      .merge(this.entityService.entities)
+      .merge(this.sheetService.sheets)
+      .subscribe(() => {
+        this.editNameEntity = null;
+        const realmDefinitions = this.realmDefinitionService.getCurrent();
+        this.modules = realmDefinitions.map(rd => {
+          return {
+            label: rd.name,
+            value: rd
+          };
+        });
+
+        if (this.selectedModule) {
+          const matching = realmDefinitions.filter(rt => rt.id === this.selectedModule.id);
+          this.selectedModule = matching.length ? matching[0] : null;
+          this.populateEntities();
+          this.populateSheets();
+        }
+
+        if (!this.selectedModule && this.modules.length ) {
+          this.selectedModule = this.modules[0].value;
+          this.populateEntities();
+          this.populateSheets();
+        }
+
+        this.changeDetectorRef.markForCheck();
       });
-
-      if (this.selectedModule) {
-        const matching = realmDefinitions.filter(rt => rt.id === this.selectedModule.id);
-        this.selectedModule = matching.length ? matching[0] : null;
-        this.populateEntities();
-        this.populateSheets();
-      }
-
-      if (!this.selectedModule && this.modules.length ) {
-        this.selectedModule = this.modules[0].value;
-        this.populateEntities();
-        this.populateSheets();
-      }
-
-      this.changeDetectorRef.markForCheck();
-    });
   }
 
   ngOnDestroy() {
@@ -117,7 +126,7 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
       definitions = [...definitions, ...realmDef.definitions];
     });
 
-    let definitionChain = this.definitionEnhancerService.getParentChain(definitions, this.selectedEntity.definitionGuid);
+    const definitionChain = this.definitionEnhancerService.getParentChain(definitions, this.selectedEntity.definitionGuid);
 
     this.sheets.filter(sh =>  definitionChain.some(chain => chain.definitionGuid === sh.definitionGuid))
       .forEach(sh => {
@@ -136,6 +145,18 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
     this.gameWorkflowEntityService.saveEntityName(this.selectedEntity);
 
     this.changeDetectorRef.markForCheck();
+  }
+
+  editName(entity: Untold.ClientEntity) {
+    this.editNameEntity = JSON.parse(JSON.stringify(entity));
+  }
+
+  closeNameEditor(decision: true) {
+    if (decision) {
+      this.updateEntityName(this.editNameEntity);
+    }
+
+    this.editNameEntity = null;
   }
 
 }
