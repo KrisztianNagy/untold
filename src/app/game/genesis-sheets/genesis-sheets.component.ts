@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/merge';
 
 import { SelectItem } from 'primeng/primeng';
 import { Inplace } from 'primeng/primeng';
@@ -19,6 +20,7 @@ export class GenesisSheetsComponent implements OnInit, OnDestroy {
   modules: Array<SelectItem>;
   selectedModule: Untold.ClientModuleDefinitions;
   sheets: Sheet[];
+  editNameSheet: Sheet;
   private definitionSubscription;
 
   constructor(private realmDefinitionService: RealmDefinitionService,
@@ -31,27 +33,32 @@ export class GenesisSheetsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sheets = [];
 
-    this.definitionSubscription = this.realmDefinitionService.definitions.subscribe(realmDefinitions => {
-      this.modules = realmDefinitions.map(rd => {
-         return {
-          label: rd.name,
-          value: rd
-        };
+    this.definitionSubscription = this.realmDefinitionService.definitions
+      .merge(this.sheetService.sheets)
+      .subscribe(() => {
+        const realmDefinitions = this.realmDefinitionService.getCurrent();
+        this.editNameSheet = null;
+
+        this.modules = realmDefinitions.map(rd => {
+          return {
+            label: rd.name,
+            value: rd
+          };
+        });
+
+        if (this.selectedModule) {
+          const matching = realmDefinitions.filter(rt => rt.id === this.selectedModule.id);
+          this.selectedModule = matching.length ? matching[0] : null;
+          this.populateSheets();
+        }
+
+        if (!this.selectedModule && this.modules.length ) {
+          this.selectedModule = this.modules[0].value;
+          this.populateSheets();
+        }
+
+        this.changeDetectorRef.markForCheck();
       });
-
-      if (this.selectedModule) {
-        const matching = realmDefinitions.filter(rt => rt.id === this.selectedModule.id);
-        this.selectedModule = matching.length ? matching[0] : null;
-        this.populateSheets();
-      }
-
-      if (!this.selectedModule && this.modules.length ) {
-        this.selectedModule = this.modules[0].value;
-        this.populateSheets();
-      }
-
-      this.changeDetectorRef.markForCheck();
-    });
   }
 
   ngOnDestroy() {
@@ -74,5 +81,17 @@ export class GenesisSheetsComponent implements OnInit, OnDestroy {
   private populateSheets() {
     this.sheets = this.sheetService.getCurrent().filter(ent => ent.moduleGuid = this.selectedModule.guid);
     this.changeDetectorRef.markForCheck();
+  }
+
+  editName(sheet: Sheet) {
+    this.editNameSheet = JSON.parse(JSON.stringify(sheet));
+  }
+
+  closeNameEditor(decision: true) {
+    if (decision) {
+      this.updateSheetName(this.editNameSheet);
+    }
+
+    this.editNameSheet = null;
   }
 }

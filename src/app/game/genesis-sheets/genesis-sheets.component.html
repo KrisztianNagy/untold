@@ -17,27 +17,20 @@
                         <p-panel>
                             <p-header>
                                 <div class="ui-helper-clearfix">
-                                    <p-inplace closable="closable">
-                                        <span pInplaceDisplay closable="closable">
-                                            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{sheet.name}}</span>                                            
-                                        </span>
-                                        <span pInplaceContent>
-                                            <input type="text" [(ngModel)]="sheet.name" (change)="updateSheetName(sheet)" pInputText>                                            
-                                        </span>
-                                    </p-inplace>
+                                        <span class="ui-panel-title" style="cursor: pointer; font-size:16px;display:inline-block;margin-top:2px">{{sheet.name}}</span>
+                                    <i class="material-icons" (click)="editName(sheet)" style="float: right; cursor: pointer;">edit</i>
                                 </div>
                             </p-header>
                             
                             <p-footer>
                                 <div class="ui-g">
-                                    <div class="ui-g-4">
-                                        <button pButton type="button" class='blue-btn' [routerLink]="['/game/sheet', sheet.id]" icon="ui-icon-dehaze" ></button>
+                                    <div class="ui-g-2">
                                     </div>
-                                    <div class="ui-g-4">
-                                            
+                                    <div class="ui-g-8">
+                                        <button pButton type="button" class='red-btn' label="Delete" (click)="deleteSheet(sheet)" icon="ui-icon-delete-forever" ></button>
                                     </div>
-                                    <div class="ui-g-4">
-                                        <button pButton type="button" class='red-btn' (click)="deleteSheet(sheet)" icon="ui-icon-delete-forever" ></button>
+                                    <div class="ui-g-2">
+                                        
                                     </div>
                                 </div>
                             </p-footer>
@@ -45,6 +38,23 @@
                     </div>
                 </ng-template>
             </p-dataGrid>
+        </div>
+    </div>
+    <p-dialog header="Edit Name" [visible]="editNameSheet" modal="modal" width="300" [responsive]="true" [closable]="false">
+        <input type="text" pInputText [(ngModel)]="editNameSheet.name" *ngIf="editNameSheet">
+        <p-footer>
+            <button type="button" pButton icon="ui-icon-check" (click)="closeNameEditor(true)" label="Update"></button>
+            <button type="button" pButton icon="ui-icon-close" (click)="closeNameEditor(false)" label="Cancel"></button>
+        </p-footer>
+    </p-dialog>
+    <div class="ui-g-12">
+        <div class="card">
+            <p-panel header="Quick Help" [toggleable]="true" [collapsed]="true">
+                Sheets are the way to create custom character sheets. Sheets can be assigned to entities on the <b>Entity</b><br>
+
+                To create a new sheet you must go to the definition page and select your definition. Choose the <b>Create Sheet</b> from the dropdown menu<br/><br/>
+                The pencil let's you change the name.<br/>
+            </p-panel>
         </div>
     </div>
 </div>

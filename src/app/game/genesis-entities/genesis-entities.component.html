@@ -41,12 +41,12 @@
         </div>
     </div>
     <p-dialog header="Edit Name" [visible]="editNameEntity" modal="modal" width="300" [responsive]="true" [closable]="false">
-            <input type="text" pInputText [(ngModel)]="editNameEntity.name" *ngIf="editNameEntity">
-            <p-footer>
-                <button type="button" pButton icon="ui-icon-check" (click)="closeNameEditor(true)" label="Update"></button>
-                <button type="button" pButton icon="ui-icon-close" (click)="closeNameEditor(false)" label="Cancel"></button>
-            </p-footer>
-        </p-dialog>
+        <input type="text" pInputText [(ngModel)]="editNameEntity.name" *ngIf="editNameEntity">
+        <p-footer>
+            <button type="button" pButton icon="ui-icon-check" (click)="closeNameEditor(true)" label="Update"></button>
+            <button type="button" pButton icon="ui-icon-close" (click)="closeNameEditor(false)" label="Cancel"></button>
+        </p-footer>
+    </p-dialog>
     <p-dialog header="Select sheet" [(visible)]="displaySheetPicker" width="300" [responsive]="true" [closable]="false">
         <p-dropdown [options]="availableSheets"  [(ngModel)]="selectedSheetId" *ngIf="displaySheetPicker"></p-dropdown>
         <br/><br/>
