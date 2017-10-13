@@ -1,0 +1,64 @@
+<div class="card">
+<p-dataTable *ngIf="dataTable" [value]="dataTable.rows" [(selection)]="selectedRow" 
+            [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" [editable]="true" reorderableColumns="true" 
+            [tableStyle]="{'table-layout':'auto'}"  #dt (onEditComplete)="editCellComplete($event)" (onColReorder)="colReorder($event)"
+            [primeDragula]="bag" [dragulaModel]="dataTable.rows" [dragulaOptions]="{ childContainerSelector: 'tbody', initAfterView: true }" (onDrop)="onDrop($event)">
+    <p-header>
+        <div class="ui-g form-group" >
+            <div class="ui-g-4">
+                <div class="ui-helper-clearfix">
+                    <span (click)="clickEditName()" style="float:left">{{dataTable.name}}</span>
+                </div>              
+            </div>
+            <div class="ui-g-6"></div>
+            <div class="ui-g-2">
+                <button pButton type="button" class='green-btn' (click)="clickEditColumn()" label="Add column" [disabled]="!dataTable.name"></button>
+            </div>
+        </div>
+    </p-header>
+    <p-footer>
+      <div class="ui-g">
+        <div class="ui-g-2">
+              <p-splitButton label="Add Row" [disabled]="!dataTable.name" (onClick)="addNewRow()" [model]="addRowOptions" icon="ui-icon-check"></p-splitButton>
+        </div>
+        <div class="ui-g-8">
+        </div>
+        <div class="ui-g-2">
+           <button type="button" pButton icon="ui-icon-file-download" label="CSV" (click)="exportCsv()"></button>
+        </div> 
+      </div>
+    </p-footer>
+    <p-column [style]="{'width':'38px'}" selectionMode="single"></p-column>                     
+    <p-column *ngFor="let col of dataTable.columns |filtersRuleTableColumns" [field]="'c' + col.id" [header]="col.name" [editable]="col.type !== 'bool'"  (onColReorder)="colReorder($event)">
+       <ng-template pTemplate="header">
+          <span (click)="clickEditColumn(col)" style="cursor: pointer;">{{col.name}}</span>
+      </ng-template>
+      
+      <ng-template let-cell="rowData" pTemplate="body" *ngIf="col.type === 'bool'">
+        <p-checkbox name="'groupname' + {{index}} + '-' + {{cell.RowKey}}" [(ngModel)]="cell['c' + col.id]"  binary="true" (onChange)="checkboxChanged($event, cell)"></p-checkbox>
+      </ng-template>
+    </p-column>
+    <p-column styleClass="col-button" [style]="{'width':'38px'}">
+      <ng-template pTemplate="header" style="background-color: red">          
+      </ng-template>
+      <ng-template let-cell="rowData" pTemplate="body">
+          <button type="button" class="red-btn" pButton (click)="deleteRow(cell)" icon="ui-icon-delete-forever"></button>
+      </ng-template>
+    </p-column>
+    </p-dataTable>
+    <p-dialog header="Edit Column" [visible]="editColumn" modal="modal" width="450" [responsive]="true" [closable]="false">
+        <app-edit-table-column *ngIf="editColumn" [column]="editColumn"  (onUpdated)="editColumnUpdated($event)"></app-edit-table-column>
+        <p-footer *ngIf="editColumn">
+            <button type="button" pButton icon="ui-icon-check" (click)="closeEditColumn(true)" [disabled]="!editColumnResponse" label="Update"></button>
+            <button type="button" pButton icon="ui-icon-clear" (click)="deleteEditColumn(true)" [disabled]="!editColumn.rowKey" label="Delete"></button>
+            <button type="button" pButton icon="ui-icon-close" (click)="closeEditColumn(false)" label="Cancel"></button>
+        </p-footer>
+    </p-dialog>
+    <p-dialog header="Edit Name" [visible]="showEditName" modal="modal" width="300" [responsive]="true" [closable]="false">
+        <input type="text" pInputText [(ngModel)]="nameDraft">
+        <p-footer>
+            <button type="button" pButton icon="ui-icon-check" (click)="closeNameEditor(true)" label="Update"></button>
+            <button type="button" pButton icon="ui-icon-close" (click)="closeNameEditor(false)" label="Cancel"></button>
+        </p-footer>
+    </p-dialog>
+</div>

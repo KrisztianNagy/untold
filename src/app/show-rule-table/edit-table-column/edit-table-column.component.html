@@ -1,0 +1,10 @@
+<div class="ui-g">
+    <div class="ui-g form-group" > 
+        <div class="ui-g-12"> 
+            <input type="text" pInputText [(ngModel)]="draftColumn.name" (change)="update()">   
+        </div> 
+        <div class="ui-g-12"> 
+            <p-dropdown [options]="columnTypes" [(ngModel)]="draftColumn.type" (onChange)="update()" [autoWidth]="false" [readonly]="draftColumn.rowKey"></p-dropdown>
+        </div>           
+    </div>
+</div>

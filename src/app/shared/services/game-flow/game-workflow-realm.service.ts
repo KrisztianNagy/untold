@@ -14,6 +14,7 @@ import { EntityService } from '../../../store/services/entity.service';
 import { SheetService } from '../../../store/services/sheet.service';
 import { GrowlService } from '../growl.service';
 import { Untold } from '../../models/backend-export';
+import { ExpressionTableCacheService } from '../../services/expressions/expression-table-cache.service';
 
 @Injectable()
 export class GameWorkflowRealmService {
@@ -29,7 +30,8 @@ export class GameWorkflowRealmService {
               private realmTableService: RealmTableService,
               private realmDefinitionService: RealmDefinitionService,
               private entityService: EntityService,
-              private gameWorkflowSheetService: GameWorkflowSheetService) {
+              private gameWorkflowSheetService: GameWorkflowSheetService,
+              private expressionTableCacheService: ExpressionTableCacheService) {
     this.realmHubListenerService.responseJoinRealm.subscribe(rm => {
       this.currentUserJoinsRealm(rm.Data);
     });
@@ -55,6 +57,10 @@ export class GameWorkflowRealmService {
 
     this.realmHubListenerService.responseReloadRealmTableModules.subscribe(rr => {
       this.reloadModuleTables();
+    });
+
+    this.realmHubListenerService.responseClearLocalTableCache.subscribe(rr => {
+      this.expressionTableCacheService.removeCachedTable(rr.Data.uniqueTableName)
     });
 
     this.realmHubListenerService.responseReloadRealmDefinitionModules.subscribe(rr => {

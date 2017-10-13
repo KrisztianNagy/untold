@@ -87,4 +87,8 @@ export class RealmHubSenderService {
   reloadRealmDefinitionModules(moduleReference: Untold.ClientModuleReference): Observable<any> {
     return this.invoke('reloadRealmDefinitionModules', moduleReference);
   }
+
+  clearLocalTableCache(ruleTableReference: Untold.ClientRuleTableReference): Observable<any> {
+    return this.invoke('clearLocalTableCache', ruleTableReference);
+  }
 }

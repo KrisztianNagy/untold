@@ -173,6 +173,10 @@ export class ExpressionTableCacheService {
         return subject;
     }
 
+    removeCachedTable(uniqueTableName: string) {
+        this.cachedTables = this.cachedTables.filter(table => table.tableUniqueName !== uniqueTableName);
+    }
+
     private getRuleTableFromStore(tableName: string, moduleName: string): Untold.ClientRuleTable {
         const module = this.realmTableService.getCurrent().filter(md => moduleName === md.name);
 

@@ -192,6 +192,10 @@ import { DefinitionChoiceConfigComponent } from './game/genesis-definitions/gene
 import { GenesisDefinitionsChartComponent } from './game/genesis-definitions/genesis-definitions-chart/genesis-definitions-chart.component';
 // tslint:disable-next-line:max-line-length
 import { GenesisDefinitionsAddFormComponent } from './game/genesis-definitions/genesis-definitions-chart/genesis-definitions-add-form/genesis-definitions-add-form.component';
+import { ShowRuleTableComponent } from './show-rule-table/show-rule-table.component';
+import { EditTableColumnComponent } from './show-rule-table/edit-table-column/edit-table-column.component';
+import { PrimeDragulaDirective } from './shared/directives/prime-dragula.directive';
+import { DragulaService } from 'ng2-dragula';
 
 
 enableProdMode();
@@ -331,6 +335,9 @@ enableProdMode();
         DefinitionChoiceConfigComponent,
         GenesisDefinitionsChartComponent,
         GenesisDefinitionsAddFormComponent,
+        ShowRuleTableComponent,
+        EditTableColumnComponent,
+        PrimeDragulaDirective,
         //AceEditorComponent
     ],
     providers: [
@@ -383,7 +390,8 @@ enableProdMode();
         SheetEntityService,
         CanActivateSelectedRealmGuard,
         CanActivateSelectedRealmOwnerGuard,
-        CanActivateAuthenticationGuard
+        CanActivateAuthenticationGuard,
+        DragulaService
     ],
     bootstrap:[AppComponent]
 })
