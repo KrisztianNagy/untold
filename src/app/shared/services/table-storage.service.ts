@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { AsyncSubject } from 'rxjs/AsyncSubject';
 import 'rxjs/add/operator/max';
 import 'rxjs/add/operator/map';
 
@@ -60,7 +61,7 @@ export class TableStorageService {
       });
   }
 
-  saveDataTable(dataTable: DataTable) {
+  saveDataTable(dataTable: DataTable){
     const schemaUpdateRequired = dataTable.name !== dataTable.oldName ||
                                JSON.stringify(dataTable.oldColumns) !== JSON.stringify(dataTable.columns);
 
@@ -160,31 +161,35 @@ export class TableStorageService {
 
   private deleterows(dataTable: DataTable, rows: Array<AzureTableRow>) {
     const url = '' + dataTable.uniqueName + dataTable.editorAccessSignature;
+    
     rows.forEach(row => {
       if (row.PartitionKey && row.RowKey) {
         const data = this.rowToTableEntity(row, dataTable, row.RowKey);
         this.storageDataService.delete(data, dataTable.uniqueName, dataTable.editorAccessSignature).subscribe(() => {
-          dataTable.rows = dataTable.rows.filter(innerRow => innerRow !== row);
         });
-      } else {
-        dataTable.rows = dataTable.rows.filter(innerRow => innerRow !== row);
       }
+      
+      dataTable.rows = dataTable.rows.filter(innerRow => innerRow !== row);
     });
   }
 
   private rowToTableEntity(row: AzureTableRow, dataTable: DataTable, rowKey: string) {
     if (!row.PartitionKey) {
       row.PartitionKey = 'row';
+    }
+
+    if (!row.RowKey) {
       row.RowKey = rowKey;
     }
 
-    row = JSON.parse(JSON.stringify(row));
-    delete row.rowStatus;
+    const data = JSON.parse(JSON.stringify(row));
+    delete data.rowStatus;
+    delete data._$visited;
 
-   return row;
+   return data;
   }
 
-  private getNextRowKey(dataTable: DataTable): string {
+  public getNextRowKey(dataTable: DataTable): string {
     let max: number;
     Observable.from(dataTable.rows)
       .map(row => {

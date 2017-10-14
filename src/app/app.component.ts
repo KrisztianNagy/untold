@@ -1,5 +1,5 @@
 import {Component, AfterViewInit, ElementRef, Renderer, ViewChild,
-        ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy} from '@angular/core';
+        ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 import { TemplateConfigurationService } from './store/services/template-configuration.service';
@@ -18,9 +18,9 @@ enum MenuOrientation {
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  //changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements AfterViewInit, OnDestroy {
+export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     authenticated: boolean;
     msgs: Array<any>;
 
@@ -51,7 +51,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
                 private userDataService: UserDataService,
                 private authService: AuthService,
                 private growlService: GrowlService) {
-        this.authenticated = false;
         this.templateConfigurationService.update({
             showFrame: true
         });
@@ -64,15 +63,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        this.authService.ready.subscribe(() => {
-            this.authenticated = this.authService.authenticated();
-
-            if (!this.authenticated) {
-                this.authService.login();
-            } else {
-                this.initScreenAfterAuth();
-            }
-        });
         this.documentClickListener = this.renderer.listenGlobal('body', 'click', (event) => {
             if (!this.topbarItemClick) {
                 this.activeTopbarItem = null;
@@ -88,6 +78,20 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         });
     }
 
+    ngOnInit() {
+        this.authService.ready.subscribe(() => {
+            console.log('now');
+            this.authenticated = this.authService.authenticated();
+            if (!this.authenticated) {
+                this.authService.login();
+            } else {
+                this.initScreenAfterAuth();
+            }
+
+            this.changeDetectorRef.markForCheck();
+        });
+    }
+
     initScreenAfterAuth() {
         const user: Untold.ClientUser = {
             id: 0,
@@ -98,7 +102,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         };
 
         this.userDataService.ensureUser(user).subscribe(() => {
-            this.authenticated = true;
             this.changeDetectorRef.markForCheck();
         });
     }

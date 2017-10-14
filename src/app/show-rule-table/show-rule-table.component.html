@@ -1,5 +1,5 @@
 <div class="card">
-<p-dataTable *ngIf="dataTable" [value]="dataTable.rows" [(selection)]="selectedRow" 
+<p-dataTable *ngIf="dataTable" [value]="dataTable.rows" [(selection)]="selectedRow"  (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
             [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" [editable]="true" reorderableColumns="true" 
             [tableStyle]="{'table-layout':'auto'}"  #dt (onEditComplete)="editCellComplete($event)" (onColReorder)="colReorder($event)"
             [primeDragula]="bag" [dragulaModel]="dataTable.rows" [dragulaOptions]="{ childContainerSelector: 'tbody', initAfterView: true }" (onDrop)="onDrop($event)">
@@ -19,7 +19,7 @@
     <p-footer>
       <div class="ui-g">
         <div class="ui-g-2">
-              <p-splitButton label="Add Row" [disabled]="!dataTable.name" (onClick)="addNewRow()" [model]="addRowOptions" icon="ui-icon-check"></p-splitButton>
+              <p-splitButton label="Add Row" [disabled]="!dataTable.name" (onClick)="addNewRow()" [model]="addRowOptions" icon="ui-icon-insert-comment"></p-splitButton>
         </div>
         <div class="ui-g-8">
         </div>

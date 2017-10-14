@@ -198,7 +198,6 @@ import { PrimeDragulaDirective } from './shared/directives/prime-dragula.directi
 import { DragulaService } from 'ng2-dragula';
 
 
-enableProdMode();
 @NgModule({
     imports: [
         BrowserModule,

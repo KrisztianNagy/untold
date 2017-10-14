@@ -1,4 +1,4 @@
-<div class="ui-g" *ngIf="!hideButtons">
+<div class="ui-g">
     <div class="ui-g-12">
         <div *ngIf="importMode">
             <app-rule-table-import-wizard [module]="selectedModule"></app-rule-table-import-wizard>
@@ -16,16 +16,16 @@
                     <p-dropdown [options]="tables" *ngIf="selectedModule" [(ngModel)]="selectedTable" (onChange)="prepareDropDowns()"></p-dropdown>
                 </div>
                 <div class="ui-g-2">
-                      <button pButton type="button" class='green-btn' (click)="createTable()" label="Create" ></button>
+                      <button pButton type="button" class='green-btn' (click)="createTable()" label="Create" icon="ui-icon-create-new-folder"></button>
                 </div> 
                 <div class="ui-g-2">
-                      <button pButton type="button" class='blue-btn' (click)="showImport()" label="Import" ></button>
+                      <button pButton type="button" class='blue-btn' (click)="showImport()" label="Import" icon="ui-icon-file-upload"></button>
                 </div> 
                 <div class="ui-g-2">
                     {{test}}
                 </div>
                 <div class="ui-g-2">
-                    <button pButton type="button" class='red-btn' (click)="deleteTable(selectedTable)" label="Delete" *ngIf="selectedTable"></button>
+                    <button pButton type="button" class='red-btn' (click)="deleteTable(selectedTable)" label="Delete" *ngIf="selectedTable" icon="ui-icon-close"></button>
                 </div>              
                 
             </div> 

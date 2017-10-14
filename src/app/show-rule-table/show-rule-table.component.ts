@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy,
-         SimpleChanges, OnChanges, ChangeDetectorRef } from '@angular/core';
+         SimpleChanges, OnChanges, ChangeDetectorRef, NgZone } from '@angular/core';
 
 import { SelectItem } from 'primeng/primeng';
 import { MenuItem } from 'primeng/primeng';
@@ -36,12 +36,13 @@ export class ShowRuleTableComponent implements OnInit, OnChanges {
               private realmTableService: RealmTableService,
               private csvFileService: CsvFileService,
               private gameService: GameService,
-              private realmHubSenderService: RealmHubSenderService) { }
+              private realmHubSenderService: RealmHubSenderService,
+              private NgZone: NgZone) { }
 
   ngOnInit() {
 
     this.addRowOptions = [
-      {label: 'Insert Row', icon: 'ui-icon-person-pin', disabled: !this.selectedRow, command: () =>  {
+      {label: 'Insert Row', icon: 'ui-icon-insert-comment', disabled: true, command: () =>  {
         this.addNewRow(this.selectedRow);
       }},
     ];
@@ -210,16 +211,13 @@ export class ShowRuleTableComponent implements OnInit, OnChanges {
     if (selectedRow) {
       const pos = this.dataTable.rows.map(row => row.RowKey).indexOf(selectedRow.RowKey);
 
-      this.dataTable.rows = [...this.dataTable.rows.slice(0, pos - 1), tempRow, ...this.dataTable.rows.slice(pos)];
+      this.dataTable.rows = [...this.dataTable.rows.slice(0, pos), tempRow, ...this.dataTable.rows.slice(pos)];
+      this.onDrop();
     } else {
-      this.dataTable.rows = [... this.dataTable.rows, {
-        PartitionKey: null,
-        RowKey: null,
-        rowStatus: DataRowStatusConstants.Changed
-      }];
-    }
+      this.dataTable.rows = [... this.dataTable.rows, tempRow];
 
-    this.saveDataTable();
+      this.saveDataTable();
+    }
 
     this.changeDetectorRef.markForCheck();
   }
@@ -256,6 +254,7 @@ export class ShowRuleTableComponent implements OnInit, OnChanges {
   }
 
   saveDataTable() {
+
     this.tableStorageService.saveDataTable(this.dataTable);
 
     const module = this.realmTableService.getCurrent().filter(mod => mod.guid === this.table.moduleGuid);
@@ -269,6 +268,8 @@ export class ShowRuleTableComponent implements OnInit, OnChanges {
         realmId: this.gameService.getCurrent().realm.id
       });
     }
+
+    this.changeDetectorRef.markForCheck();
   }
 
   onDrop() {
@@ -282,7 +283,10 @@ export class ShowRuleTableComponent implements OnInit, OnChanges {
         const previous = parseInt(row.RowKey, 10);
         const next = parseInt(this.dataTable.rows[index + 1].RowKey, 10);
 
-        if (previous > next)  {
+        const prevIsNumber = previous.toString() !== 'NaN';
+        const nextIsNumber = next.toString() !== 'NaN';
+
+        if ((!prevIsNumber && nextIsNumber) || (prevIsNumber && nextIsNumber && previous > next))  {
           const temp = row.RowKey;
           row.RowKey = this.dataTable.rows[index + 1].RowKey;
           this.dataTable.rows[index + 1].RowKey = temp;
@@ -296,5 +300,13 @@ export class ShowRuleTableComponent implements OnInit, OnChanges {
     } while (changed);
 
     this.saveDataTable();
+  }
+
+  onRowSelect() {
+    this.addRowOptions[0].disabled = false;
+  }
+
+  onRowUnselect() {
+    this.addRowOptions[0].disabled = false;
   }
 }

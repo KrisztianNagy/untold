@@ -5,9 +5,11 @@ import 'rxjs/add/operator/map';
 import { MenuItem, SelectItem } from 'primeng/primeng';
 
 import { GenesisDataService } from '../../../shared/services/rest/genesis-data.service';
-import { Untold, System, ClientModuleTables } from '../../../shared/models/backend-export';
+import { Untold, System } from '../../../shared/models/backend-export';
 import { CsvFileService } from '../../../shared/services/csv-file.service';
 import { TableStorageService } from '../../../shared/services/table-storage.service';
+import { RealmHubSenderService } from '../../../shared/services/realm-hub-sender.service';
+import { GameService } from '../../../store/services/game.service';
 
 @Component({
   selector: 'app-rule-table-import-wizard',
@@ -16,10 +18,9 @@ import { TableStorageService } from '../../../shared/services/table-storage.serv
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RuleTableImportWizardComponent implements OnInit {
-  @Input() module: ClientModuleTables;
+  @Input() module: Untold.ClientModuleTables;
  
   private keyValueColumns: Array<string>;
-
   stepsMenu: MenuItem[];
   currentStep: number;
   tableName: string;
@@ -30,11 +31,14 @@ export class RuleTableImportWizardComponent implements OnInit {
   progressMeter: number;
   progressMessage: string;
   uploading: boolean;
+  fileIsBeingLoaded: boolean;
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private csvFileService: CsvFileService,
               private genesisDataService: GenesisDataService,
-              private tableStorageService: TableStorageService) { }
+              private tableStorageService: TableStorageService,
+              private realmHubSenderService: RealmHubSenderService,
+              private gameService: GameService) { }
 
   ngOnInit() {
     this.currentStep = 0;
@@ -55,15 +59,13 @@ export class RuleTableImportWizardComponent implements OnInit {
   }
 
   importCsv() {
-    $('#csvinput').click();
-
-    let fileInput = document.getElementById('csvinput');
-    fileInput.removeEventListener('change');
+    const fileInput = document.getElementById('csvinput');
+    fileInput.removeEventListener('change', () => {});
 
     fileInput.addEventListener('change', () => {
       this.file = (<any>fileInput).files[0];
       if (this.file) {
-        let sub = this.csvFileService.parseCsv(this.file)
+        const sub = this.csvFileService.parseCsv(this.file)
           .subscribe(csv => {
             this.parsedCsv = csv;
             this.currentStep = 1;
@@ -82,9 +84,13 @@ export class RuleTableImportWizardComponent implements OnInit {
                 rowKey: this.tableStorageService.padNumber(index)
               };
             });
+
+            this.changeDetectorRef.markForCheck();
           });
       }
     });
+
+    $('#csvinput').click();
   }
 
   gotoImport() {
@@ -93,8 +99,8 @@ export class RuleTableImportWizardComponent implements OnInit {
 
   uploadCsv() {
     this.uploading = true;
-    let index = 1;
-    let step = Math.floor(100 / (Math.ceil(this.parsedCsv.data.length / 100) + 1));
+    const index = 1;
+    const step = Math.floor(100 / (Math.ceil(this.parsedCsv.data.length / 100) + 1));
     this.progressMeter = 0;
     this.progressMessage = 'Creating table.';
 
@@ -114,9 +120,9 @@ export class RuleTableImportWizardComponent implements OnInit {
       const rt: Untold.ClientRuleTable = JSON.parse(resp);
       const maxPos = this.parsedCsv.data.length - 1;
 
-      let queue = new Subject<number>();
+      const queue = new Subject<number>();
 
-      let subs = queue.subscribe(start => {
+      const subs = queue.subscribe(start => {
         if (this.parsedCsv.data.length > start ) {
           this.progressMeter += step;
           this.changeDetectorRef.markForCheck();
@@ -132,6 +138,11 @@ export class RuleTableImportWizardComponent implements OnInit {
             subs.unsubscribe();
             this.currentStep = 3;
             this.changeDetectorRef.markForCheck();
+
+            this.realmHubSenderService.reloadRealmTableModules({
+              moduleId: this.module.id,
+              realmId: this.gameService.getCurrent().realm.id
+            });
           }, 1000);
         }
       });
@@ -149,10 +160,10 @@ export class RuleTableImportWizardComponent implements OnInit {
 
     this.progressMessage = 'Uploading: ' + (start + 1) + ' to ' + end ;
 
-    let entities = this.parsedCsv.data
+    const entities = this.parsedCsv.data
       .filter((row, index: number) => index >= start && index < end)
       .map((row, index: number): Untold.ClientRuleTableBulkInsertEntity => {
-        let properties: Array<string> = [];
+        const properties: Array<string> = [];
 
         this.parsedCsv.meta.fields.forEach(field => {
           if (row[field]) {
@@ -169,7 +180,7 @@ export class RuleTableImportWizardComponent implements OnInit {
         };
       });
 
-    let bulk: Untold.ClientRuleTableBulkInsert = {
+    const bulk: Untold.ClientRuleTableBulkInsert = {
       columns: this.columns,
       tableUniqueName: tabeUniqueName,
       tableGuid: tableGuid,

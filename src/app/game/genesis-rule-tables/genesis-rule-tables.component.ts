@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ApplicationRef, NgZone} from '@angular/core';
 import 'rxjs/add/operator/max';
 import 'rxjs/add/operator/map';
 
@@ -26,8 +26,7 @@ export class GenesisRuleTablesComponent implements OnInit, OnDestroy {
   selectedTable: Untold.ClientRuleTable;
   isDeleteVisible: boolean;
   importMode: boolean;
-  hideButtons: boolean;
-  test: string;
+  createdTableGuid: string;
   private tableSubscription;
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
@@ -35,13 +34,18 @@ export class GenesisRuleTablesComponent implements OnInit, OnDestroy {
               private gameService: GameService,
               private tableStorageService: TableStorageService,
               private realmTableService: RealmTableService,
-              private realmHubSenderService: RealmHubSenderService) {
+              private realmHubSenderService: RealmHubSenderService,
+              private applicationRef: ApplicationRef,
+              private ngZone: NgZone) {
   }
 
   ngOnInit() {
     this.tableSubscription = this.realmTableService.realmTables.subscribe(realmTables => {
+      this.importMode = false;
       this.realmTables = realmTables;
-      this.prepareDropDowns();
+      this.ngZone.run(() => {
+        this.prepareDropDowns();
+      });
     });
   }
 
@@ -50,7 +54,6 @@ export class GenesisRuleTablesComponent implements OnInit, OnDestroy {
   }
 
   prepareDropDowns() {
-    this.test = (new Date()).toTimeString();
     this.modules = this.realmTables.map(rt => {
       return {
        label: rt.name,
@@ -78,7 +81,12 @@ export class GenesisRuleTablesComponent implements OnInit, OnDestroy {
       this.tables = [];
     }
 
-    if (this.selectedTable) {
+    if (this.createdTableGuid) {
+      const matching = this.selectedModule.tables.filter(table => table.tableGuid === this.createdTableGuid);
+      this.selectedTable = matching.length ? matching[0] : null;
+
+      this.createdTableGuid = null;
+    } else if (this.selectedTable) {
       const matching = this.selectedModule.tables.filter(table => table.tableGuid === this.selectedTable.tableGuid);
       this.selectedTable = matching.length ? matching[0] : null;
     }
@@ -87,7 +95,6 @@ export class GenesisRuleTablesComponent implements OnInit, OnDestroy {
       this.selectedTable = this.selectedModule.tables[0];
     }
 
-    this.changeDetectorRef.markForCheck();
     this.changeDetectorRef.detectChanges();
   }
 
@@ -111,9 +118,7 @@ export class GenesisRuleTablesComponent implements OnInit, OnDestroy {
     .subscribe(resp => {
 
       const resultTable: Untold.ClientRuleTable = JSON.parse(resp.text());
-      this.selectedTable = resultTable;
-      this.selectedModule.tables = [...this.selectedModule.tables, this.selectedTable];
-
+      this.createdTableGuid = <string> resultTable.tableGuid;
       this.realmHubSenderService.reloadRealmTableModules({
         moduleId: this.selectedModule.id,
         realmId: this.gameService.getCurrent().realm.id

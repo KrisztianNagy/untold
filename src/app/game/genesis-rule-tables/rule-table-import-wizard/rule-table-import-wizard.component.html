@@ -1,35 +1,32 @@
-<p-steps [model]="stepsMenu" [activeIndex]="currentStep"></p-steps>
-<input id="csvinput" type="file" style="visibility:hidden" />  
-<div class="card" *ngIf="currentStep === 0">
-  <div class="ui-g-12 ui-g form-group">
-    <div class="ui-g-2">
-      <button pButton type="button" class='green-btn' (click)="importCsv()" label="Load file"></button>
-    </div>
+<div class="card ui-g">
+  <div class="ui-g-12">
+    <p-steps [model]="stepsMenu" [activeIndex]="currentStep"></p-steps>
+    <input id="csvinput" type="file" style="visibility:hidden" /> 
   </div>   
-</div>        
-<div class="card" *ngIf="currentStep === 1">
-  <div class="ui-g form-group">
+  <div *ngIf="currentStep === 0" class="ui-g-12 form-group">
+    <div class="ui-g-2">
+      <button pButton type="button" class='green-btn' (click)="importCsv()" label="Load file"  icon="ui-icon-file-upload"></button>
+    </div>    
+  </div>        
+  <div *ngIf="currentStep === 1" class="ui-g-12 form-group">
     <div class="ui-g-12">
-      <div class="ui-g-4">
-
-      </div>
+      Please set the column types and use the import button to create your table.
+    </div>
+    <div class="ui-g-12">
       <div class="ui-g-2">
-        <button pButton type="button" class='green-btn' (click)="gotoImport()" label="Import"></button>
-      </div>
-      
+        <button pButton type="button" class='green-btn' (click)="gotoImport()" label="Import" icon="ui-icon-computer" ></button>
+      </div>        
     </div>
     <div class="ui-g-12" *ngFor="let column of columns">
       <div class="ui-g-4">
         {{column.name}}
       </div>
-        <div class="ui-g-4">
-          <p-selectButton [options]="columnTypes" [(ngModel)]="column.type"></p-selectButton>
-        </div>
+      <div class="ui-g-4">
+        <p-selectButton [options]="columnTypes" [(ngModel)]="column.type"></p-selectButton>
+      </div>
     </div>
   </div>
-</div>
-<div class="card" *ngIf="currentStep === 2">
-  <div class="ui-g form-group">
+  <div *ngIf="currentStep === 2" class="ui-g-12 form-group">
     <div class="ui-g-12" >
       <div class="ui-g-4">
         <span class="md-inputfield">
@@ -38,7 +35,7 @@
         </span>
       </div>
       <div class="ui-g-2">
-        <button pButton type="button" class='green-btn' (click)="uploadCsv()" label="Upload" [disabled]="!tableName || uploading"></button>
+        <button pButton type="button" class='green-btn' (click)="uploadCsv()" label="Upload" [disabled]="!tableName || uploading" icon="ui-icon-computer"></button>
       </div>
     </div>
     <div class="ui-g-12">
@@ -48,12 +45,10 @@
       <div class="ui-g-6">
         {{progressMessage}}
       </div>  
-    </div>
-  </div>  
-  <div class="card" *ngIf="currentStep === 3">
-  <div class="ui-g form-group">
-    <div class="ui-g-12" >
-     <span>Your csv file has been succesfully imported. Please, go back to the rule table list.</span>
-    </div>
-  </div>  
-</div>           
+    </div>  
+    <div *ngIf="currentStep === 3" class="ui-g-12 form-group">
+      <div class="ui-g-12" >
+      <span>Your csv file has been succesfully imported. Please, go back to the rule table list.</span>
+      </div>
+  </div>
+</div>          

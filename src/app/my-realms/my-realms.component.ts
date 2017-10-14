@@ -44,6 +44,7 @@ export class MyRealmsComponent implements OnInit, OnDestroy {
 
         this.responseJoinRealmSubscription = this.realmHubListenerService.responseJoinRealm.subscribe(rm => {
           this.router.navigateByUrl('game');
+          this.changeDetectorRef.markForCheck();
         });
       }
     });
@@ -71,6 +72,7 @@ export class MyRealmsComponent implements OnInit, OnDestroy {
 
     this.realmHubSenderService.joinRealm(realm.id).subscribe(() => {
       this.busy = false;
+      this.changeDetectorRef.markForCheck();
     });
   }
 

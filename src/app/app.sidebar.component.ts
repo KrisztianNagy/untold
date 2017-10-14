@@ -1,16 +1,18 @@
-import { Component, Input, OnInit, ChangeDetectorRef, EventEmitter, ViewChild, Inject, forwardRef } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, 
+         EventEmitter, ViewChild, Inject, forwardRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
 
 import { AppComponent } from './app.component';
-import { AppMenuComponent }  from './app.menu.component';
+import { AppMenuComponent } from './app.menu.component';
 import { GameService } from './store/services/game.service';
 import { Untold } from './shared/models/backend-export';
 
 @Component({
     selector: 'app-sidebar',
-      templateUrl: './app.sidebar.component.html'
+    templateUrl: './app.sidebar.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppSideBarComponent {
     selectedGame: Untold.ClientGameRealmDetails;
