@@ -1,18 +1,34 @@
-<p-tabView>
-    
+<p-tabView>    
     <p-tabPanel header="HTML">
         <div class="ui-g">
-            <div class="ui-g-2">
-                <button pButton type="button" class='green-btn' (click)="saveSheet()" label="Save"></button>
+            <div class="ui-g-12">
+                <div class="ui-g-2">
+                    <button pButton type="button" class='green-btn' (click)="saveSheet()" label="Save"></button>
+                </div>               
             </div>
-            <div class="ui-g-2">
-                <p-dropdown [options]="modelMappings" [(ngModel)]="selectedMapping" [autoWidth]="false"></p-dropdown>
+            <div class="ui-g-12">
+                <p-panel header="Snippets" [toggleable]="true" [collapsed]="true">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <button pButton type="button" class='blue-btn' (click)="selectDefinition()" label="Select Definition"></button>
+                        </div>
+                        <div class="ui-g-12">
+                            <ace-editor [(text)]="snippet.text" [mode]="'html'" [readOnly]="true" #editorsnippet style="height:200px;"></ace-editor>
+                        </div>
+                    </div>
+                </p-panel>
+            </div>       
+            <div class="ui-g-12">
+                <ace-editor [(text)]="sheet.html" [mode]="'html'" (textChanged)="editorChanged($event)" #editorhtml style="height:400px;"></ace-editor>
             </div>
-            <div class="ui-g-2">
-                <button pButton type="button" class="green-btn" (click)="insertMapping()" label="Insert" [disabled]="!selectedMapping" ></button>
-            </div>    
+            <p-sidebar [(visible)]="displayDefinitionsChart" [fullScreen]="true">
+                <div class="ui-g" style="overflow-x: auto">
+                    <div class="ui-g-12">
+                        <app-genesis-definitions-chart *ngIf="displayDefinitionsChart" [simplified]="true" [definition]="definition" (onDefinitionClick)="onDefinitionClick($event)"></app-genesis-definitions-chart>
+                    </div>
+                </div>
+            </p-sidebar>        
         </div>
-        <ace-editor [(text)]="sheet.html" [mode]="'html'" (textChanged)="editorChanged($event)" #editorhtml style="height:400px;"></ace-editor>
     </p-tabPanel>
     <p-tabPanel header="CSS">
         <ace-editor [(text)]="sheet.css" [mode]="'css'" (textChanged)="editorChanged($event)" #editorcss style="height:400px;"></ace-editor>
@@ -30,7 +46,7 @@
                 </div>
             </div>
             <div class="ui-g-12">                
-                <app-sheet-viewer [model]="model" [html]="htmlTextToProcess" [css]="cssTextToProcess" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
+                <app-sheet-viewer [model]="model" [html]="htmlTextToProcess" [css]="cssTextToProcess" [options]="options" [definition]="definition" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
             </div>            
         </div>
     </p-tabPanel>

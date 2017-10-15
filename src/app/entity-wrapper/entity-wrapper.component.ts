@@ -24,6 +24,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
   model: any;
   sheet: Sheet;
   choiceOptions: object;
+  definition: Untold.ClientDefinition;
   private entitySub: any;
   private routeSub: any;
 
@@ -55,6 +56,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
                     this.hasSheet = true;
                     let simple = this.sheetEntityService.getSimpleEntityFromGenesisEntity(gen);
                     this.model = JSON.parse(JSON.stringify(simple));
+                    this.definition = gen.definition;
 
                     this.sheetService.getCurrent().filter(sh => sh.id === ent.sheetId)
                       .forEach(sheet => {

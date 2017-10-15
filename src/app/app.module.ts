@@ -76,6 +76,7 @@ import {TreeModule} from 'primeng/primeng';
 import {TreeTableModule} from 'primeng/primeng';
 import {OrganizationChartModule} from 'primeng/primeng';
 import {InplaceModule} from 'primeng/primeng';
+import {SidebarModule} from 'primeng/components/sidebar/sidebar';
 import {AceEditorModule} from 'ng2-ace-editor';
 
 // Barcelona layout
@@ -184,7 +185,7 @@ import { BoardSideBarComponent } from './side-bar/board-side-bar/board-side-bar.
 import { EntityWrapperComponent } from './entity-wrapper/entity-wrapper.component';
 import { SheetSideBarComponent } from './side-bar/sheet-side-bar/sheet-side-bar.component';
 import { GenesisSheetsComponent } from './game/genesis-sheets/genesis-sheets.component';
-import { EditSheetComponent } from './game/genesis-sheets//edit-sheet/edit-sheet.component';
+import { EditSheetComponent } from './game/genesis-sheets/edit-sheet/edit-sheet.component';
 import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
 // tslint:disable-next-line:max-line-length
 import { DefinitionListConfigComponent } from './game/genesis-definitions/genesis-definitions-chart/definition-list-config/definition-list-config.component';
@@ -270,6 +271,7 @@ import { DragulaService } from 'ng2-dragula';
         TreeTableModule,
         OrganizationChartModule,
         InplaceModule,
+        SidebarModule,
         AceEditorModule,
         StoreModule.forRoot(CombinedReducers)
     ],

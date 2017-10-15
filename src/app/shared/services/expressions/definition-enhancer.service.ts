@@ -37,6 +37,28 @@ export class DefinitionEnhancerService {
     return chain;
   }
 
+  // tslint:disable-next-line:max-line-length
+  findDefinitionContainerChain(rootDefinition: Untold.ClientInnerDefinition, targetDefinition: Untold.ClientInnerDefinition) : Array<Untold.ClientInnerDefinition> {
+    if (!targetDefinition.occurrenceGuid) {
+      return [targetDefinition];
+    }
+
+    for (let i = 0; i < rootDefinition.definitions.length; i++ ) {
+      if (rootDefinition.definitions[i].occurrenceGuid === targetDefinition.occurrenceGuid) {
+        return [rootDefinition, targetDefinition];
+      }
+
+      if (rootDefinition.definitions[i].definitions) {
+        const checkBelow = this.findDefinitionContainerChain(rootDefinition.definitions[i], targetDefinition);
+        if (checkBelow.length) {
+          return[rootDefinition, ...checkBelow];
+        }
+      }
+    }
+
+    return [];
+  }
+
   getAllChoiceOptions(definition: Untold.ClientInnerDefinition): AsyncSubject<object> {
     const subject = new AsyncSubject<object>();
 

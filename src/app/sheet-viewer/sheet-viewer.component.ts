@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
 import 'rxjs/add/operator/debounce';
 import { Subject } from 'rxjs/Subject';
 
+import { Untold } from '../shared/models/backend-export';
+
 @Component({
   selector: 'app-sheet-viewer',
   templateUrl: './sheet-viewer.component.html',
@@ -19,6 +21,8 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() html: string;
   @Input() css: string;
   @Input() model: any;
+  @Input() definition: Untold.ClientDefinition;
+  @Input() options: object;
   @Output() onBuildCompleted = new EventEmitter<boolean>();
   @Output() entityChangedEvent = new EventEmitter<any>();
   @ViewChild('div', {read: ViewContainerRef}) div;
@@ -60,14 +64,14 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (contentChange) {
-      this.createWidget(this.html, this.css, this.model);
+      this.createWidget(this.html, this.css, this.model, this.options, this.definition);
     } else if (modelChange) {
       this.componentRef.instance.pushChanges(this.model);
       this.changeDetectorRef.markForCheck();
     }
   }
 
-  private createWidget(template: string, style: string, model) {
+  private createWidget(template: string, style: string, model, options, definition) {
       const html = template;
       if (!html)  {
         return;
@@ -96,7 +100,7 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.compiler.clearCache();
-        this.createComponentFactory( this.compiler, compMetadata, model )
+        this.createComponentFactory( this.compiler, compMetadata, model, options, definition )
             .then(factory => {
               this.componentRef = this.div.createComponent(factory);
 
@@ -145,7 +149,7 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
   }
 
-  private createComponentFactory( compiler: Compiler, metadata: Component, model: Object ) {
+  private createComponentFactory( compiler: Compiler, metadata: Component, model: Object, options: Object, definition: Untold.ClientDefinition ) {
       @Component( metadata )
       class DynamicComponent implements DoCheck, OnDestroy, OnInit  {
         @Output() entityChangedEvent = new EventEmitter<any>();
@@ -154,10 +158,14 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
         private changeDelaySub: any;
         oldEntity: any;
         entity: any;
+        definition: any;
+        options: object;
 
         constructor(private changeDetectorRef: ChangeDetectorRef) {
           this.entity = JSON.parse(JSON.stringify(model));
           this.oldEntity = JSON.parse(JSON.stringify(this.entity));
+          this.definition = definition;
+          this.options = options;
           this.changeDetectorRef.markForCheck();
         }
 
@@ -209,6 +217,40 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
             list.pop();
           }
+        }
+
+        getChoiceOptions (target: object) {
+          const matchingGuid = this.recursiveOptionSearch(this.entity, this.definition, target);
+
+          if (matchingGuid) {
+            return this.options[matchingGuid];
+          }
+
+          return [];
+        }
+
+        recursiveOptionSearch(parentModel: object, parentDefinition: Untold.ClientInnerDefinition, target: object) {
+          for (const property in parentModel) {
+            if (parentModel.hasOwnProperty(property)) {
+              const matchingDef = parentDefinition.definitions.filter(def => def.name === property);
+
+              if (matchingDef.length > 0) {
+                 if (parentModel[property] === target) {
+                  return matchingDef[0].occurrenceGuid;
+                 }
+
+                 if (matchingDef[0].definitions) {
+                   const result = this.recursiveOptionSearch(parentModel[property], matchingDef[0], target);
+
+                   if (result) {
+                     return result;
+                   }
+                 }
+              }
+            }
+          }
+
+          return '';
         }
       };
 

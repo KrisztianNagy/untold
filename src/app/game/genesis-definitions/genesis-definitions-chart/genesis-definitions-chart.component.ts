@@ -20,6 +20,7 @@ import { TreeNodeService } from '../../../shared/services/tree-node.service';
 export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
   @Input() definition: Untold.ClientDefinition;
   @Input() realmDefinitions: Array<Untold.ClientModuleDefinitions>;
+  @Input() simplified: boolean;
   @Output() onSaved = new EventEmitter<boolean>();
   @Output() onDefinitionClick = new EventEmitter<Untold.ClientDefinition>();
   @Output() onDraftUpdated = new EventEmitter<Untold.ClientDefinition>();
@@ -77,6 +78,10 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
   }
 
   editName(definition: Untold.ClientInnerDefinition) {
+    if (this.simplified) {
+      return;
+    }
+
     this.editNameDefinition = definition;
     this.changeDetectorRef.markForCheck();
   }

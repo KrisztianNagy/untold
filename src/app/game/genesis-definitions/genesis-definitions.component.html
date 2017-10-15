@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="card">
-            <app-genesis-definitions-chart *ngIf="selectedDefinition" [realmDefinitions]="realmDefinitions" [definition]="selectedDefinition" (onDefinitionClick)="onDefinitionClick($event)" (onDraftUpdated)="onDraftUpdated($event)"></app-genesis-definitions-chart>
+            <app-genesis-definitions-chart *ngIf="selectedDefinition" [simplified]="false" [realmDefinitions]="realmDefinitions" [definition]="selectedDefinition" (onDefinitionClick)="onDefinitionClick($event)" (onDraftUpdated)="onDraftUpdated($event)"></app-genesis-definitions-chart>
         </div>
         <div class="ui-g-12" *ngIf="!createVisible">
             <div class="card">

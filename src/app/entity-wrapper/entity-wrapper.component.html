@@ -1,4 +1,4 @@
 <div>
     <app-entity-editor *ngIf="entity &&choiceOptions && !hasSheet" [entity]="entity" (entityChanged)="updateEntity($event)" [choiceOptions]="choiceOptions"></app-entity-editor>
-    <app-sheet-viewer *ngIf="model && choiceOptions && hasSheet" [model]="model" [html]="sheet.html" [css]="sheet.css" (entityChangedEvent)="entityChanged($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
+    <app-sheet-viewer *ngIf="model && choiceOptions && hasSheet" [model]="model" [html]="sheet.html" [css]="sheet.css" [options]="choiceOptions" [definition]="definition" (entityChangedEvent)="entityChanged($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
 </div>
