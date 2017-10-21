@@ -91,4 +91,8 @@ export class RealmHubSenderService {
   clearLocalTableCache(ruleTableReference: Untold.ClientRuleTableReference): Observable<any> {
     return this.invoke('clearLocalTableCache', ruleTableReference);
   }
+
+  reloadSheets(realmId: number): Observable<any> {
+    return this.invoke('reloadSheets', realmId);
+  }
 }

@@ -150,6 +150,7 @@ import { TopBarNotificationComponent } from './top-bar/top-bar-notification/top-
 import { NotificationsComponent } from './notifications/notifications.component';
 import { GrowlService } from './shared/services/growl.service';
 import { CsvFileService } from './shared/services/csv-file.service';
+import { WebWorkerService } from './shared/services/web-worker.service';
 import { GameWorkflowService } from './shared/services/game-flow/game-workflow.service';
 import { GameWorkflowRealmService } from './shared/services/game-flow/game-workflow-realm.service';
 import { GameWorkflowMapService } from './shared/services/game-flow/game-workflow-map.service';
@@ -379,6 +380,7 @@ import { DragulaService } from 'ng2-dragula';
         StorageDataService,
         TableStorageService,
         CsvFileService,
+        WebWorkerService,
         AuthService,
         CalculatedExpressionService,
         ExpressionEvaluatorService,
@@ -396,5 +398,5 @@ import { DragulaService } from 'ng2-dragula';
     ],
     bootstrap:[AppComponent]
 })
-export class AppModule {    
+export class AppModule {
 }

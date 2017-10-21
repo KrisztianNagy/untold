@@ -10,12 +10,13 @@ import { Editor } from 'primeng/primeng';
 import { SheetViewerComponent } from '../../../sheet-viewer/sheet-viewer.component';
 import { EntityService } from '../../../store/services/entity.service';
 import { SheetService } from '../../../store/services/sheet.service';
-import { Sheet } from '../../../store/models/sheet';
+import { Sheet, SheetScript } from '../../../store/models/sheet';
 import { RealmDefinitionService } from '../../../store/services/realm-definition.service';
 import { EntityEnhancerService } from '../../../shared/services/expressions/entity-enhancer.service';
 import { DefinitionEnhancerService } from '../../../shared/services/expressions/definition-enhancer.service';
 import { SheetEntityService } from '../../../shared/services/expressions/sheet-entity.service';
 import { GameWorkflowSheetService } from '../../../shared/services/game-flow/game-workflow-sheet.service';
+import { WebWorkerService } from '../../../shared/services/web-worker.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -27,6 +28,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('editorhtml') editorhtml;
   @ViewChild('editorcss') editorcss;
+  @ViewChild('editorscript') editorscript;
   @ViewChild('editorsnippet') editorsnippet;
   @ViewChild(SheetViewerComponent) sheetViewer: SheetViewerComponent;
   private previewVisible: boolean;
@@ -34,6 +36,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   private sheet: Sheet;
   private htmlTextToProcess = '';
   private cssTextToProcess = '';
+  private scriptsToProcess = [];
   private model: any;
   private buildResultIcon: string;
   private id: number;
@@ -42,6 +45,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   private textChangeSub: Subject<boolean>;
   private textChangeDelaySub: any;
   private entities: Array<SelectItem>;
+  private commands: Array<SelectItem>;
   private selectedEntity: Untold.ClientEntity;
   private sheetVisible: boolean;
   private modelMappings: Array<SelectItem>;
@@ -51,6 +55,9 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   private definition: Untold.ClientDefinition;
   private snippetDefinition: Untold.ClientInnerDefinition;
   private options: object;
+  private selectedCommand: SheetScript
+  private selectedScript: string;
+  private commandResult: any;
 
   constructor(private sheetService: SheetService,
               private entityEnhancerService: EntityEnhancerService,
@@ -59,6 +66,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
               private entityService: EntityService,
               private realmDefinitionService: RealmDefinitionService,
               private gameWorkflowSheetService: GameWorkflowSheetService,
+              private webWorkerService: WebWorkerService,
               private route: ActivatedRoute,
               private router: Router,
               private changeDetectorRef: ChangeDetectorRef) {
@@ -73,6 +81,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
         this.sheetVisible = true;
         this.htmlTextToProcess = this.sheet.html;
         this.cssTextToProcess = this.sheet.css;
+        this.scriptsToProcess = JSON.parse(JSON.stringify(this.sheet.scripts));
         this.changeDetectorRef.markForCheck();
     });
 
@@ -101,6 +110,7 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.selectedEntity = this.entities[0].value;
                 }
                 this.populateDefinitionMapping();
+                this.populateCommands();
                 this.setModel();
 
                 this.textChangeSub.next(true);
@@ -133,30 +143,41 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngAfterViewInit() {
-    this.editorsnippet.setTheme('eclipse');
-    this.editorsnippet.getEditor();
+    ngAfterViewInit() {
+        this.editorsnippet.setTheme('eclipse');
+        this.editorsnippet.getEditor();
 
-    this.editorhtml.setTheme('eclipse');
+        this.editorhtml.setTheme('eclipse');
 
-    this.editorhtml.getEditor().setOptions({
-        enableBasicAutocompletion: true
-    });
+        this.editorhtml.getEditor().setOptions({
+            enableBasicAutocompletion: true
+        });
 
-    this.editorhtml.getEditor().commands.addCommand({
-        name: 'showOtherCompletions',
-        bindKey: 'Ctrl-.',
-        exec: function (editor) {
-        }
-    });
+        this.editorhtml.getEditor().commands.addCommand({
+            name: 'showOtherCompletions',
+            bindKey: 'Ctrl-.',
+            exec: function (editor) {
+            }
+        });
 
-    this.editorcss.setTheme('eclipse');
-
+        this.editorcss.setTheme('eclipse');
         this.editorcss.getEditor().setOptions({
             enableBasicAutocompletion: true
         });
 
         this.editorcss.getEditor().commands.addCommand({
+            name: 'showOtherCompletions',
+            bindKey: 'Ctrl-.',
+            exec: function (editor) {
+            }
+        });
+
+        this.editorscript.setTheme('eclipse');
+        this.editorscript.getEditor().setOptions({
+            enableBasicAutocompletion: true
+        });
+
+        this.editorscript.getEditor().commands.addCommand({
             name: 'showOtherCompletions',
             bindKey: 'Ctrl-.',
             exec: function (editor) {
@@ -172,6 +193,10 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private onModelUpdated() {
+        this.setModel();
+    }
+
+    entityChanged() {
         this.setModel();
     }
 
@@ -200,6 +225,60 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
+    private populateCommands() {
+        this.commands = this.sheet.scripts.map(cmd => {
+            return {
+                label: cmd.name,
+                value: cmd
+              };
+        });
+
+        this.selectedCommand = this.commands.length ? this.commands[0].value : null;
+
+        if (this.selectedCommand) {
+            this.selectedScript = this.selectedCommand.script;
+        } else {
+            this.selectedScript = '';
+        }
+        this.changeDetectorRef.markForCheck();
+    }
+
+    private addCommand() {
+        let script = '// This is your command. Use the JSON representation above to change your model\n';
+        script += '// For example: entity[\'property name\'] = 5;\n\n\n\n';
+        script += '//At the end of your code you can return the array of chat commands you would like to execute:\n';
+        script += '//return [\n';
+        script += '//\t\'#roll 1d6 + 3\',\n';
+        script += '//\tAttack with long sword!\n';
+        script += '//}';
+
+        this.sheet.scripts = [...this.sheet.scripts, {name: 'Command name', script: script}];
+
+        this.populateCommands();
+
+        if (this.commands.length) {
+            this.selectedCommand = this.commands[this.commands.length - 1].value;
+            this.selectedScript = this.selectedCommand.script;
+        }
+        this.commandResult = null;
+
+        this.changeDetectorRef.markForCheck();
+    }
+
+    private deleteCommand() {
+        this.sheet.scripts = this.sheet.scripts.filter(cmd => {
+            return !(this.selectedCommand.name === cmd.name && this.selectedCommand.script === cmd.script);
+        });
+
+        this.commandResult = null;
+
+        this.populateCommands();
+    }
+
+    commandChanged() {
+        this.commandResult = null;
+    }
+
     private selectDefinition() {
         this.displayDefinitionsChart = true;
     }
@@ -221,6 +300,31 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
         this.textChangeSub.next(true);
     }
 
+    commandEditorChanged(event) {
+        this.selectedCommand.script = this.selectedScript;
+        this.commands.forEach((cmd, index) => {
+            this.sheet.scripts[index].name = cmd.value.name;
+            this.sheet.scripts[index].script = cmd.value.script;
+        });
+
+        this.populateCommands();
+        this.editorChanged(null);
+    }
+
+    onCommandExecuted(commandName: string) {
+
+    }
+
+    testCommand() {
+        const worker = this.webWorkerService.createCommandWorker(this.selectedCommand.script);
+
+        worker.onmessage = (result) => {
+            this.commandResult = result.data;
+        };
+
+        worker.postMessage(this.model);
+    }
+
     private snippetGenerator(definition: Untold.ClientInnerDefinition) {
         const introductionSnippet = 'These are the snippets you can use to interact with the ' + definition.name + ' property\n\n';
         let definitionChain = this.definitionEnhancerService.findDefinitionContainerChain(<any> this.definition, definition);
@@ -229,11 +333,10 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
             definitionChain = definitionChain.slice(1);
         }
 
-
-
         this.snippet.text = introductionSnippet + this.digIn(definitionChain, 0, 'entity', 0, '');
     }
 
+    // tslint:disable-next-line:max-line-length
     private digIn(definitionChain: Array<Untold.ClientInnerDefinition>, position: number, path: string, listNumber: number, padding: string) {
         const definition = definitionChain[position];
         path = path + '[\'' + definition.name + '\']';
@@ -290,27 +393,31 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
             case 'text':
             dataHtml += 'Use the curly braces to display the value:\n<span>{{' + snippet + '}}</span>\n\n' ;
             dataHtml += definition.isCalculated ?
+                // tslint:disable-next-line:max-line-length
                 'Bind the property to a readonly input because it is calculated:\n<input type="text" id="item_name" [ngModel]="' + snippet + '" readonly>\n\n' :
                 'Bind the property to an input:\n<input type="text" id="item_name" [(ngModel)]="' + snippet + '">\n';
             break;
             case 'number':
             dataHtml += 'Use the curly braces to display the value:\n<span>{{' + snippet + '}}</span>\n';
             dataHtml += definition.isCalculated ?
+            // tslint:disable-next-line:max-line-length
             'Bind the property to a readonly input because it is calculated:\n<input type="number" id="item_name" [ngModel]="' + snippet + '" readonly>\n\n' :
             'Bind the property to an input:\n<input type="number" id="item_name" [(ngModel)]="' + snippet + '">\n';
             break;
             case 'bool':
             dataHtml += 'Use the curly braces with expressions to the value:\n<span>{{' + snippet + ' ? \'Yes\ : \'No\'}}</span>\n';
             dataHtml += definition.isCalculated ?
-            'Bind the property to a readonly checkbox bacause it is calculated:\n<input type="checkbox" id="item_name" [ngModel]="' + snippet + '" readonly>' : 
+            // tslint:disable-next-line:max-line-length
+            'Bind the property to a readonly checkbox bacause it is calculated:\n<input type="checkbox" id="item_name" [ngModel]="' + snippet + '" readonly>' :
             'Bind the property to a checkbox:\n<input type="checkbox" id="item_name" [(ngModel)]="' + snippet + '">\n';
             break;
             case 'choice':
-            
+
             dataHtml += 'Use the curly braces to display the value:\n<span>{{' + snippet + '}}</span>\n\n' ;
             dataHtml += 'Bind the property to an input.:\n' +
                 '<select type="text" [(ngModel)]="' + snippet + '">\n' +
-                '\t<option *ngFor="let choiceOption of getChoiceOptions('+ snippet+ ')" [ngValue]="choiceOption"> {{choiceOption}}</option>\n' +
+                // tslint:disable-next-line:max-line-length
+                '\t<option *ngFor="let choiceOption of getChoiceOptions('+ snippet + ')" [ngValue]="choiceOption"> {{choiceOption}}</option>\n' +
                 '</select>';
             break;
             default:

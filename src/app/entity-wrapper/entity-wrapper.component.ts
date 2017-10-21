@@ -10,6 +10,7 @@ import { GameWorkflowEntityService } from '../shared/services/game-flow/game-wor
 import { SheetEntityService } from '../shared/services/expressions/sheet-entity.service';
 import { Sheet } from '../store/models/sheet';
 import { Untold } from '../shared/models/backend-export';
+import { WebWorkerService } from '../shared/services/web-worker.service';
 
 @Component({
   selector: 'app-entity-wrapper',
@@ -35,6 +36,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
               private gameWorkflowEntityService: GameWorkflowEntityService,
               private sheetEntityService: SheetEntityService,
               private sheetService: SheetService,
+              private webWorkerService: WebWorkerService,
               private route: ActivatedRoute,
               private router: Router) {
 
@@ -54,7 +56,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
 
                   if (ent.sheetId) {
                     this.hasSheet = true;
-                    let simple = this.sheetEntityService.getSimpleEntityFromGenesisEntity(gen);
+                    const simple = this.sheetEntityService.getSimpleEntityFromGenesisEntity(gen);
                     this.model = JSON.parse(JSON.stringify(simple));
                     this.definition = gen.definition;
 
@@ -111,5 +113,18 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
     const genesisEntity = JSON.parse(JSON.stringify(this.entity));
     genesisEntity.entity  = this.sheetEntityService.getEntityFromSimpleEntity(this.entity, event);
     this.updateEntity(genesisEntity);
+  }
+
+  onCommandExecuted(commandName: string) {
+    const command = this.sheet.scripts.filter(scr => scr.name === commandName);
+    if (command.length) {
+      const worker = this.webWorkerService.createCommandWorker(command[0].script);
+      worker.onmessage = (result) => {
+          this.entityChanged(result.data.entity);
+      };
+      worker.postMessage(this.model);
+    } else {
+      console.log('Command: ' + commandName + ' is not valid');
+    }
   }
 }

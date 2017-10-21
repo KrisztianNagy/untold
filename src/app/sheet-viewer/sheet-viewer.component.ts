@@ -25,10 +25,12 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() options: object;
   @Output() onBuildCompleted = new EventEmitter<boolean>();
   @Output() entityChangedEvent = new EventEmitter<any>();
+  @Output() commandExecuted = new EventEmitter<string>();
   @ViewChild('div', {read: ViewContainerRef}) div;
   componentRef: any;
   errorMsg = '';
-  private emitterSubscription;
+  private entityChangedSubscription;
+  private commandExecutedSubscription;
   private errorSubscription;
 
   constructor(public compiler: Compiler,
@@ -40,8 +42,12 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.emitterSubscription) {
-      this.emitterSubscription.unsubscribe();
+    if (this.entityChangedSubscription) {
+      this.entityChangedSubscription.unsubscribe();
+    }
+
+    if (this.commandExecutedSubscription) {
+      this.commandExecutedSubscription.unsubscribe();
     }
 
     if (this.errorSubscription) {
@@ -95,8 +101,12 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
       }
 
       try {
-        if (this.emitterSubscription) {
-          this.emitterSubscription.unsubscribe();
+        if (this.entityChangedSubscription) {
+          this.entityChangedSubscription.unsubscribe();
+        }
+
+        if (this.commandExecutedSubscription) {
+          this.commandExecutedSubscription.unsubscribe();
         }
 
         this.compiler.clearCache();
@@ -108,8 +118,13 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
               this.onBuildCompleted.emit(true);
               this.changeDetectorRef.markForCheck();
 
-              this.emitterSubscription = this.componentRef.instance.entityChangedEvent.subscribe(entity => {
+              this.entityChangedSubscription = this.componentRef.instance.entityChangedEvent.subscribe(entity => {
                 this.entityChangedEvent.emit(entity);
+                console.log('emitter fired');
+              });
+
+              this.commandExecutedSubscription = this.componentRef.instance.commandExecutedEvent.subscribe(command => {
+                this.commandExecuted.emit(command);
                 console.log('emitter fired');
               });
 
@@ -149,10 +164,12 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
   }
 
+  // tslint:disable-next-line:max-line-length
   private createComponentFactory( compiler: Compiler, metadata: Component, model: Object, options: Object, definition: Untold.ClientDefinition ) {
       @Component( metadata )
       class DynamicComponent implements DoCheck, OnDestroy, OnInit  {
         @Output() entityChangedEvent = new EventEmitter<any>();
+        @Output() commandExecutedEvent = new EventEmitter<string>();
         @Output() runtimeErrorOccuredEvent = new EventEmitter<any>();
         private changeSub: Subject<boolean>;
         private changeDelaySub: any;
@@ -251,6 +268,10 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
           }
 
           return '';
+        }
+
+        command(commandName: string) {
+          this.commandExecutedEvent.emit(commandName);
         }
       };
 

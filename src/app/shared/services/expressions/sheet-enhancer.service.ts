@@ -8,6 +8,7 @@ import { Untold } from '../../models/backend-export';
 import { Sheet } from '../../../store/models/sheet';
 import { StorageDataService } from '../rest/storage-data.service';
 import { SheetTableRow } from '../../models/data-table';
+declare var LZString;
 
 @Injectable()
 export class SheetEnhancerService {
@@ -19,12 +20,9 @@ export class SheetEnhancerService {
       PartitionKey: 'sheet',
       RowKey: sheet.id.toString(),
       rowStatus: 1,
-      html1: sheet.html,
-      css1: sheet.css,
-      html2: '',
-      html3: '',
-      css2: '',
-      html4: ''
+      html: '',
+      css: '',
+      scripts: ''
     };
 
     return this.storageDataService.delete(tableRow, 'RM' + realm.id + 'Sheets', realm.sheetEditorAcccessSignature);
@@ -39,20 +37,17 @@ export class SheetEnhancerService {
   }
 
   saveSheetContent(sheet: Sheet, realm: Untold.ClientRealm) {
-
-    const htmlChunks = this.splitTextContent(sheet.html, 30000);
-    const cssChunks = this.splitTextContent(sheet.css, 30000);
+    const compressedHTML = LZString.compressToUTF16(sheet.html ? sheet.html : '');
+    const compressedCSS = LZString.compressToUTF16(sheet.css ? sheet.css : '');
+    const compressedScripts = LZString.compressToUTF16(sheet.scripts ? JSON.stringify(sheet.scripts) : '');
 
     const tableRow: SheetTableRow = {
       PartitionKey: 'sheet',
       RowKey: sheet.id.toString(),
       rowStatus: 1,
-      html1: htmlChunks.length ? htmlChunks[0] : '',
-      html2: htmlChunks.length > 1 ? htmlChunks[1] : '',
-      html3: htmlChunks.length > 2 ? htmlChunks[2] : '',
-      html4: htmlChunks.length > 3 ? htmlChunks[3] : '',
-      css1: cssChunks.length ? cssChunks[0] : '',
-      css2: cssChunks.length > 1 ? cssChunks[1] : '',
+      html: compressedHTML,
+      css: compressedCSS,
+      scripts: compressedScripts
     };
 
     return this.storageDataService.insertOrUpdate(tableRow, 'RM' + realm.id + 'Sheets', realm.sheetEditorAcccessSignature);
@@ -65,12 +60,9 @@ export class SheetEnhancerService {
       PartitionKey: 'sheet',
       RowKey: sheet.id.toString(),
       rowStatus: 1,
-      html1: '',
-      html2: '',
-      html3: '',
-      html4: '',
-      css1: '',
-      css2: ''
+      html: '',
+      css: '',
+      scripts: ''
     };
 
     this.storageDataService.readRow('RM' + realm.id + 'Sheets', 'sheet', sheet.id.toString(), realm.sheetReaderAcccessSignature)
@@ -78,8 +70,19 @@ export class SheetEnhancerService {
         const storageSheet = JSON.parse(res);
 
         const loadedSheet: Sheet = JSON.parse(JSON.stringify(sheet));
-        loadedSheet.html = this.mergeTableProperties(storageSheet, 'html', 4);
-        loadedSheet.css = this.mergeTableProperties(storageSheet, 'css', 2);
+        loadedSheet.html = storageSheet['html'] ? LZString.decompressFromUTF16(storageSheet['html']) : '';
+        loadedSheet.css = storageSheet['css'] ? LZString.decompressFromUTF16(storageSheet['css']) : '';
+        loadedSheet.scripts = [];
+
+        if (storageSheet['scripts'] ) {
+          try {
+              const scripts = LZString.decompressFromUTF16(storageSheet['scripts']);
+              loadedSheet.scripts = JSON.parse(scripts);
+
+          } catch (err) {
+            console.error('Error occured during sheet command building: ' + err);
+          }
+        }
 
         subject.next(loadedSheet);
         subject.complete();
@@ -87,33 +90,12 @@ export class SheetEnhancerService {
         const loadedSheet: Sheet = JSON.parse(JSON.stringify(sheet));
         loadedSheet.html = '';
         loadedSheet.css = '';
+        loadedSheet.scripts = [];
 
         subject.next(loadedSheet);
         subject.complete();
       });
 
     return subject;
-  }
-
-  mergeTableProperties(storageSheet: any, propertyName: string, length: number) {
-    let result = '';
-
-    for (let i = 0; i < length; i++) {
-      result += storageSheet && storageSheet[propertyName + i] ? storageSheet[propertyName + i] : '';
-    }
-
-    return result;
-  }
-
-  splitTextContent(content: string, maxSize: number): Array<string> {
-    const result = [];
-    let pos = 0;
-
-    while (pos < content.length) {
-      result.push( content.substring(pos, pos + maxSize));
-      pos += maxSize;
-    }
-
-    return result;
   }
 }

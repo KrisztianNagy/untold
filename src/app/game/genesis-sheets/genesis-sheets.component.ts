@@ -73,7 +73,7 @@ export class GenesisSheetsComponent implements OnInit, OnDestroy {
         this.gameWorkflowSheetService.saveSheetName(sheet);
   }
 
-  deleteEntity(sheet: Sheet) {
+  deleteSheet(sheet: Sheet) {
     this.gameWorkflowSheetService.deleteSheet(sheet);
     this.populateSheets();
   }

@@ -11,12 +11,9 @@ export class EntityTableRow extends AzureTableRow {
 }
 
 export class SheetTableRow extends AzureTableRow {
-    html1: string;
-    html2: string;
-    html3: string;
-    html4: string;
-    css1: string;
-    css2: string;
+    html: string;
+    css: string;
+    scripts: string;
 }
 
 export class DataTable {

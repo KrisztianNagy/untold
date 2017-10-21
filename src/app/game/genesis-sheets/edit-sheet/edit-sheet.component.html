@@ -1,11 +1,23 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="ui-g-3">
+            <button pButton type="button" class='green-btn' (click)="saveSheet()" label="Save"></button>
+        </div>               
+        <div class="ui-g-4">
+            <div *ngIf="!entities || !entities.length">
+                Please create an entity for this definition first.
+            </div>
+            <div *ngIf="entities && entities.length" class="ui-g">
+                <div class="ui-g-2">
+                    <p-dropdown [options]="entities"  [(ngModel)]="selectedEntity" (onChange)="entityChanged()"></p-dropdown>
+                </div>                                 
+            </div>
+        </div>
+    </div>
+</div>
 <p-tabView>    
     <p-tabPanel header="HTML">
         <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="ui-g-2">
-                    <button pButton type="button" class='green-btn' (click)="saveSheet()" label="Save"></button>
-                </div>               
-            </div>
             <div class="ui-g-12">
                 <p-panel header="Snippets" [toggleable]="true" [collapsed]="true">
                     <div class="ui-g">
@@ -33,20 +45,51 @@
     <p-tabPanel header="CSS">
         <ace-editor [(text)]="sheet.css" [mode]="'css'" (textChanged)="editorChanged($event)" #editorcss style="height:400px;"></ace-editor>
     </p-tabPanel>
+    <p-tabPanel header="Commands">
+        <div class="ui-g">
+            <div class="ui-g-6">
+                <p-dropdown [options]="commands" *ngIf="commands"  [(ngModel)]="selectedCommand" (onChange)="commandChanged()"></p-dropdown>
+            </div>
+            <div class="ui-g-3">
+                <button pButton type="button" class='blue-btn' (click)="addCommand()" label="Add Command"></button>
+            </div>
+            <div class="ui-g-3">
+                <button pButton type="button" class='red-btn' (click)="deleteCommand()" [disabled]="!selectedCommand" label="Delete Command"></button>
+            </div>
+            <div class="ui-g-3">
+                <input type="text" pInputText [(ngModel)]="selectedCommand.name" *ngIf="selectedCommand" (change)="commandEditorChanged($event)"/>
+            </div>
+            <div class="ui-g-12">
+                <p-panel header="JSON" [toggleable]="true" [collapsed]="true" *ngIf="model">
+                    This is the JSON representation of your object: <br>
+                    <pre>{{model | json}}</pre>
+                </p-panel>
+            </div>
+            <div class="ui-g-12" [hidden]="!selectedCommand">
+                <ace-editor [(text)]="selectedScript" [mode]="'javascript'" (textChanged)="commandEditorChanged($event)" #editorscript style="height:400px;"></ace-editor>
+            </div>
+            <div class="ui-g-12">
+                <button pButton type="button" class='blue-btn' (click)="testCommand()" label="Test" *ngIf="selectedCommand"></button>
+            </div>
+            <div class="ui-g-12" *ngIf="commandResult">
+                <p-panel header="Respone entity" [toggleable]="true" [collapsed]="true">
+                    This is the JSON representation of the updated object: <br>
+                    <pre *ngIf="commandResult.entity">{{commandResult.entity | json}}</pre>
+                    <div *ngIf="!commandResult.entity">The command destoyed the entity</div>
+                </p-panel>
+                <p-panel header="Response result" [toggleable]="true" [collapsed]="true">
+                    This the response returned by your command: <br>
+                    <pre *ngIf="commandResult.result">{{commandResult.result | json}}</pre>
+                    <div *ngIf="!commandResult.result">The command has no return values</div>
+                </p-panel>
+            </div>
+        </div>
+    </p-tabPanel>
     <p-tabPanel header="Preview" [rightIcon]="buildResultIcon">
         <div class="ui-g">
-            <div class="ui-g-12">
-                <div *ngIf="!entities || !entities.length">
-                    Please create an entity for this definition first.
-                </div>
-                <div *ngIf="entities && entities.length" class="ui-g">
-                    <div class="ui-g-2">
-                        <p-dropdown [options]="entities"  [(ngModel)]="selectedEntity" (onChange)="entityChanged()"></p-dropdown>
-                    </div>                                 
-                </div>
-            </div>
+            
             <div class="ui-g-12">                
-                <app-sheet-viewer [model]="model" [html]="htmlTextToProcess" [css]="cssTextToProcess" [options]="options" [definition]="definition" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)"></app-sheet-viewer>
+                <app-sheet-viewer [model]="model" [html]="htmlTextToProcess" [css]="cssTextToProcess" [options]="options" [definition]="definition" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)" (commandExecuted)="onCommandExecuted($event)"></app-sheet-viewer>
             </div>            
         </div>
     </p-tabPanel>

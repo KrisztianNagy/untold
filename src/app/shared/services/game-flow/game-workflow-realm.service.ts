@@ -92,11 +92,7 @@ export class GameWorkflowRealmService {
           });
         }
 
-        this.genesisDataService.getSheetsByRealm(game.realm.id).subscribe(sheets => {
-          sheets.forEach(sheet => {
-            this.gameWorkflowSheetService.setEnhancedSheet(sheet);
-          });
-        });
+        this.gameWorkflowSheetService.loadSheets();
       });
     });
 

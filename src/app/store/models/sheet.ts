@@ -8,4 +8,10 @@ export class Sheet implements Untold.ClientSheet {
     name: string;
     html: string;
     css: string;
+    scripts: Array<SheetScript>;
+}
+
+export class SheetScript {
+    name: string;
+    script: string;
 }
