@@ -2,6 +2,7 @@ import {Component,Inject,forwardRef} from '@angular/core';
 import {AppComponent} from './app.component';
 
 import { AuthService } from './shared/services/auth.service';
+import { ChatEntryService } from './store/services/chat-entry.service';
 
 @Component({
     selector: 'app-topbar',
@@ -13,7 +14,7 @@ import { AuthService } from './shared/services/auth.service';
                 </a>
             </div>
             
-            <img src="assets/layout/images/logo-text.svg" class="app-name"/>
+            <img src="assets/layout/images/untold.png" class="app-name"/>
             
             <a id="topbar-menu-button" href="#" (click)="app.onTopbarMenuButtonClick($event)">
                 <i class="material-icons">menu</i>
@@ -92,43 +93,11 @@ import { AuthService } from './shared/services/auth.service';
                     </ul>
                 </li>
                 <li #messages [ngClass]="{'active-topmenuitem':app.activeTopbarItem === messages}">
-                    <a href="#" (click)="app.onTopbarItemClick($event,messages)"> 
+                    <a href="#" (click)="app.onChatClick($event,messages)"> 
                         <i class="topbar-icon material-icons">message</i>
-                        <span class="topbar-badge">5</span>
+                        <span class="topbar-badge" *ngIf="chatCounter">{{chatCounter}}</span>
                         <span class="topbar-item-name">Messages</span>
                     </a>
-                    <ul class="fadeInDown">
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <img src="assets/layout/images/avatar1.png" width="35"/>
-                                <span>Give me a call</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <img src="assets/layout/images/avatar2.png" width="35"/>
-                                <span>Sales reports attached</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <img src="assets/layout/images/avatar3.png" width="35"/>
-                                <span>About your invoice</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <img src="assets/layout/images/avatar2.png" width="35"/>
-                                <span>Meeting today at 10pm</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <img src="assets/layout/images/avatar4.png" width="35"/>
-                                <span>Out of office</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li #notifications [ngClass]="{'active-topmenuitem':app.activeTopbarItem === notifications}">
                     <a href="#" (click)="app.onTopbarItemClick($event,notifications)"> 
@@ -175,10 +144,16 @@ import { AuthService } from './shared/services/auth.service';
         </div>
     `
 })
+// tslint:disable-next-line:component-class-suffix
 export class AppTopBar {
+    chatCounter: number;
 
     constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent,
-                public authService: AuthService) {
+                public authService: AuthService,
+                private chatEntryService: ChatEntryService) {
+        this.chatEntryService.chat.subscribe(entries => {
+            this.chatCounter = entries.filter(entry => entry.isRead === false).length;
+        });
 
     }
 

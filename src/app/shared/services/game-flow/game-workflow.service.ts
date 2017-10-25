@@ -16,6 +16,9 @@ import { LoadQueueService } from '../../../shared/services/load-queue.service';
 import { GenesisDataService } from '../../../shared/services/rest/genesis-data.service';
 import { GameWorkflowRealmService } from './game-workflow-realm.service';
 import { GameWorkflowMapService } from './game-workflow-map.service';
+import { GameWorkflowChatService } from './game-workflow-chat.service';
+import { GameWorkflowSheetService } from './game-workflow-sheet.service';
+import { GameWorkflowEntityService } from './game-workflow-entity.service';
 
 @Injectable()
 export class GameWorkflowService {
@@ -33,7 +36,10 @@ export class GameWorkflowService {
               private realmDefinitionService: RealmDefinitionService,
               private entityService: EntityService,
               private gameWorkflowRealmService: GameWorkflowRealmService,
-              private gameWorkflowMapService: GameWorkflowMapService) {
+              private gameWorkflowMapService: GameWorkflowMapService,
+              private gameWorkflowChatService: GameWorkflowChatService,
+              private gameWorkflowSheetService: GameWorkflowSheetService,
+              private gameWorkflowEntityService: GameWorkflowEntityService) {
 
     this.realmHubListenerService.responseCreateToken.subscribe(ur => {
       this.tokenService.addToLocalStore([ur.Data]);

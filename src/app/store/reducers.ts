@@ -11,6 +11,7 @@ import { RealmTableReducer } from './reducers/realm-table.reducer';
 import { EntityReducer } from './reducers/entity.reducer';
 import { DefinitonReducer } from './reducers/definition.reducer';
 import { SheetReducer } from './reducers/sheet.reducer';
+import { ChatEntryReducer } from './reducers/chat-entry.reducer';
 
 export const CombinedReducers = {
     GridTiles: GridTileReducer,
@@ -25,5 +26,6 @@ export const CombinedReducers = {
     RealmTables: RealmTableReducer,
     RealmDefinitions: DefinitonReducer,
     Entities: EntityReducer,
-    Sheets: SheetReducer
+    Sheets: SheetReducer,
+    Chat: ChatEntryReducer
 };

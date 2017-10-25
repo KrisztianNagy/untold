@@ -7,6 +7,7 @@ import { GameService } from '../../../store/services/game.service';
 import { GameWorkflowMapService } from './game-workflow-map.service';
 import { GameWorkflowEntityService } from './game-workflow-entity.service';
 import { GameWorkflowSheetService } from './game-workflow-sheet.service';
+import { GameWorkflowChatService } from './game-workflow-chat.service';
 import { GenesisDataService } from '../../../shared/services/rest/genesis-data.service';
 import { RealmTableService } from '../../../store/services/realm-table.service';
 import { RealmDefinitionService } from '../../../store/services/realm-definition.service';
@@ -31,7 +32,8 @@ export class GameWorkflowRealmService {
               private realmDefinitionService: RealmDefinitionService,
               private entityService: EntityService,
               private gameWorkflowSheetService: GameWorkflowSheetService,
-              private expressionTableCacheService: ExpressionTableCacheService) {
+              private expressionTableCacheService: ExpressionTableCacheService,
+              private gameWorkflowChatService: GameWorkflowChatService) {
     this.realmHubListenerService.responseJoinRealm.subscribe(rm => {
       this.currentUserJoinsRealm(rm.Data);
     });
@@ -93,6 +95,7 @@ export class GameWorkflowRealmService {
         }
 
         this.gameWorkflowSheetService.loadSheets();
+        this.gameWorkflowChatService.loadMessages();
       });
     });
 

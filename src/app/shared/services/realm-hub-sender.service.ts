@@ -95,4 +95,8 @@ export class RealmHubSenderService {
   reloadSheets(realmId: number): Observable<any> {
     return this.invoke('reloadSheets', realmId);
   }
+
+  newMessage(realmId: number): Observable<any> {
+    return this.invoke('newMessage', realmId);
+  }
 }

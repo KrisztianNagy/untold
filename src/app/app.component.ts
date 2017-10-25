@@ -8,7 +8,7 @@ import { GameWorkflowService } from './shared/services/game-flow/game-workflow.s
 import { UserDataService } from './shared/services/rest/user-data.service';
 import { Untold } from './shared/models/backend-export';
 import { GrowlService } from './shared/services/growl.service';
-
+import { Sidebar} from 'primeng/components/sidebar/sidebar';
 enum MenuOrientation {
     STATIC,
     OVERLAY
@@ -23,24 +23,16 @@ enum MenuOrientation {
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     authenticated: boolean;
     msgs: Array<any>;
-
     activeTabIndex: number;
-
     sidebarActive: boolean;
-
     layoutMode: MenuOrientation = MenuOrientation.STATIC;
-
     darkMenu = false;
-
     topbarMenuActive: boolean;
-
     sidebarClick: boolean;
-
     topbarItemClick: boolean;
-
     activeTopbarItem: any;
-
     documentClickListener: Function;
+    chatVisible: boolean;
 
     constructor(private changeDetectorRef: ChangeDetectorRef,
                 public renderer: Renderer,
@@ -51,6 +43,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
                 private userDataService: UserDataService,
                 private authService: AuthService,
                 private growlService: GrowlService) {
+        this.chatVisible = false;
         this.templateConfigurationService.update({
             showFrame: true
         });
@@ -143,6 +136,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         }
 
         event.preventDefault();
+    }
+
+    onChatClick() {
+        this.chatVisible = !this.chatVisible;
     }
 
     get overlay(): boolean {

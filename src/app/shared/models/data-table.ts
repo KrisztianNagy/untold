@@ -16,6 +16,10 @@ export class SheetTableRow extends AzureTableRow {
     scripts: string;
 }
 
+export class ChatTableRow extends AzureTableRow {
+    message: string;
+}
+
 export class DataTable {
     oldColumns: Array<Untold.ClientRuleTableColumn>;
     columns: Array<Untold.ClientRuleTableColumn>;

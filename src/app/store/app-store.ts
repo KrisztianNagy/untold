@@ -6,6 +6,7 @@ import {Wall} from './models/wall';
 import {TemplateConfiguration} from './models/template-configuration';
 import {Untold} from '../shared/models/backend-export';
 import { Sheet } from './models/sheet';
+import { ChatEntry } from './models/chat-entry';
 
 export interface AppStore {
     GridTiles: GridTile[];
@@ -21,4 +22,5 @@ export interface AppStore {
     RealmDefinitions: Untold.ClientModuleDefinitions[];
     Entities: Untold.ClientEntity[];
     Sheets: Sheet[];
+    Chat: ChatEntry[];
 }

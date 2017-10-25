@@ -4,6 +4,10 @@
     
     <app-sidebar *ngIf="authenticated"></app-sidebar>
     
+    <p-sidebar [(visible)]="chatVisible" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+        <app-main-chat *ngIf="chatVisible"></app-main-chat>
+    </p-sidebar>
+
     <div class="layout-main">
         <div class="layout-main-content">
             <router-outlet></router-outlet>

@@ -113,6 +113,8 @@ import { NotificationTemplateService } from './shared/services/notification-temp
 import { TableStorageService } from './shared/services/table-storage.service';
 import { TreeNodeService } from './shared/services/tree-node.service';
 import { AuthService } from './shared/services/auth.service';
+import { ChatService } from './shared/services/chat.service';
+import { DiceService } from './shared/services/dice.service';
 import { GridService } from './store/services/grid.service';
 import { WallService } from './store/services/wall.service';
 import { VisibleAreaService } from './store/services/visible-area.service';
@@ -122,6 +124,7 @@ import { RealmTableService } from './store/services/realm-table.service';
 import { RealmDefinitionService } from './store/services/realm-definition.service';
 import { EntityService } from './store/services/entity.service';
 import { SheetService } from './store/services/sheet.service';
+import { ChatEntryService } from './store/services/chat-entry.service';
 import { CalculatedExpressionService } from './shared/services/expressions/calculated-expression.service';
 import { ExpressionEvaluatorService } from './shared/services/expressions/expression-evaluator.service';
 import { ExpressionOperatorService } from './shared/services/expressions/expression-operator.service';
@@ -156,6 +159,7 @@ import { GameWorkflowRealmService } from './shared/services/game-flow/game-workf
 import { GameWorkflowMapService } from './shared/services/game-flow/game-workflow-map.service';
 import { GameWorkflowEntityService } from './shared/services/game-flow/game-workflow-entity.service';
 import { GameWorkflowSheetService } from './shared/services/game-flow/game-workflow-sheet.service';
+import { GameWorkflowChatService } from './shared/services/game-flow/game-workflow-chat.service';
 import { ToolbarComponent } from './game/board/toolbar/toolbar.component';
 import { RealmImagesComponent } from './game/realm-images/realm-images.component';
 import { LoadQueueService } from './shared/services/load-queue.service';
@@ -198,6 +202,7 @@ import { ShowRuleTableComponent } from './show-rule-table/show-rule-table.compon
 import { EditTableColumnComponent } from './show-rule-table/edit-table-column/edit-table-column.component';
 import { PrimeDragulaDirective } from './shared/directives/prime-dragula.directive';
 import { DragulaService } from 'ng2-dragula';
+import { MainChatComponent } from './main-chat/main-chat.component';
 
 
 @NgModule({
@@ -340,6 +345,7 @@ import { DragulaService } from 'ng2-dragula';
         ShowRuleTableComponent,
         EditTableColumnComponent,
         PrimeDragulaDirective,
+        MainChatComponent,
         //AceEditorComponent
     ],
     providers: [
@@ -365,6 +371,7 @@ import { DragulaService } from 'ng2-dragula';
         GameWorkflowMapService,
         GameWorkflowEntityService,
         GameWorkflowSheetService,
+        GameWorkflowChatService,
         VisibleAreaService,
         InteractionService,
         TokenService,
@@ -394,7 +401,10 @@ import { DragulaService } from 'ng2-dragula';
         CanActivateSelectedRealmGuard,
         CanActivateSelectedRealmOwnerGuard,
         CanActivateAuthenticationGuard,
-        DragulaService
+        DragulaService,
+        ChatEntryService,
+        ChatService,
+        DiceService
     ],
     bootstrap:[AppComponent]
 })

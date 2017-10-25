@@ -1,0 +1,43 @@
+<p-overlayPanel #op1>
+        Tist
+        <div *ngIf="selectedCommand">
+            Test
+            <div *ngIf="selectedCommand.type === 'roll'">
+                <pre>{{selectedCommand.command}}</pre>
+            </div>
+        </div>
+    </p-overlayPanel>
+<div class="ui-g dashboard" style="height: 100%">
+    <div class="ui-g-12 chat">
+        <p-panel header="Chat" styleClass="ui-shadow-content" [style]="{'height': '100%'}" >
+            
+            <ul style="height: 80%; overflow-y:scroll" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+              <ng-container *ngFor="let entries of groupedEntries">
+                <li [ngClass]="'clearfix ' + (entries[0].sentByMe ? 'message-own' : 'message-from')">
+                    <span style="background-color: white; font-weight: bold">{{entries[0].senderName}}</span>
+                </li>
+                <li [ngClass]="'clearfix ' + (entry.sentByMe ? 'message-own' : 'message-from')" *ngFor="let entry of entries;">                    
+                    <ng-container *ngFor="let messagePart of entry.message.messageParts">
+                        <span *ngIf="messagePart.type === 'text'">
+                            {{messagePart.message}}
+                        </span>
+                        <span *ngIf="messagePart.type === 'roll' && !messagePart.switch" style="font-weight: bold; cursor: pointer" (click)="changeView(messagePart)">
+                            {{messagePart.message}}
+                        </span>
+                        <span *ngIf="messagePart.type === 'roll' && messagePart.switch" style="font-weight: bold; cursor: pointer" (click)="changeView(messagePart)">
+                            {{messagePart.command}}
+                        </span>
+                    </ng-container>
+                </li>
+              </ng-container> 
+            </ul>            
+            <div class="new-message">    
+                <div class="ui-inputgroup">
+                    <input type="text" pInputText placeholder="Write a message" [(ngModel)]="message" style="width: 70%"/>
+                    <p-splitButton label="Send" (onClick)="send()" [model]="sendOptions" icon="ui-icon-send"></p-splitButton>      
+                </div>            
+            </div>
+        </p-panel>
+        
+    </div>  
+</div>

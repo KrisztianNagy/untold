@@ -110,6 +110,8 @@ export declare namespace Untold {
 		entityReaderAcccessSignature: string;
 		sheetEditorAcccessSignature: string;
 		sheetReaderAcccessSignature: string;
+		communicationEditorAcccessSignature: string;
+		communicationReaderAcccessSignature: string;
 		id: number;
 		isCurrentUserOwner: boolean;
 		members: Untold.ClientUser[];
