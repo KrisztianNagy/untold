@@ -70,7 +70,7 @@ export class MainChatComponent implements OnInit, OnDestroy {
   }
 
   refreshEntries(entries: ChatEntry[]) {
-
+    entries = JSON.parse(JSON.stringify(entries));
     const hasUnread = entries.some(entry => !entry.isRead);
     const currentUserId = this.gameService.getCurrent().localMembership.user.id;
 

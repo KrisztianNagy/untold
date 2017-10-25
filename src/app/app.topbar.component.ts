@@ -93,7 +93,7 @@ import { ChatEntryService } from './store/services/chat-entry.service';
                     </ul>
                 </li>
                 <li #messages [ngClass]="{'active-topmenuitem':app.activeTopbarItem === messages}">
-                    <a href="#" (click)="app.onChatClick($event,messages)"> 
+                    <a href="javascript:void(0)" (click)="app.onChatClick($event,messages)"> 
                         <i class="topbar-icon material-icons">message</i>
                         <span class="topbar-badge" *ngIf="chatCounter">{{chatCounter}}</span>
                         <span class="topbar-item-name">Messages</span>

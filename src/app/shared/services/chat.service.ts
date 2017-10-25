@@ -34,9 +34,9 @@ createMessageParts(message: string): Array<ChatEntryMessagePart> {
           });
         }
 
-        const command = message.substr(match.index, match.length);
+        const command = message.substr(match.index, match[0].length);
         messageParts.push(this.rollDice(command));
-        message = message.substr(match.index + match.length);
+        message = message.substr(match.index + match[0].length);
       } else {
         messageParts.push({
           message: message,

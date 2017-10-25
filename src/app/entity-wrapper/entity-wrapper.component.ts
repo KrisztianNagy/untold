@@ -11,6 +11,7 @@ import { SheetEntityService } from '../shared/services/expressions/sheet-entity.
 import { Sheet } from '../store/models/sheet';
 import { Untold } from '../shared/models/backend-export';
 import { WebWorkerService } from '../shared/services/web-worker.service';
+import { GameWorkflowChatService } from '../shared/services/game-flow/game-workflow-chat.service';
 
 @Component({
   selector: 'app-entity-wrapper',
@@ -37,6 +38,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
               private sheetEntityService: SheetEntityService,
               private sheetService: SheetService,
               private webWorkerService: WebWorkerService,
+              private gameWorkflowChatService: GameWorkflowChatService,
               private route: ActivatedRoute,
               private router: Router) {
 
@@ -121,6 +123,13 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
       const worker = this.webWorkerService.createCommandWorker(command[0].script);
       worker.onmessage = (result) => {
           this.entityChanged(result.data.entity);
+          if (result.data.result && result.data.result.constructor === Array) {
+            result.data.result.forEach(row => {
+              if (typeof row === 'string') {
+                this.gameWorkflowChatService.sendMessage(row, null, false);
+              }
+            })
+          }
       };
       worker.postMessage(this.model);
     } else {
