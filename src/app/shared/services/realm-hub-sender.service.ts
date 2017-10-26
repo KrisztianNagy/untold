@@ -72,6 +72,10 @@ export class RealmHubSenderService {
     return this.invoke('entityDataChange', clientEntityChange);
   }
 
+  reloadEntities(realmId: number): Observable<any> {
+    return this.invoke('reloadEntities', realmId);
+  }
+
   realmTableDeleted(ruleTableReference: Untold.ClientRuleTableReference): Observable<any> {
     return this.invoke('realmTableDeleted', ruleTableReference);
   }

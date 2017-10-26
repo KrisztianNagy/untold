@@ -19,8 +19,8 @@ export class EntityService {
     });
   }
 
-  setEntities(entities: Untold.ClientEntity[]) {
-    this.store.dispatch({ type: EntityActions.SET_ENTITIES, payload: entities });
+  keepEntities(entities: Untold.ClientEntity[]) {
+    this.store.dispatch({ type: EntityActions.KEEP_ENTITIES, payload: entities });
   }
 
   addEntity(entity: Untold.ClientEntity) {

@@ -26,6 +26,7 @@ export class RealmHubListenerService {
   responseClearLocalTableCache: Observable<Untold.UntoldResponse>;
   responseReloadSheets: Observable<Untold.UntoldResponse>;
   responseNewMessage: Observable<Untold.UntoldResponse>;
+  responseReloadEntities: Observable<Untold.UntoldResponse>;
 
   constructor(private signalRService: SignalRService) {
       const hub = this.signalRService.realmHub;
@@ -49,6 +50,7 @@ export class RealmHubListenerService {
       this.responseClearLocalTableCache = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseClearLocalTableCache');
       this.responseReloadSheets = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseReloadSheets');
       this.responseNewMessage = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseNewMessage');
+      this.responseReloadEntities = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseReloadEntities');
   }
 
 }

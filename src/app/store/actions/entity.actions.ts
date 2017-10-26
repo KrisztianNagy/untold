@@ -10,6 +10,7 @@ export class EntityActions {
     static SET_ENTITIES = 'ADD_ENTITIES';
     static UPDATE_ENTITY = 'UPDATE_ENTITY';
     static DELETE_ENTITY = 'DELETE_ENTITY';
+    static KEEP_ENTITIES = 'KEEP_ENTITIES';
 
     addEntities(entities: Array<Untold.ClientEntity>): Action {
         return {
@@ -22,6 +23,13 @@ export class EntityActions {
         return {
             type: EntityActions.ADD_ENTITY,
             payload: entity
+        };
+    }
+
+    keepEntities(entities: Untold.ClientEntity[]): Action {
+        return {
+            type: EntityActions.KEEP_ENTITIES,
+            payload: entities
         };
     }
 

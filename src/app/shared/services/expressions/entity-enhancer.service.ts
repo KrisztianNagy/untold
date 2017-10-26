@@ -13,6 +13,8 @@ import { GenesisEntity, GenesisEntityValue } from '../../models/genesis-entity';
 import { CalculatedExpressionService } from './calculated-expression.service';
 import { ExpressionEvaluatorService } from './expression-evaluator.service';
 
+declare var LZString;
+
 @Injectable()
 export class EntityEnhancerService {
 
@@ -59,11 +61,14 @@ export class EntityEnhancerService {
   }
 
   saveEntity(entity: Untold.ClientEntity, realm: Untold.ClientRealm): Observable<Response> {
+    const rawEntity = JSON.stringify(entity.entity);
+    const codedEntity = LZString.compressToUTF16(rawEntity);
+
     const tableRow: EntityTableRow = {
       PartitionKey: 'entity',
       RowKey: entity.id.toString(),
       rowStatus: 1,
-      entity: JSON.stringify(entity.entity)
+      entity: codedEntity
     };
 
     return this.storageDataService.insertOrUpdate(tableRow, 'RM' + realm.id + 'Entities', realm.entityEditorAcccessSignature);
@@ -94,10 +99,16 @@ export class EntityEnhancerService {
 
     this.storageDataService.readRow('RM' + realm.id + 'Entities', 'entity', entity.id.toString(), realm.entityReaderAcccessSignature)
       .subscribe(res => {
+        const loadedEntity: Untold.ClientEntity = JSON.parse(JSON.stringify(entity));
+        loadedEntity.entity = {};
+
         const storageEntity = JSON.parse(res);
 
-        const loadedEntity: Untold.ClientEntity = JSON.parse(JSON.stringify(entity));
-        loadedEntity.entity = storageEntity && storageEntity['entity'] ? JSON.parse(storageEntity['entity']) : {};
+        if (storageEntity && storageEntity['entity']) {
+          const decompressed = LZString.decompressFromUTF16(storageEntity['entity']);
+          const parsed = JSON.parse(decompressed);
+          loadedEntity.entity = parsed;
+        }
 
         subject.next(loadedEntity);
         subject.complete();

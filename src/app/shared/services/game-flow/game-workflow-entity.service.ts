@@ -10,6 +10,9 @@ import { Untold } from '../../models/backend-export';
 import { TreeNodeService } from '../tree-node.service';
 import { GenesisEntity, GenesisTreeNode } from '../../../shared/models/genesis-entity';
 import { GenesisDataService } from '../../../shared/services/rest/genesis-data.service';
+import { RealmHubSenderService } from '../realm-hub-sender.service';
+import { RealmHubListenerService } from '../realm-hub-listener.service';
+import { GrowlService } from '../growl.service';
 
 @Injectable()
 export class GameWorkflowEntityService {
@@ -18,7 +21,41 @@ export class GameWorkflowEntityService {
               private gameService: GameService,
               private entityService: EntityService,
               private treeNodeService: TreeNodeService,
-              private genesisDataService: GenesisDataService) {
+              private genesisDataService: GenesisDataService,
+              private realmHubSenderService: RealmHubSenderService,
+              private realmHubListenerService: RealmHubListenerService,
+              private growlService: GrowlService) {
+      this.realmHubListenerService.responseReloadEntities.subscribe(resp => {
+        this.loadEntities();
+      });
+
+      this.realmHubListenerService.responseEntityDataChange.subscribe(resp => {
+        this.synDataChange(resp.Data);
+      })
+  }
+
+  public loadEntities() {
+    const game = this.gameService.getCurrent();
+
+    if (game.realm.isCurrentUserOwner) {
+      this.genesisDataService.getOwnerEntities(game.realm.id).subscribe(res => {
+        this.entityService.keepEntities(res);
+        res.forEach(ent => {
+          this.setCalculatedEntity(ent);
+        });
+
+        this.growlService.addInfo('Entities', 'The entity list have been updated');
+      });
+    } else {
+      this.genesisDataService.getPlayerEntities(game.realm.id).subscribe(res => {
+        this.entityService.keepEntities(res);
+        res.forEach(ent => {
+          this.setCalculatedEntity(ent);
+        });
+
+        this.growlService.addInfo('Entities', 'The entity list have been updated');
+      });
+    }
   }
 
   public createEntity(definition: Untold.ClientDefinition) {
@@ -32,14 +69,16 @@ export class GameWorkflowEntityService {
       id: 0,
       moduleGuid: definition.moduleGuid,
       name: definition.name + ' entity',
-      users: null
+      users: []
     };
 
     this.genesisDataService.createEntity(this.gameService.getCurrent().realm.id, entity)
     .subscribe(response => {
-      const responseEntity = JSON.parse(response.json());
-      this.entityService.addEntity(responseEntity);
-        // TODO: Notify others
+      const responseEntityId = JSON.parse(response.json());
+      entity.id = responseEntityId;
+      this.setCalculatedEntity(entity);
+      this.realmHubSenderService.reloadEntities(this.gameService.getCurrent().realm.id);
+      this.growlService.addInfo('Entity', 'The entity have been created. Visit the entity page.');
     });
   }
 
@@ -60,7 +99,12 @@ export class GameWorkflowEntityService {
     this.entityEnhancerService.saveEntity(entity, this.gameService.getCurrent().realm)
       .subscribe(() => {
           this.entityService.updateEntity(entity);
-          // TODO: Notify other users
+          this.realmHubSenderService.entityDataChange({
+            id: entity.id,
+            name: entity.name,
+            realmId: this.gameService.getCurrent().realm.id,
+            users: entity.users
+          });
       });
   }
 
@@ -68,7 +112,8 @@ export class GameWorkflowEntityService {
     this.genesisDataService.saveEntity(this.gameService.getCurrent().realm.id, entity)
     .subscribe(() => {
       this.entityService.updateEntity(entity);
-      // TODO: Notify other users
+        this.realmHubSenderService.reloadEntities(this.gameService.getCurrent().realm.id);
+        this.growlService.addInfo('Entity', 'The entity name have been updated..');
     });
   }
 
@@ -77,7 +122,25 @@ export class GameWorkflowEntityService {
     .subscribe(() => {
       this.entityService.deleteEntity(entity);
       this.entityEnhancerService.deleteEntity(entity, this.gameService.getCurrent().realm);
-      // TODO: Notify other users
+      this.realmHubSenderService.reloadEntities(this.gameService.getCurrent().realm.id)
     });
+  }
+
+  private synDataChange(change: Untold.ClientEntityChange) {
+    if (!change) {
+      return;
+    }
+
+    const match = this.entityService.getCurrent().filter(ent => ent.id === change.id);
+
+    if (match.length) {
+      const entity: Untold.ClientEntity = JSON.parse(JSON.stringify(match[0]));
+
+      if (entity.name !== change.name) {
+        entity.name = change.name;
+      }
+
+      this.setCalculatedEntity(entity);
+    }
   }
 }

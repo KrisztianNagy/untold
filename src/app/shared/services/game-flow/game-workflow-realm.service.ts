@@ -80,20 +80,7 @@ export class GameWorkflowRealmService {
       this.genesisDataService.getDefinitionsByRealm(game.realm.id).subscribe(rd => {
         this.realmDefinitionService.setDefinitions(rd.moduleDefinitions);
 
-        if (game.realm.isCurrentUserOwner) {
-          this.genesisDataService.getOwnerEntities(game.realm.id).subscribe(res => {
-            res.forEach(ent => {
-              this.gameWorkflowEntityService.setCalculatedEntity(ent);
-            });
-          });
-        } else {
-          this.genesisDataService.getPlayerEntities(game.realm.id).subscribe(res => {
-            res.forEach(ent => {
-              this.gameWorkflowEntityService.setCalculatedEntity(ent);
-            });
-          });
-        }
-
+        this.gameWorkflowEntityService.loadEntities();
         this.gameWorkflowSheetService.loadSheets();
         this.gameWorkflowChatService.loadMessages();
       });
