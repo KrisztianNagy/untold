@@ -17,9 +17,12 @@
 </div>
 <p-tabView>    
     <p-tabPanel header="HTML">
-        <div class="ui-g">
+        <div class="ui-g">            
             <div class="ui-g-12">
-                <p-panel header="Snippets" [toggleable]="true" [collapsed]="true">
+                <ace-editor [(text)]="sheet.html" [mode]="'html'" (textChanged)="editorChanged($event)" #editorhtml style="height:400px;"></ace-editor>
+            </div>
+            <div class="ui-g-12">
+                <p-panel header="Snippets" [toggleable]="true" [collapsed]="snippetCollapsed">
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <button pButton type="button" class='blue-btn' (click)="selectDefinition()" label="Select Definition"></button>
@@ -30,9 +33,6 @@
                     </div>
                 </p-panel>
             </div>       
-            <div class="ui-g-12">
-                <ace-editor [(text)]="sheet.html" [mode]="'html'" (textChanged)="editorChanged($event)" #editorhtml style="height:400px;"></ace-editor>
-            </div>
             <p-sidebar [(visible)]="displayDefinitionsChart" [fullScreen]="true">
                 <div class="ui-g" style="overflow-x: auto">
                     <div class="ui-g-12">
@@ -69,8 +69,24 @@
                 <ace-editor [(text)]="selectedScript" [mode]="'javascript'" (textChanged)="commandEditorChanged($event)" #editorscript style="height:400px;"></ace-editor>
             </div>
             <div class="ui-g-12">
-                <button pButton type="button" class='blue-btn' (click)="testCommand()" label="Test" *ngIf="selectedCommand"></button>
+                <div class="ui-g-4">
+                    <h3>How to call</h3>
+                    <span class="ui-float-label">
+                        <input id="float-input" type="text" size="30" pInputText [ngModel]="commandTestFormat" readonly="readonly"> 
+                    </span>
+                </div>
+                <div class="ui-g-6">
+                    <h3>Comma-separated test input</h3>
+                    <span class="ui-float-label">
+                        <input id="float-input" type="text" size="60" pInputText [(ngModel)]="commandTestInput" (change)="recalculateCommandTextFormat($event)"> 
+                    </span>
+                </div>
+                <div class="ui-g-2">
+                    <h3>Test</h3>
+                    <button pButton type="button" class='blue-btn' (click)="testCommand()" label="Test" *ngIf="selectedCommand"></button>
+                </div>
             </div>
+            
             <div class="ui-g-12" *ngIf="commandResult">
                 <p-panel header="Respone entity" [toggleable]="true" [collapsed]="true">
                     This is the JSON representation of the updated object: <br>

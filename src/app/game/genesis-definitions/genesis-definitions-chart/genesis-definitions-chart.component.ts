@@ -21,7 +21,6 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
   @Input() definition: Untold.ClientDefinition;
   @Input() realmDefinitions: Array<Untold.ClientModuleDefinitions>;
   @Input() simplified: boolean;
-  @Output() onSaved = new EventEmitter<boolean>();
   @Output() onDefinitionClick = new EventEmitter<Untold.ClientDefinition>();
   @Output() onDraftUpdated = new EventEmitter<Untold.ClientDefinition>();
 

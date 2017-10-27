@@ -58,6 +58,9 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
   private selectedCommand: SheetScript
   private selectedScript: string;
   private commandResult: any;
+  private snippetCollapsed = true;
+  private commandTestFormat: string;
+  private commandTestInput: string;
 
   constructor(private sheetService: SheetService,
               private entityEnhancerService: EntityEnhancerService,
@@ -240,6 +243,9 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             this.selectedScript = '';
         }
+
+        this.commandTestInput = '';
+        this.recalculateCommandTextFormat();
         this.changeDetectorRef.markForCheck();
     }
 
@@ -315,8 +321,39 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
 
     }
 
+    recalculateCommandTextFormat() {
+        this.commandTestFormat = '';
+
+        if (this.selectedCommand) {
+            this.commandTestFormat += 'command(\'' + this.selectedCommand.name + '\'';
+
+            if (this.commandTestInput) {
+                const a = this.commandTestInput.split(',').forEach(part => {
+                    const trimmed = part.trim();
+
+                    if (trimmed) {
+                        this.commandTestFormat += ', ' + trimmed;
+                    }
+                });
+            }
+
+            this.commandTestFormat += ')';
+        }
+    }
+
     testCommand() {
-        const worker = this.webWorkerService.createCommandWorker(this.selectedCommand.script);
+        const params = [];
+        if (this.commandTestInput) {
+            const a = this.commandTestInput.split(',').forEach(part => {
+                const trimmed = part.trim();
+
+                if (trimmed) {
+                    params.push(trimmed);
+                }
+            });
+        }
+
+        const worker = this.webWorkerService.createCommandWorker(this.selectedCommand.script, ...params);
 
         worker.onmessage = (result) => {
             this.commandResult = result.data;

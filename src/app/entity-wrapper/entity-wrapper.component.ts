@@ -117,10 +117,12 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
     this.updateEntity(genesisEntity);
   }
 
-  onCommandExecuted(commandName: string) {
+  onCommandExecuted(commandDetails: any[]) {
+    const commandName = <string> commandDetails[0];
     const command = this.sheet.scripts.filter(scr => scr.name === commandName);
+
     if (command.length) {
-      const worker = this.webWorkerService.createCommandWorker(command[0].script);
+      const worker = this.webWorkerService.createCommandWorker(command[0].script, ...commandDetails);
       worker.onmessage = (result) => {
           this.entityChanged(result.data.entity);
           if (result.data.result && result.data.result.constructor === Array) {
@@ -135,5 +137,9 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
     } else {
       console.log('Command: ' + commandName + ' is not valid');
     }
+  }
+
+  onChatExecuted(chatText: string) {
+    this.gameWorkflowChatService.sendMessage(chatText, null, false);
   }
 }

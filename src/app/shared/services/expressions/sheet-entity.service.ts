@@ -72,6 +72,8 @@ export class SheetEntityService {
                   return typeof entity.entity === 'string' ? entity.entity : '';
                 case 'bool':
                   return typeof entity.entity === 'boolean' ? entity.entity : false;
+                case 'choice':
+                  return typeof entity.entity === 'string' ? entity.entity : '';
                 default:
                 return null;
             }

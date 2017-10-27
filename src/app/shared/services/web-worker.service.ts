@@ -5,17 +5,19 @@ export class WebWorkerService {
 
   constructor() { }
 
-  createCommandWorker(userJavascript: string): Worker {
-    const commandWorkerscript = this.getCommandWorkerJavascript(userJavascript);
+  createCommandWorker(userJavascript: string, ...parameters: any[]): Worker {
+    const commandWorkerscript = this.getCommandWorkerJavascript(userJavascript, ...parameters);
     const worker = this.getWorker(commandWorkerscript);
 
     return worker;
   }
 
-  private getCommandWorkerJavascript(userJavascript: string): string {
+  private getCommandWorkerJavascript(userJavascript: string, ...parameters: any[]): string {
+    const input = JSON.stringify(parameters);
 
     let workerOuterJavaScript = 'onmessage = function(e) {\n'
     workerOuterJavaScript += 'var entity = e.data;\n';
+    workerOuterJavaScript += 'var params = ' + input + ';\n';
     workerOuterJavaScript += 'function command() {\n';
     workerOuterJavaScript += userJavascript;
     workerOuterJavaScript += '}\n\n';

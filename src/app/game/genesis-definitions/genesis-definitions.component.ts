@@ -125,6 +125,15 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
   nodeSelect(event) {
   }
 
+  save() {
+    this.genesisDataService.saveDefinition(this.draftDefinition, this.gameService.getCurrent().realm.id)
+    .subscribe(() => {
+      this.onSaved(true);
+    }, () => {
+      this.onSaved(false);
+    });
+  }
+
   delete() {
     this.genesisDataService.deleteDefinition(<string> this.selectedDefinition.definitionGuid, this.selectedModule.id )
       .subscribe(() => {

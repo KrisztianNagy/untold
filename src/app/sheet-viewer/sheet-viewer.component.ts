@@ -26,11 +26,13 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
   @Output() onBuildCompleted = new EventEmitter<boolean>();
   @Output() entityChangedEvent = new EventEmitter<any>();
   @Output() commandExecuted = new EventEmitter<string>();
+  @Output() chatExecuted = new EventEmitter<string>();
   @ViewChild('div', {read: ViewContainerRef}) div;
   componentRef: any;
   errorMsg = '';
   private entityChangedSubscription;
   private commandExecutedSubscription;
+  private chatExecutedSubscription;
   private errorSubscription;
 
   constructor(public compiler: Compiler,
@@ -48,6 +50,10 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
     if (this.commandExecutedSubscription) {
       this.commandExecutedSubscription.unsubscribe();
+    }
+
+    if (this.chatExecutedSubscription) {
+      this.chatExecutedSubscription.unsubscribe();
     }
 
     if (this.errorSubscription) {
@@ -109,6 +115,10 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
           this.commandExecutedSubscription.unsubscribe();
         }
 
+        if (this.chatExecutedSubscription) {
+          this.chatExecutedSubscription.unsubscribe();
+        }
+
         this.compiler.clearCache();
         this.createComponentFactory( this.compiler, compMetadata, model, options, definition )
             .then(factory => {
@@ -125,7 +135,10 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
               this.commandExecutedSubscription = this.componentRef.instance.commandExecutedEvent.subscribe(command => {
                 this.commandExecuted.emit(command);
-                console.log('emitter fired');
+              });
+
+              this.chatExecutedSubscription = this.componentRef.instance.chatExecutedEvent.subscribe(text => {
+                this.chatExecuted.emit(text);
               });
 
               this.errorSubscription = this.componentRef.instance.runtimeErrorOccuredEvent.subscribe(error => {
@@ -169,7 +182,8 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
       @Component( metadata )
       class DynamicComponent implements DoCheck, OnDestroy, OnInit  {
         @Output() entityChangedEvent = new EventEmitter<any>();
-        @Output() commandExecutedEvent = new EventEmitter<string>();
+        @Output() commandExecutedEvent = new EventEmitter<any[]>();
+        @Output() chatExecutedEvent = new EventEmitter<string>();
         @Output() runtimeErrorOccuredEvent = new EventEmitter<any>();
         private changeSub: Subject<boolean>;
         private changeDelaySub: any;
@@ -270,8 +284,12 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
           return '';
         }
 
-        command(commandName: string) {
-          this.commandExecutedEvent.emit(commandName);
+        command(commandName: string, ...parameters: any[]) {
+          this.commandExecutedEvent.emit([commandName, ...parameters]);
+        }
+
+        chat(chatText: string) {
+          this.chatExecutedEvent.emit(chatText);
         }
       };
 
