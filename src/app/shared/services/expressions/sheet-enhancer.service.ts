@@ -20,8 +20,7 @@ export class SheetEnhancerService {
       PartitionKey: 'sheet',
       RowKey: sheet.id.toString(),
       rowStatus: 1,
-      html: '',
-      css: '',
+      json: '',
       scripts: ''
     };
 
@@ -37,16 +36,14 @@ export class SheetEnhancerService {
   }
 
   saveSheetContent(sheet: Sheet, realm: Untold.ClientRealm) {
-    const compressedHTML = LZString.compressToUTF16(sheet.html ? sheet.html : '');
-    const compressedCSS = LZString.compressToUTF16(sheet.css ? sheet.css : '');
+    const compressedJson = LZString.compressToUTF16(sheet.json ? JSON.stringify(sheet.json) : '');
     const compressedScripts = LZString.compressToUTF16(sheet.scripts ? JSON.stringify(sheet.scripts) : '');
 
     const tableRow: SheetTableRow = {
       PartitionKey: 'sheet',
       RowKey: sheet.id.toString(),
       rowStatus: 1,
-      html: compressedHTML,
-      css: compressedCSS,
+      json: compressedJson,
       scripts: compressedScripts
     };
 
@@ -60,8 +57,7 @@ export class SheetEnhancerService {
       PartitionKey: 'sheet',
       RowKey: sheet.id.toString(),
       rowStatus: 1,
-      html: '',
-      css: '',
+      json: '',
       scripts: ''
     };
 
@@ -70,8 +66,7 @@ export class SheetEnhancerService {
         const storageSheet = JSON.parse(res);
 
         const loadedSheet: Sheet = JSON.parse(JSON.stringify(sheet));
-        loadedSheet.html = storageSheet['html'] ? LZString.decompressFromUTF16(storageSheet['html']) : '';
-        loadedSheet.css = storageSheet['css'] ? LZString.decompressFromUTF16(storageSheet['css']) : '';
+        loadedSheet.json = [];
         loadedSheet.scripts = [];
 
         if (storageSheet['scripts'] ) {
@@ -84,12 +79,21 @@ export class SheetEnhancerService {
           }
         }
 
+        if (storageSheet['json'] ) {
+          try {
+              const json = LZString.decompressFromUTF16(storageSheet['json']);
+              loadedSheet.json = JSON.parse(json);
+
+          } catch (err) {
+            console.error('Error occured during sheet command building: ' + err);
+          }
+        }
+
         subject.next(loadedSheet);
         subject.complete();
       }, err => {
         const loadedSheet: Sheet = JSON.parse(JSON.stringify(sheet));
-        loadedSheet.html = '';
-        loadedSheet.css = '';
+        loadedSheet.json = [];
         loadedSheet.scripts = [];
 
         subject.next(loadedSheet);

@@ -1,4 +1,4 @@
-<div *ngIf="!editedRule">
+<div *ngIf="!editedRule" style="overflow-x: scroll;height: 100%;">
     <p-organizationChart [value]="organizationTree" *ngIf="organizationTree" styleClass="definition">
         <ng-template let-node pTemplate="definition">
             <div class="node-header ui-corner-top" [style.background-color]="getColor(node.data)" >

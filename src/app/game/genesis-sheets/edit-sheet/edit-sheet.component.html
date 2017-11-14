@@ -15,7 +15,7 @@
         </div>
     </div>
 </div>
-<p-tabView>    
+<p-tabView (onChange)="onTabChange($event)" >    
     <p-tabPanel header="HTML">
         <div class="ui-g">            
             <div class="ui-g-12">
@@ -45,7 +45,7 @@
     <p-tabPanel header="CSS">
         <ace-editor [(text)]="sheet.css" [mode]="'css'" (textChanged)="editorChanged($event)" #editorcss style="height:400px;"></ace-editor>
     </p-tabPanel>
-    <p-tabPanel header="Commands">
+    <p-tabPanel header="Commands" >
         <div class="ui-g">
             <div class="ui-g-6">
                 <p-dropdown [options]="commands" *ngIf="commands"  [(ngModel)]="selectedCommand" (onChange)="commandChanged()"></p-dropdown>
@@ -102,10 +102,9 @@
         </div>
     </p-tabPanel>
     <p-tabPanel header="Preview" [rightIcon]="buildResultIcon">
-        <div class="ui-g">
-            
+        <div class="ui-g" *ngIf="tabIndex === 3">            
             <div class="ui-g-12">                
-                <app-sheet-viewer [model]="model" [html]="htmlTextToProcess" [css]="cssTextToProcess" [options]="options" [definition]="definition" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)" (commandExecuted)="onCommandExecuted($event)"></app-sheet-viewer>
+                <app-sheet-viewer [model]="model" [html]="sheet.html" [css]="sheet.css" [options]="options" [definition]="definition" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)" (commandExecuted)="onCommandExecuted($event)"></app-sheet-viewer>
             </div>            
         </div>
     </p-tabPanel>

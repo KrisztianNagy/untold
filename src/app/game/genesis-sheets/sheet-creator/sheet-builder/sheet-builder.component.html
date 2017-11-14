@@ -1,0 +1,78 @@
+<app-sheet-mock (onClick)="childClick($event)" [sheetElement]="sheetElement" *ngIf="sheetElement"></app-sheet-mock>
+<p-sidebar [(visible)]="definitionPickerVisible"[fullScreen]="true">
+    <app-genesis-definitions-chart *ngIf="definitionPickerVisible" [simplified]="true" [definition]="pickedDefinition" (onDefinitionClick)="onDefinitionClick($event)"></app-genesis-definitions-chart>
+</p-sidebar>
+
+<p-sidebar [(visible)]="editorVisible" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+    <div *ngIf="selectedSheetElement">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h3 *ngIf="selectedSheetElement.type === 'root'">Root</h3>
+                <h3 *ngIf="selectedSheetElement.type === 'grid'">Grid ({{selectedSheetElement.numerator + (selectedSheetElement.denominator ? '-' + selectedSheetElement.denominator : '')}})</h3>
+                <h3 *ngIf="selectedSheetElement.type === 'text'">Text - {{selectedSheetElement.content}}</h3>
+                <h3 *ngIf="selectedSheetElement.type === 'property'">Property - {{selectedSheetElement.content}}</h3>
+            </div>
+            <br/>
+
+            <p-accordion>
+                <p-accordionTab header="Modify" *ngIf="selectedSheetElement.type !== 'root'">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="ui-g-8">
+                            </div>
+                            <div class="ui-g-4">
+                                <button pButton type="button" class='red-btn' (click)="deleteElement(selectedSheetElement)" label="Delete" icon="ui-icon-close"></button>                            
+                            </div>       
+                        </div>
+                        <div class="ui-g-12">
+                            <div class="ui-g form-group" > 
+                                <div class="ui-g-6">   
+                                    <span class="md-inputfield">             
+                                        <input type="text" pInputText [(ngModel)]="selectedSheetElement.content">
+                                    <label>{{selectedSheetElement.type === 'grid' ? 'Legend' : 'Label'}}</label>
+                                    </span>
+                                </div>
+                                <div class="ui-g-6">
+                                    <p-dropdown [options]="gridSizes" [(ngModel)]="updateGridSize" (onChange)="gridSizeUpdated()"></p-dropdown>
+                                </div>
+                                <div class="ui-g-4" *ngIf="selectedSheetElement.type === 'property'">
+                                    <button pButton type="button" class='green-btn' (click)="showDefinitionPicker()" label="Set Property Mapping" icon="ui-icon-text-fields"></button>           
+                                </div>
+                            </div>
+                        </div>  
+                    </div>                     
+                </p-accordionTab>
+                <p-accordionTab header="Add Grid" *ngIf="selectedSheetElement.type === 'root' || selectedSheetElement.type === 'grid'">
+                    <div class="ui-g">
+                        <div class="ui-g-12" >
+                            <div class="ui-g-8">
+                                <p-dropdown [options]="gridSizes" [(ngModel)]="addGridSize"></p-dropdown>
+                            </div>
+                            <div class="ui-g-4">
+                                <button pButton type="button" class='green-btn' (click)="addGrid(selectedSheetElement, 'add')" label="Add Inside" icon="ui-icon-exposure-plus-1"></button>                            
+                            </div>
+                            <div class="ui-g-4">
+                                <button pButton type="button" class='green-btn' (click)="addGrid(selectedSheetElement, 'addbefore')" label="Add Before" icon="ui-icon-navigate-before"></button>                            
+                            </div>
+                            <div class="ui-g-4">
+                                <button pButton type="button" class='green-btn' (click)="addGrid(selectedSheetElement, 'addafter')" label="Add After" icon="ui-icon-navigate-next"></button>                            
+                            </div>
+                        </div>     
+                    </div>                   
+                </p-accordionTab>
+                <p-accordionTab header="Add Control"  *ngIf="selectedSheetElement.type === 'grid' || selectedSheetElement.type === 'root'">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="ui-g-6">
+                                <button pButton type="button" class='green-btn' (click)="addTextControl(selectedSheetElement)" label="Add Text" icon="ui-icon-text-fields"></button>           
+                            </div>
+                            <div class="ui-g-6">
+                                <button pButton type="button" class='green-btn' (click)="addPropertyControl(selectedSheetElement)" label="Add Property" icon="ui-icon-text-fields"></button>           
+                            </div>
+                        </div>
+                    </div>
+                </p-accordionTab>                   
+            </p-accordion>
+        </div>
+    </div>
+</p-sidebar>

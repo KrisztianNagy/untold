@@ -130,7 +130,6 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
               this.entityChangedSubscription = this.componentRef.instance.entityChangedEvent.subscribe(entity => {
                 this.entityChangedEvent.emit(entity);
-                console.log('emitter fired');
               });
 
               this.commandExecutedSubscription = this.componentRef.instance.commandExecutedEvent.subscribe(command => {
@@ -144,7 +143,6 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
               this.errorSubscription = this.componentRef.instance.runtimeErrorOccuredEvent.subscribe(error => {
                 if (this.componentRef) {
                   this.componentRef.destroy();
-                  console.log('destroyed');
                 }
 
                 this.div.clear();

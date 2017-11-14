@@ -13,6 +13,7 @@ import { GenesisTemplatesComponent } from './game/genesis-templates/genesis-temp
 import { GenesisEntitiesComponent } from './game/genesis-entities/genesis-entities.component';
 import { GenesisSheetsComponent } from './game/genesis-sheets/genesis-sheets.component';
 import { EditSheetComponent } from './game/genesis-sheets/edit-sheet/edit-sheet.component';
+import { SheetCreatorComponent } from './game/genesis-sheets/sheet-creator/sheet-creator.component';
 import { EntityWrapperComponent } from './entity-wrapper/entity-wrapper.component';
 import { RealmImagesComponent } from './game/realm-images/realm-images.component';
 import { MapsComponent } from './game/maps/maps.component';
@@ -32,7 +33,7 @@ export const routes: Routes = [
         {path: 'ruletables', component: GenesisRuleTablesComponent, canActivate: [CanActivateSelectedRealmOwnerGuard]},
         {path: 'definitions', component: GenesisDefinitionsComponent, canActivate: [CanActivateSelectedRealmOwnerGuard]},
         {path: 'sheets', component: GenesisSheetsComponent, canActivate: [CanActivateSelectedRealmOwnerGuard]},
-        {path: 'sheet/:id', component: EditSheetComponent, canActivate: [CanActivateSelectedRealmOwnerGuard]},
+        {path: 'sheet/:id', component: SheetCreatorComponent, canActivate: [CanActivateSelectedRealmOwnerGuard]},
         {path: 'templates', component: GenesisTemplatesComponent, canActivate: [ CanActivateSelectedRealmOwnerGuard]},
         {path: 'entities', component: GenesisEntitiesComponent, canActivate: [ CanActivateSelectedRealmOwnerGuard]},
         {path: 'entity/:id', component: EntityWrapperComponent, canActivate: [ CanActivateSelectedRealmGuard]},

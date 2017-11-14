@@ -4417,7 +4417,8 @@ body .ui-orderlist .ui-orderlist-caption {
   box-sizing: border-box; }
 body .ui-orderlist .ui-orderlist-list {
   padding: 0;
-  box-sizing: border-box; }
+  box-sizing: border-box; 
+  width: 100% }
   body .ui-orderlist .ui-orderlist-list li.ui-orderlist-item {
     font-size: 1em;
     padding: 0.625em 1em;

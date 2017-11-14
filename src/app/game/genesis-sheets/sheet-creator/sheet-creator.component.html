@@ -1,0 +1,43 @@
+<div class="ui-g">
+  <div class="ui-g-12">
+      <div class="ui-g-3">
+          <button pButton type="button" class='green-btn' (click)="saveSheet()" label="Save"></button>
+      </div>               
+      <div class="ui-g-4">
+          <div *ngIf="!entities || !entities.length">
+              Please create an entity for this definition first.
+          </div>
+          <div *ngIf="entities && entities.length" class="ui-g">
+              <div class="ui-g-2">
+                  <p-dropdown [options]="entities"  [(ngModel)]="selectedEntity" (onChange)="entityChanged()"></p-dropdown>
+              </div>                                 
+          </div>
+      </div>
+  </div>
+</div>
+<p-tabView >    
+  <p-tabPanel header="Builder">
+    <div class="ui-g">
+      <div class="ui-g-12">
+        <div class="ui-g-3" *ngIf="tabList && tabList.length && selectedTab">
+          <p-dropdown [options]="tabList"  [(ngModel)]="selectedTab"></p-dropdown>
+        </div>
+        <div class="ui-g-7">
+
+        </div>
+        <div class="ui-g-2">
+          <button pButton type="button" class='blue-btn' (click)="showSheetTab()" label="Configure Tabs"></button>
+        </div>
+      </div>
+      <div class="ui-g-12">            
+        <app-sheet-builder style="width: 100%;" [sheetElement]="selectedTab.sheet" *ngIf="selectedTab" (onSheetElementUpdate)="sheetElementUpdated($event)" [definition]="definition"></app-sheet-builder>
+      </div>
+    </div>
+  </p-tabPanel>  
+  <p-tabPanel header="Preview" [rightIcon]="buildResultIcon">
+     
+  </p-tabPanel>
+</p-tabView>
+<p-sidebar [(visible)]="sheetTabVisible && definition" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
+  <app-sheet-tab-list *ngIf="sheetTabVisible && definition" [tabs]="sheet.json" (onUpdate)="tabListUpdated($event)" ></app-sheet-tab-list>
+</p-sidebar>

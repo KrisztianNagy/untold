@@ -26,125 +26,102 @@ import { ActivatedRoute, Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('editorhtml') editorhtml;
-  @ViewChild('editorcss') editorcss;
-  @ViewChild('editorscript') editorscript;
-  @ViewChild('editorsnippet') editorsnippet;
-  @ViewChild(SheetViewerComponent) sheetViewer: SheetViewerComponent;
-  private previewVisible: boolean;
+    @ViewChild('editorhtml') editorhtml;
+    @ViewChild('editorcss') editorcss;
+    @ViewChild('editorscript') editorscript;
+    @ViewChild('editorsnippet') editorsnippet;
+    @ViewChild(SheetViewerComponent) sheetViewer: SheetViewerComponent;
+    private previewVisible: boolean;
 
-  private sheet: Sheet;
-  private htmlTextToProcess = '';
-  private cssTextToProcess = '';
-  private scriptsToProcess = [];
-  private model: any;
-  private buildResultIcon: string;
-  private id: number;
-  private routeSub: any;
-  private sheetSub: any;
-  private textChangeSub: Subject<boolean>;
-  private textChangeDelaySub: any;
-  private entities: Array<SelectItem>;
-  private commands: Array<SelectItem>;
-  private selectedEntity: Untold.ClientEntity;
-  private sheetVisible: boolean;
-  private modelMappings: Array<SelectItem>;
-  private selectedMapping: string;
-  private snippet: any;
-  private displayDefinitionsChart: boolean;
-  private definition: Untold.ClientDefinition;
-  private snippetDefinition: Untold.ClientInnerDefinition;
-  private options: object;
-  private selectedCommand: SheetScript
-  private selectedScript: string;
-  private commandResult: any;
-  private snippetCollapsed = true;
-  private commandTestFormat: string;
-  private commandTestInput: string;
+    private sheet: Sheet;
+    private model: any;
+    private buildResultIcon: string;
+    private id: number;
+    private routeSub: any;
+    private sheetSub: any;
+    private entities: Array<SelectItem>;
+    private commands: Array<SelectItem>;
+    private selectedEntity: Untold.ClientEntity;
+    private sheetVisible: boolean;
+    private modelMappings: Array<SelectItem>;
+    private selectedMapping: string;
+    private snippet: any;
+    private displayDefinitionsChart: boolean;
+    private definition: Untold.ClientDefinition;
+    private snippetDefinition: Untold.ClientInnerDefinition;
+    private options: object;
+    private selectedCommand: SheetScript
+    private selectedScript: string;
+    private commandResult: any;
+    private snippetCollapsed = true;
+    private commandTestFormat: string;
+    private commandTestInput: string;
+    private tabIndex = 0;
 
-  constructor(private sheetService: SheetService,
-              private entityEnhancerService: EntityEnhancerService,
-              private definitionEnhancerService: DefinitionEnhancerService,
-              private sheetEntityService: SheetEntityService,
-              private entityService: EntityService,
-              private realmDefinitionService: RealmDefinitionService,
-              private gameWorkflowSheetService: GameWorkflowSheetService,
-              private webWorkerService: WebWorkerService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private changeDetectorRef: ChangeDetectorRef) {
-    this.snippet = { text: ''};
-   }
+    constructor(private sheetService: SheetService,
+                private entityEnhancerService: EntityEnhancerService,
+                private definitionEnhancerService: DefinitionEnhancerService,
+                private sheetEntityService: SheetEntityService,
+                private entityService: EntityService,
+                private realmDefinitionService: RealmDefinitionService,
+                private gameWorkflowSheetService: GameWorkflowSheetService,
+                private webWorkerService: WebWorkerService,
+                private route: ActivatedRoute,
+                private router: Router,
+                private changeDetectorRef: ChangeDetectorRef) {
+        this.snippet = { text: ''};
+    }
 
-  ngOnInit() {
-    this.textChangeSub = new Subject<boolean>();
-    this.modelMappings = [{label: 'Select mapping', value: null}];
+    ngOnInit() {
+        this.modelMappings = [{label: 'Select mapping', value: null}];
 
-    this.textChangeDelaySub = this.textChangeSub.debounceTime(5000).subscribe(() => {
-        this.sheetVisible = true;
-        this.htmlTextToProcess = this.sheet.html;
-        this.cssTextToProcess = this.sheet.css;
-        this.scriptsToProcess = JSON.parse(JSON.stringify(this.sheet.scripts));
-        this.changeDetectorRef.markForCheck();
-    });
+        this.routeSub = this.route.params.subscribe(params => {
+        if (params['id']) {
+            this.id = parseInt(params['id'], 10);
+            console.log(this.id);
+            this.sheetSub = this.sheetService.sheets
+            .subscribe(sheets =>
+                sheets.filter(sh => sh.id === this.id)
+                .forEach(sh => {
+                    this.sheet = sh;
 
-    this.routeSub = this.route.params.subscribe(params => {
-    if (params['id']) {
-        this.id = parseInt(params['id'], 10);
-        console.log(this.id);
-        this.sheetSub = this.sheetService.sheets
-        .subscribe(sheets =>
-             sheets.filter(sh => sh.id === this.id)
-            .forEach(sh => {
-                this.sheet = sh;
+                    if (this.sheetSub) {
+                        this.sheetSub.unsubscribe();
+                    }
 
-                if (this.sheetSub) {
-                    this.sheetSub.unsubscribe();
-                }
+                    this.entities = this.entityService.getCurrent().map(ent => {
+                        return {
+                            label: ent.name,
+                            value: ent
+                        };
+                    });
 
-                this.entities = this.entityService.getCurrent().map(ent => {
-                    return {
-                        label: ent.name,
-                        value: ent
-                      };
-                });
+                    if (this.entities.length) {
+                        this.selectedEntity = this.entities[0].value;
+                    }
+                    this.populateDefinitionMapping();
+                    this.populateCommands();
+                    this.setModel();
 
-                if (this.entities.length) {
-                    this.selectedEntity = this.entities[0].value;
-                }
-                this.populateDefinitionMapping();
-                this.populateCommands();
-                this.setModel();
+                    this.definitionEnhancerService.getAllChoiceOptions(<Untold.ClientInnerDefinition> this.definition)
+                    .subscribe(choiceOptions => {
+                        this.options = choiceOptions;
+                        this.changeDetectorRef.markForCheck();
+                    });
+                }));
+            }
+        });
+    }
 
-                this.textChangeSub.next(true);
-
-                this.definitionEnhancerService.getAllChoiceOptions(<Untold.ClientInnerDefinition> this.definition)
-                .subscribe(choiceOptions => {
-                    this.options = choiceOptions;
-                    this.changeDetectorRef.markForCheck();
-                });
-            }));
+    ngOnDestroy() {
+        if (this.routeSub) {
+            this.routeSub.unsubscribe();
         }
-    });
-  }
 
-  ngOnDestroy() {
-    if (this.routeSub) {
-        this.routeSub.unsubscribe();
+        if (this.sheetSub) {
+            this.sheetSub.unsubscribe();
+        }
     }
-
-    if (this.textChangeSub) {
-        this.textChangeSub.unsubscribe();
-    }
-
-    if (this.textChangeDelaySub) {
-        this.textChangeDelaySub.unsubscribe();
-    }
-
-    if (this.sheetSub) {
-        this.sheetSub.unsubscribe();
-    }
-  }
 
     ngAfterViewInit() {
         this.editorsnippet.setTheme('eclipse');
@@ -186,6 +163,10 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
             exec: function (editor) {
             }
         });
+    }
+
+    onTabChange(event) {
+        this.tabIndex = event.index;
     }
 
     onBuildCompleted(event: boolean) {
@@ -303,7 +284,6 @@ export class EditSheetComponent implements OnInit, AfterViewInit, OnDestroy {
 
     editorChanged(event) {
         this.buildResultIcon = 'ui-icon-autorenew';
-        this.textChangeSub.next(true);
     }
 
     commandEditorChanged(event) {

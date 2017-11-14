@@ -11,7 +11,7 @@ export class TreeNodeService {
 
   }
 
-  getOrganizationChartFromDefinitions(definition: Untold.ClientDefinition) {
+  getOrganizationChartFromDefinitions(definition: Untold.ClientDefinition, simplified?: boolean) {
     const organizationTree =  [{
         label: definition.name,
         data: definition,
@@ -19,11 +19,11 @@ export class TreeNodeService {
         type: 'definition',
       }];
 
-      this.updateTreeLayerFromDefinitions(organizationTree[0], definition.definitions);
+      this.updateTreeLayerFromDefinitions(organizationTree[0], definition.definitions, simplified);
       return organizationTree;
   }
 
-  updateTreeLayerFromDefinitions(parentNode: TreeNode, definitions: Array<Untold.ClientDefinition>) {
+  updateTreeLayerFromDefinitions(parentNode: TreeNode, definitions: Array<Untold.ClientInnerDefinition>, simplified?: boolean) {
     parentNode.children = [];
 
     definitions.forEach(definition => {
@@ -42,7 +42,7 @@ export class TreeNodeService {
             parent: parentNode
         };
 
-        if (definition.definitions && definition.definitions) {
+        if (definition.definitions && !(definition.isList && simplified )) {
             this.updateTreeLayerFromDefinitions(node, definition.definitions);
         }
 

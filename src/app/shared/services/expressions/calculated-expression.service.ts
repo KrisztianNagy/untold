@@ -101,7 +101,7 @@ export class CalculatedExpressionService {
     Untold.ClientInnerDefinition {
 
     if (definition  && definition.definitions) {
-      const matchingDefs = definition.definitions.filter(def => def.name.replace(' ', '').toLowerCase() === identifier.name.toLowerCase());
+      const matchingDefs = definition.definitions.filter(def => def.name.replace(/ /g, '').toLowerCase() === identifier.name.toLowerCase());
 
       if (matchingDefs.length) {
         identifier.name = '_' + <string> matchingDefs[0].occurrenceGuid;

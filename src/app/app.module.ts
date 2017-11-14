@@ -203,6 +203,12 @@ import { EditTableColumnComponent } from './show-rule-table/edit-table-column/ed
 import { PrimeDragulaDirective } from './shared/directives/prime-dragula.directive';
 import { DragulaService } from 'ng2-dragula';
 import { MainChatComponent } from './main-chat/main-chat.component';
+import { SheetBuilderComponent } from './game/genesis-sheets/sheet-creator/sheet-builder/sheet-builder.component';
+import { SheetMockComponent } from './game/genesis-sheets/sheet-creator/sheet-builder/sheet-mock/sheet-mock.component';
+import { SheetCreatorComponent } from './game/genesis-sheets/sheet-creator/sheet-creator.component';
+// tslint:disable-next-line:max-line-length
+import { SheetGridElementComponent } from './game/genesis-sheets/sheet-creator/sheet-builder/sheet-mock/sheet-grid-element/sheet-grid-element.component';
+import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//sheet-tab-list/sheet-tab-list.component';
 
 
 @NgModule({
@@ -346,6 +352,11 @@ import { MainChatComponent } from './main-chat/main-chat.component';
         EditTableColumnComponent,
         PrimeDragulaDirective,
         MainChatComponent,
+        SheetBuilderComponent,
+        SheetMockComponent,
+        SheetCreatorComponent,
+        SheetGridElementComponent,
+        SheetTabListComponent,
         //AceEditorComponent
     ],
     providers: [

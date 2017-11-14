@@ -1,0 +1,24 @@
+.sheet-grid {
+    border-style: dotted;
+    padding: 3px;
+    border-width: 1px;
+    /*padding: 3px;
+    min-height: 4em;
+    cursor: pointer;
+    background-color: lightgray;
+    border-width: 1px;*/
+}
+
+.sheet-grid:hover {
+    /*border-color: blue;
+    background-color: gray;
+    border-width: 1px;
+    background: grey;
+    border-style: solid;*/
+}
+
+.sheet-property {
+    border-style: dashed;
+    padding: 3px; 
+    border-width: 1px;
+}

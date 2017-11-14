@@ -11,8 +11,7 @@ export class EntityTableRow extends AzureTableRow {
 }
 
 export class SheetTableRow extends AzureTableRow {
-    html: string;
-    css: string;
+    json: string;
     scripts: string;
 }
 

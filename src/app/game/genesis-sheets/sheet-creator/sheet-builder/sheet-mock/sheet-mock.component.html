@@ -1,0 +1,8 @@
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+<link rel="stylesheet" href="http://icono-49d6.kxcdn.com/icono.min.css">
+
+<form class="pure-form">
+    <div class="pure-g">
+        <app-sheet-grid-element [sheet]="sheetElement" style="width: 100%;" (onClick)="childClick($event)" *ngIf="sheetElement"></app-sheet-grid-element>
+    </div>
+</form>

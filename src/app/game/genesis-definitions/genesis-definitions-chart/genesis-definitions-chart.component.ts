@@ -67,13 +67,16 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
     this.onDraftUpdated.emit(this.draftDefinition);
 
     setTimeout(() => {
-      this.organizationTree = this.treeNodeService.getOrganizationChartFromDefinitions(this.draftDefinition);
+      this.organizationTree = this.treeNodeService.getOrganizationChartFromDefinitions(this.draftDefinition, this.simplified);
       this.changeDetectorRef.markForCheck();
     }, 40);
   }
 
   definitionClick(definition: Untold.ClientInnerDefinition) {
-    this.onDefinitionClick.emit(definition);
+
+    if (!this.simplified || definition.dataType !== 'Definition' || definition.isList) {
+      this.onDefinitionClick.emit(definition);
+    }
   }
 
   editName(definition: Untold.ClientInnerDefinition) {
@@ -115,9 +118,11 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
       if (definition.occurrenceGuid) {
         return !def.occurrenceGuid || def.occurrenceGuid !== definition.occurrenceGuid;
       } else {
-        return def.occurrenceGuid || def.name === definition.name;
+        return def.occurrenceGuid || def.name !== definition.name;
       }
     });
+
+    this.draftDefinition = JSON.parse(JSON.stringify(this.draftDefinition));
 
     this.loadChart();
   }

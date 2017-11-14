@@ -1,0 +1,39 @@
+<div class="ui-g form-group" > 
+    <div class="ui-g-12">  
+        <div class="ui-g-9">            
+            <span class="md-inputfield">
+                <input type="text" pInputText [(ngModel)]="addedTabName" >
+            </span>
+        </div>
+        <div class="ui-g-3">
+            <button pButton type="button" class='green-btn' label="Add" (click)="addTab()" [disabled]="!tabNameIsUnique()"></button>
+        </div> 
+    </div>  
+    <div class="ui-g-12"> 
+        <p-orderList [(value)]="temporaryTabList" dragdrop="true">
+            <ng-template let-tab pTemplate="item">
+                <div class="ui-g form-group" > 
+                    <div class="ui-g-8">  
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [(ngModel)]="tab.name">                    
+                        </span>
+                    </div>
+                    <div class="ui-g-4">  
+                        <span class="md-inputfield">
+                            <button pButton type="button" class='red-btn'  icon="ui-icon-delete" (click)="deleteTab(tab)"></button>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+        </p-orderList>               
+    </div> 
+    <div class="ui-g-12"> 
+        <div class="ui-g-8"> 
+        </div>           
+        <div class="ui-g-4">  
+            <span class="md-inputfield">
+                <button pButton type="button" class='green-btn'  icon="ui-icon-check" label="Save" (click)="save()"></button>
+            </span>
+        </div>
+    </div>       
+</div>
