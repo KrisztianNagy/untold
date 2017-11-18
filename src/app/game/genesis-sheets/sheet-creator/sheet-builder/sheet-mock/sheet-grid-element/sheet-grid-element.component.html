@@ -1,5 +1,5 @@
 
-<div class="pure-g" *ngIf="sheet.type === 'grid' || sheet.type === 'root'"  [style.background-color]="hovered ? 'lightgray' : ''" >
+<div *ngIf="sheet.type === 'grid' || sheet.type === 'root'"  [style.background-color]="hovered ? 'lightgray' : ''" >
     <legend *ngIf="sheet.content">[{{sheet.content ? sheet.content : '[PROPERTY]'}}]</legend>
   <app-sheet-grid-element *ngFor="let sheetElement of sheet.innerElements; let i = index"  [sheet]="sheetElement"
         [class]="sheetElement.type === 'grid' ? 'sheet-grid pure-u-' + sheetElement.numerator + (sheetElement.denominator ? '-' + sheetElement.denominator : '' ) : 'pure-u-1'" 
@@ -10,13 +10,13 @@
   </div>
 </div> 
 
-<div *ngIf="sheet.type === 'text'" class="pure-g" (click)="sheetElementClick($event)">
+<div *ngIf="sheet.type === 'text'" (click)="sheetElementClick($event)">
   <div class="pure-u-1" style="text-align: center">
     <span (click)="sheetElementClick($event)" style="text-align: center;letter-spacing: 0;cursor: pointer;" (mouseenter)="hover(true)"  (mouseleave)="hover(false)">{{sheet.content ? sheet.content : '[TEXT]'}}</span>
   </div>
 </div>
 
-<div *ngIf="sheet.type === 'property'" class="pure-g" (click)="sheetElementClick($event)">
+<div *ngIf="sheet.type === 'property'" (click)="sheetElementClick($event)">
   <div class="pure-u-1" style="text-align: center">
     <div class="sheet-property" (click)="sheetElementClick($event)"  >
       <span *ngIf="!sheet.definitionOccurenceGuid"  >
@@ -31,6 +31,13 @@
             <input id="{{'bool-' + sheet.id}}" type="checkbox"> {{sheet.content}}
           </label>
         </div>
+        <div *ngIf="sheet.propertyType === 'choice'">
+            <label for="{{'choice-' + sheet.id}}">
+                <select id="{{'choice-' + sheet.id}}" class="pure-input-1-2" readonly="readonly" style="width: 100%">
+                    <option>{{sheet.content}}</option>
+                </select>
+            </label>
+          </div>
       </div>
       
       <div *ngIf="sheet.definitionOccurenceGuid &&sheet.isList">

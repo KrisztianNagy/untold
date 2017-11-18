@@ -15,7 +15,7 @@
       </div>
   </div>
 </div>
-<p-tabView >    
+<p-tabView (onChange)="onTabChange($event)">    
   <p-tabPanel header="Builder">
     <div class="ui-g">
       <div class="ui-g-12">
@@ -35,7 +35,7 @@
     </div>
   </p-tabPanel>  
   <p-tabPanel header="Preview" [rightIcon]="buildResultIcon">
-     
+    <app-sheet-viewer *ngIf="visiblePreview" [model]="model" [html]="sheetHtml" [css]="sheetCss" [options]="options" [definition]="definition" (entityChangedEvent)="onModelUpdated($event)" (onBuildCompleted)="onBuildCompleted($event)" (commandExecuted)="onCommandExecuted($event)"></app-sheet-viewer>
   </p-tabPanel>
 </p-tabView>
 <p-sidebar [(visible)]="sheetTabVisible && definition" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">

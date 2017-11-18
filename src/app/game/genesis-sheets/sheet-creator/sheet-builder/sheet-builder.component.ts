@@ -6,6 +6,7 @@ import { SheetElement, SheetElementOperation } from '../../../../shared/models/s
 import { Sheet } from '../../../../store/models/sheet';
 import { Untold } from '../../../../shared/models/backend-export';
 import { RealmDefinitionService } from '../../../../store/services/realm-definition.service';
+import { DefinitionEnhancerService } from '../../../../shared/services/expressions/definition-enhancer.service';
 
 @Component({
   selector: 'app-sheet-builder',
@@ -25,8 +26,9 @@ export class SheetBuilderComponent implements OnInit {
   addTextValue: string;
   targetDefinition: Untold.ClientDefinition;
   pickedDefinition: Untold.ClientDefinition;
-  
-  constructor(private realmDefinitionService: RealmDefinitionService) { }
+
+  constructor(private realmDefinitionService: RealmDefinitionService,
+              private definitionEnhancerService: DefinitionEnhancerService) { }
 
   ngOnInit() {
 
@@ -45,17 +47,23 @@ export class SheetBuilderComponent implements OnInit {
     this.editorVisible = true;
     this.selectedSheetElement = event;
     this.addGridSize = this.gridSizes[0].value;
-    this.updateGridSize = this.gridSizes[this.getGridChoicePosition(event.numerator, event.denominator)];
+    this.updateGridSize = this.gridSizes[this.getGridChoicePosition(event.numerator, event.denominator)].value;
     this.addTextValue = '';
 
-    this.getContainerDefinition();
+    // tslint:disable-next-line:max-line-length
+    if (this.selectedSheetElement.parentDefinitionOccuranceGuid) {
+      const occurance = this.definitionEnhancerService.getInnerDefinition(<Untold.ClientInnerDefinition> this.definition, this.selectedSheetElement.parentDefinitionOccuranceGuid);
+      this.pickedDefinition = this.definitionEnhancerService.findDefinitionIfExist(this.definition, <string> occurance.definitionGuid);
+    } else {
+      this.pickedDefinition = this.definition;
+    }
   }
 
   getGridChoicePosition(numerator: number, denominator: number) {
     let selectedPosition = 0;
 
     this.gridSizes.forEach((item, index) => {
-      if (item.value.numerator === numerator &&item.value.denominator === denominator) {
+      if (item.value.numerator === numerator && item.value.denominator === denominator) {
         selectedPosition = index;
       }
     });
@@ -188,44 +196,4 @@ export class SheetBuilderComponent implements OnInit {
     this.selectedSheetElement.propertyType = definition.dataType;
     this.selectedSheetElement.isList = definition.isList;
   }
-
-  getContainerDefinition() {
-    this.pickedDefinition = this.definition;
-    // tslint:disable-next-line:max-line-length
-    const cointainerDef = this.getGuidFromDefinition(<Untold.ClientInnerDefinition> this.definition, this.selectedSheetElement.parentDefinitionOccuranceGuid);
-
-    const modules = this.realmDefinitionService.getCurrent();
-    modules.forEach(mod => {
-        mod.definitions.forEach(def => {
-            if (cointainerDef && def.definitionGuid === cointainerDef.definitionGuid) {
-                this.pickedDefinition = def;
-            }
-        });
-    });
-  }
-
-  getGuidFromDefinition(definition: Untold.ClientInnerDefinition, occuranceGuid: string): Untold.ClientInnerDefinition {
-    let found: Untold.ClientInnerDefinition = null;
-
-    if (definition.definitions) {
-      definition.definitions.forEach(def => {
-        if (found) {
-          return;
-        }
-
-        if (def.occurrenceGuid === occuranceGuid) {
-          found = def;
-          return;
-        }
-        const childCheck = this.getGuidFromDefinition(def, occuranceGuid);
-
-        if (childCheck) {
-          found = childCheck;
-        }
-      });
-    }
-
-    return found;
-  }
-
 }

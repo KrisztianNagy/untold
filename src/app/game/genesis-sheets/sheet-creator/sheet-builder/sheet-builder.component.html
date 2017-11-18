@@ -36,13 +36,13 @@
                                     <p-dropdown [options]="gridSizes" [(ngModel)]="updateGridSize" (onChange)="gridSizeUpdated()"></p-dropdown>
                                 </div>
                                 <div class="ui-g-4" *ngIf="selectedSheetElement.type === 'property'">
-                                    <button pButton type="button" class='green-btn' (click)="showDefinitionPicker()" label="Set Property Mapping" icon="ui-icon-text-fields"></button>           
+                                    <button pButton type="button" class='green-btn' (click)="showDefinitionPicker()" label="Pick" icon="ui-icon-text-fields"></button>           
                                 </div>
                             </div>
                         </div>  
                     </div>                     
                 </p-accordionTab>
-                <p-accordionTab header="Add Grid" *ngIf="selectedSheetElement.type === 'root' || selectedSheetElement.type === 'grid'">
+                <p-accordionTab header="Add Grid" *ngIf="selectedSheetElement.type === 'root' || selectedSheetElement.type === 'grid' || (selectedSheetElement.type === 'property' && selectedSheetElement.isList)">
                     <div class="ui-g">
                         <div class="ui-g-12" >
                             <div class="ui-g-8">
@@ -52,10 +52,10 @@
                                 <button pButton type="button" class='green-btn' (click)="addGrid(selectedSheetElement, 'add')" label="Add Inside" icon="ui-icon-exposure-plus-1"></button>                            
                             </div>
                             <div class="ui-g-4">
-                                <button pButton type="button" class='green-btn' (click)="addGrid(selectedSheetElement, 'addbefore')" label="Add Before" icon="ui-icon-navigate-before"></button>                            
+                                <button pButton type="button" class='green-btn' (click)="addGrid(selectedSheetElement, 'addbefore')" label="Add Before" icon="ui-icon-navigate-before" *ngIf="selectedSheetElement.type === 'grid'"></button>                            
                             </div>
                             <div class="ui-g-4">
-                                <button pButton type="button" class='green-btn' (click)="addGrid(selectedSheetElement, 'addafter')" label="Add After" icon="ui-icon-navigate-next"></button>                            
+                                <button pButton type="button" class='green-btn' (click)="addGrid(selectedSheetElement, 'addafter')" label="Add After" icon="ui-icon-navigate-next" *ngIf="selectedSheetElement.type === 'grid'"></button>                            
                             </div>
                         </div>     
                     </div>                   

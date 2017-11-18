@@ -9,6 +9,7 @@ import { SheetEntityService } from '../../../shared/services/expressions/sheet-e
 import { SheetService } from '../../../store/services/sheet.service';
 import { EntityService } from '../../../store/services/entity.service';
 import { EntityEnhancerService } from '../../../shared/services/expressions/entity-enhancer.service';
+import { SheetEnhancerService } from '../../../shared/services/expressions/sheet-enhancer.service';
 import { DefinitionEnhancerService } from '../../../shared/services/expressions/definition-enhancer.service';
 import { GameWorkflowSheetService } from '../../../shared/services/game-flow/game-workflow-sheet.service';
 import { RealmDefinitionService } from '../../../store/services/realm-definition.service';
@@ -50,6 +51,9 @@ export class SheetCreatorComponent implements OnInit, OnDestroy {
   private tabIndex = 0;
   private sheetTabVisible = false;
   private definitionPickerVisible: boolean;
+  private visiblePreview: boolean;
+  private sheetHtml: string;
+  private sheetCss: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -60,7 +64,8 @@ export class SheetCreatorComponent implements OnInit, OnDestroy {
               private definitionEnhancerService: DefinitionEnhancerService,
               private changeDetectorRef: ChangeDetectorRef,
               private gameWorkflowSheetService: GameWorkflowSheetService,
-              private realmDefinitionService: RealmDefinitionService) { }
+              private realmDefinitionService: RealmDefinitionService,
+              private sheetEnhancerService: SheetEnhancerService) { }
 
   ngOnInit() {
     this.routeSub = this.route.params.subscribe(params => {
@@ -176,5 +181,23 @@ export class SheetCreatorComponent implements OnInit, OnDestroy {
 
   showSheetTab() {
     this.sheetTabVisible = true;
+  }
+
+  onTabChange(event) {
+    this.visiblePreview = event.index === 1;
+
+    if (this.visiblePreview) {
+      this.sheetCss = this.sheetEnhancerService.getSheetCss(this.sheet);
+      this.sheetHtml = this.sheetEnhancerService.getSheetHtml(this.sheet, this.definition);
+    }
+  }
+
+  onBuildCompleted(event: boolean) {
+    console.log('sheet completed');
+    this.changeDetectorRef.markForCheck();
+  }
+
+  onCommandExecuted(commandName: string) {
+    
   }
 }

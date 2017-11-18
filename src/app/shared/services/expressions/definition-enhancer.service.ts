@@ -140,4 +140,43 @@ export class DefinitionEnhancerService {
 
     return subject;
   }
+
+  findDefinitionIfExist(definition: Untold.ClientDefinition, definitionGuid: string) {
+    let pickedDefinition = definition;
+
+    const modules = this.realmDefinitionService.getCurrent();
+    modules.forEach(mod => {
+        mod.definitions.forEach(def => {
+            if (def.definitionGuid === definitionGuid) {
+                pickedDefinition = def;
+            }
+        });
+    });
+
+    return pickedDefinition;
+  }
+
+  getInnerDefinition(definition: Untold.ClientInnerDefinition, occuranceGuid: string): Untold.ClientInnerDefinition {
+    let found: Untold.ClientInnerDefinition = null;
+
+    if (definition.definitions) {
+      definition.definitions.forEach(def => {
+        if (found) {
+          return;
+        }
+
+        if (def.occurrenceGuid === occuranceGuid) {
+          found = def;
+          return;
+        }
+        const childCheck = this.getInnerDefinition(def, occuranceGuid);
+
+        if (childCheck) {
+          found = childCheck;
+        }
+      });
+    }
+
+    return found;
+  }
 }
