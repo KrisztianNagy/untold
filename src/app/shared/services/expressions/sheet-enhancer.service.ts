@@ -169,6 +169,10 @@ export class SheetEnhancerService {
       elementHtml += this.getSheetPropertyContent(sheetElement, definition, modelMapping, listNumber);
     }
 
+    if (sheetElement.type === 'button') {
+      elementHtml += this.getSheetButtonContent(sheetElement, definition, modelMapping, listNumber);
+    }
+
     return elementHtml;
   }
 
@@ -286,6 +290,21 @@ export class SheetEnhancerService {
         elementHtml += '</select>';
       }
     }
+
+    return elementHtml;
+  }
+
+  // tslint:disable-next-line:max-line-length
+  getSheetButtonContent(sheetElement: SheetElement, definition: Untold.ClientInnerDefinition, modelMapping: string, listNumber: number): string {
+    let ngExtend = '';
+
+    if (sheetElement.chat) {
+      ngExtend = '(click)="chat(\'' + sheetElement.chat + '\')"';
+    }
+
+    let elementHtml = '<button class="pure-button" ' + ngExtend + '>'
+    elementHtml += sheetElement.content ? sheetElement.content : 'Button';
+    elementHtml += '</button>';
 
     return elementHtml;
   }

@@ -131,6 +131,22 @@ export class SheetBuilderComponent implements OnInit {
     this.onSheetElementUpdate.emit(this.sheetElement);
   }
 
+  addButton(sheetElement: SheetElement) {
+    const maxId = this.getMaxId(this.sheetElement);
+
+    const element: SheetElement = {
+      type: 'button',
+      id: maxId + 1,
+      content: '',
+      innerElements: [],
+      parentDefinitionOccuranceGuid: sheetElement.definitionOccurenceGuid || sheetElement.parentDefinitionOccuranceGuid || null
+    }
+
+    this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: 'add', subject: element, targetId: sheetElement.id});
+    this.editorVisible = false;
+    this.onSheetElementUpdate.emit(this.sheetElement);
+  }
+
   update(sheetElement: SheetElement) {
     this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: 'update', subject: sheetElement, targetId: sheetElement.id});
     this.editorVisible = false;

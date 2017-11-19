@@ -12,7 +12,7 @@ export class SheetElement {
     mapping?: string;
     isList?: boolean;
     propertyType?: string;
-    
+    chat?: string;
 }
 
 export class SheetElementOperation {

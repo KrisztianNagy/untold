@@ -32,11 +32,19 @@
                                     <label>{{selectedSheetElement.type === 'grid' ? 'Legend' : 'Label'}}</label>
                                     </span>
                                 </div>
-                                <div class="ui-g-6">
+                                <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'grid'">
                                     <p-dropdown [options]="gridSizes" [(ngModel)]="updateGridSize" (onChange)="gridSizeUpdated()"></p-dropdown>
                                 </div>
-                                <div class="ui-g-4" *ngIf="selectedSheetElement.type === 'property'">
+                                <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'property'">
                                     <button pButton type="button" class='green-btn' (click)="showDefinitionPicker()" label="Pick" icon="ui-icon-text-fields"></button>           
+                                </div>
+                                <div class="ui-g-12" *ngIf="selectedSheetElement.type === 'button'">
+                                    <div class="ui-g-6">   
+                                        <span class="md-inputfield">             
+                                            <input type="text" pInputText [(ngModel)]="selectedSheetElement.chat">
+                                        <label>Command</label>
+                                        </span>
+                                    </div>                                              
                                 </div>
                             </div>
                         </div>  
@@ -68,6 +76,13 @@
                             </div>
                             <div class="ui-g-6">
                                 <button pButton type="button" class='green-btn' (click)="addPropertyControl(selectedSheetElement)" label="Add Property" icon="ui-icon-text-fields"></button>           
+                            </div>
+                        </div>
+                        <div class="ui-g-12">
+                            <div class="ui-g-6">
+                                <button pButton type="button" class='green-btn' (click)="addButton(selectedSheetElement)" label="Add Button" icon="ui-icon-text-fields"></button>           
+                            </div>
+                            <div class="ui-g-6">
                             </div>
                         </div>
                     </div>

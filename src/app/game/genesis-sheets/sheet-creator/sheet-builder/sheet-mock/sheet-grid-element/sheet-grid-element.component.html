@@ -15,6 +15,11 @@
     <span (click)="sheetElementClick($event)" style="text-align: center;letter-spacing: 0;cursor: pointer;" (mouseenter)="hover(true)"  (mouseleave)="hover(false)">{{sheet.content ? sheet.content : '[TEXT]'}}</span>
   </div>
 </div>
+<div *ngIf="sheet.type === 'button'" (click)="sheetElementClick($event)">
+  <div class="pure-u-1">
+    <button  (click)="sheetElementClick($event)" class="pure-button" (mouseenter)="hover(true)"  (mouseleave)="hover(false)">{{sheet.content ? sheet.content : '[BUTTON]'}}</button>
+  </div>
+</div>
 
 <div *ngIf="sheet.type === 'property'" (click)="sheetElementClick($event)">
   <div class="pure-u-1" style="text-align: center">

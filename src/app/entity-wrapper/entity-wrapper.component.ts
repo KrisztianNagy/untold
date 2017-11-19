@@ -12,6 +12,7 @@ import { Sheet } from '../store/models/sheet';
 import { Untold } from '../shared/models/backend-export';
 import { WebWorkerService } from '../shared/services/web-worker.service';
 import { GameWorkflowChatService } from '../shared/services/game-flow/game-workflow-chat.service';
+import { SheetEnhancerService } from '../shared/services/expressions/sheet-enhancer.service';
 
 @Component({
   selector: 'app-entity-wrapper',
@@ -25,6 +26,8 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
   entity: GenesisEntity;
   model: any;
   sheet: Sheet;
+  sheetHtml: string;
+  sheetCss: string;
   choiceOptions: object;
   definition: Untold.ClientDefinition;
   private entitySub: any;
@@ -36,6 +39,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
               private definitionEnhancerService: DefinitionEnhancerService,
               private gameWorkflowEntityService: GameWorkflowEntityService,
               private sheetEntityService: SheetEntityService,
+              private sheetEnhancerService: SheetEnhancerService,
               private sheetService: SheetService,
               private webWorkerService: WebWorkerService,
               private gameWorkflowChatService: GameWorkflowChatService,
@@ -65,6 +69,8 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
                     this.sheetService.getCurrent().filter(sh => sh.id === ent.sheetId)
                       .forEach(sheet => {
                         this.sheet = sheet;
+                        this.sheetCss = this.sheetEnhancerService.getSheetCss(this.sheet);
+                        this.sheetHtml = this.sheetEnhancerService.getSheetHtml(this.sheet, this.definition);
                       });
                   } else {
                     this.hasSheet = false;
