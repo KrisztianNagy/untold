@@ -89,7 +89,7 @@ export class GameWorkflowEntityService {
     .subscribe(loadedEntity => {
       this.entityEnhancerService.updateEntityDefinition(loadedEntity);
       this.entityEnhancerService.recalculate(loadedEntity).subscribe(calculated => {
-        loadedEntity.entity = calculated;
+        loadedEntity.entity = calculated.entity;
         this.entityService.addEntity(calculated);
       });
     });
