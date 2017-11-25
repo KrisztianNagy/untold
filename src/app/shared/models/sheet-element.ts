@@ -13,6 +13,7 @@ export class SheetElement {
     isList?: boolean;
     propertyType?: string;
     chat?: string;
+    listElementLabelResolve?: string;
 }
 
 export class SheetElementOperation {

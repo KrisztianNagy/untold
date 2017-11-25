@@ -106,7 +106,7 @@ export class SheetEnhancerService {
     return subject;
   }
 
-  getSheetHtml(sheet: Sheet, definition: Untold.ClientDefinition) {
+  getSheetHtml(sheet: Sheet, definitions: Untold.ClientInnerDefinition[]) {
     // tslint:disable-next-line:max-line-length
     let baseHtml = `<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
 
@@ -114,14 +114,14 @@ export class SheetEnhancerService {
     if (sheet.json && sheet.json.length) {
       if (sheet.json.length === 1) {
         baseHtml += '<div class="pure-form"><div class="pure-g">';
-        baseHtml += this.getSheetContent(sheet.json[0].sheet, <Untold.ClientInnerDefinition> definition, 'entity', 0);
+        baseHtml += this.getSheetContent(sheet.json[0].sheet, definitions, 'entity', 0);
         baseHtml += '</div></div>';
       } else {
         baseHtml += this.getSheetTabHeaderHthml(sheet);
 
         baseHtml += sheet.json.map((tab, index) => {
           let tabHtml = '<section id="content' + (index + 1) + '" class="tab-section">';
-          tabHtml += this.getSheetContent(tab.sheet, <Untold.ClientInnerDefinition> definition, 'entity', 0);
+          tabHtml += this.getSheetContent(tab.sheet, definitions, 'entity', 0);
           tabHtml += '</section>';
 
           return tabHtml;
@@ -150,37 +150,38 @@ export class SheetEnhancerService {
     return '';
   }
 
-  getSheetContent(sheetElement: SheetElement, definition: Untold.ClientInnerDefinition, modelMapping: string, listNumber: number): string {
-    let elementHtml = ''
+  // tslint:disable-next-line:max-line-length
+  getSheetContent(sheetElement: SheetElement, definitions: Untold.ClientInnerDefinition[], modelMapping: string, listNumber: number): string {
+    let elementHtml = '';
 
     if (sheetElement.type === 'root') {
-      elementHtml += this.getSheetRootContent(sheetElement, definition, modelMapping, listNumber);
+      elementHtml += this.getSheetRootContent(sheetElement, definitions, modelMapping, listNumber);
     }
 
     if (sheetElement.type === 'grid') {
-      elementHtml += this.getSheetGridContent(sheetElement, definition, modelMapping, listNumber);
+      elementHtml += this.getSheetGridContent(sheetElement, definitions, modelMapping, listNumber);
     }
 
     if (sheetElement.type === 'text') {
-      elementHtml += this.getSheetTextContent(sheetElement, definition, modelMapping, listNumber);
+      elementHtml += this.getSheetTextContent(sheetElement, definitions, modelMapping, listNumber);
     }
 
     if (sheetElement.type === 'property') {
-      elementHtml += this.getSheetPropertyContent(sheetElement, definition, modelMapping, listNumber);
+      elementHtml += this.getSheetPropertyContent(sheetElement, definitions, modelMapping, listNumber);
     }
 
     if (sheetElement.type === 'button') {
-      elementHtml += this.getSheetButtonContent(sheetElement, definition, modelMapping, listNumber);
+      elementHtml += this.getSheetButtonContent(sheetElement, definitions, modelMapping, listNumber);
     }
 
     return elementHtml;
   }
 
   // tslint:disable-next-line:max-line-length
-  getSheetRootContent(sheetElement: SheetElement, definition: Untold.ClientInnerDefinition, modelMapping: string, listNumber: number): string {
+  getSheetRootContent(sheetElement: SheetElement, definitions: Untold.ClientInnerDefinition[], modelMapping: string, listNumber: number): string {
     let elementHtml = '<div >';
     elementHtml += sheetElement.innerElements.map(element => {
-      return(this.getSheetContent(element, definition, modelMapping, listNumber));
+      return(this.getSheetContent(element, definitions, modelMapping, listNumber));
     }).join('');
     elementHtml += '</div>';
 
@@ -188,7 +189,8 @@ export class SheetEnhancerService {
   }
 
   // tslint:disable-next-line:max-line-length
-  getSheetGridContent(sheetElement: SheetElement, definition: Untold.ClientInnerDefinition, modelMapping: string, listNumber: number): string {
+  getSheetGridContent(sheetElement: SheetElement, definitions: Untold.ClientInnerDefinition[], modelMapping: string, listNumber: number): string {
+    
     // tslint:disable-next-line:max-line-length
     let elementHtml = '<div class="pure-u-' + sheetElement.numerator + (sheetElement.denominator ? '-' + sheetElement.denominator : '' ) + '">';
 
@@ -197,7 +199,7 @@ export class SheetEnhancerService {
     }
 
     elementHtml += sheetElement.innerElements.map(element => {
-      return(this.getSheetContent(element, definition, modelMapping, listNumber));
+      return(this.getSheetContent(element, definitions, modelMapping, listNumber));
     }).join('');
     elementHtml += '</div>';
 
@@ -205,7 +207,7 @@ export class SheetEnhancerService {
   }
 
   // tslint:disable-next-line:max-line-length
-  getSheetTextContent(sheetElement: SheetElement, definition: Untold.ClientInnerDefinition, modelMapping: string, listNumber: number): string {
+  getSheetTextContent(sheetElement: SheetElement, definitions: Untold.ClientInnerDefinition[], modelMapping: string, listNumber: number): string {
     let elementHtml = '<div style="text-align: center">';
     elementHtml += '<span style="text-align: center;letter-spacing: 0;">' + sheetElement.content + '</span>';
     elementHtml += '</div>';
@@ -214,9 +216,12 @@ export class SheetEnhancerService {
   }
 
   // tslint:disable-next-line:max-line-length
-  getSheetPropertyContent(sheetElement: SheetElement, definition: Untold.ClientInnerDefinition, modelMapping: string, listNumber: number): string {
+  getSheetPropertyContent(sheetElement: SheetElement, definitions: Untold.ClientInnerDefinition[], modelMapping: string, listNumber: number): string {
     // tslint:disable-next-line:max-line-length
-    const selectedDefinition = this.definitionEnhancerService.getInnerDefinition(definition, sheetElement.definitionOccurenceGuid);
+    const lastDefinition = definitions[definitions.length - 1];
+
+    const selectedDefinition = this.definitionEnhancerService.getInnerDefinition(lastDefinition, sheetElement.definitionOccurenceGuid);
+    definitions = [...definitions, selectedDefinition];
     modelMapping += '[\'' + selectedDefinition.name + '\']';
     const htmlId = selectedDefinition.name.replace(/ /g, '_');
 
@@ -234,7 +239,7 @@ export class SheetEnhancerService {
       }
 
       elementHtml += sheetElement.innerElements.map(element => {
-        return(this.getSheetContent(element, definition, modelMapping, listNumber));
+        return(this.getSheetContent(element, definitions, modelMapping, listNumber));
       }).join('');
 
       elementHtml += '</div>';
@@ -273,7 +278,7 @@ export class SheetEnhancerService {
         '[(ngModel)]="' + modelMapping + '"';
 
         elementHtml += '<label for="' + htmlId + '">';
-        elementHtml += '<input id="' + htmlId + '" type="checkbox" ' + ngExtend + '>' + sheetElement.content
+        elementHtml += '<input id="' + htmlId + '" type="checkbox" ' + ngExtend + '>' + sheetElement.content;
         elementHtml += '</label>';
 
         elementHtml += '<input type="number"  id="' + htmlId + '" ' + ngExtend + '>';
@@ -286,7 +291,7 @@ export class SheetEnhancerService {
 
         // tslint:disable-next-line:max-line-length
         elementHtml += '<select type="text" [(ngModel)]="' + modelMapping + '" id="' + htmlId + '" class="pure-u-23-24">';
-        elementHtml += '<option *ngFor="let choiceOption of getChoiceOptions(' + modelMapping + ')"> {{choiceOption}}</option>'
+        elementHtml += '<option *ngFor="let choiceOption of getChoiceOptions(' + modelMapping + ')"> {{choiceOption}}</option>';
         elementHtml += '</select>';
       }
     }
@@ -295,15 +300,31 @@ export class SheetEnhancerService {
   }
 
   // tslint:disable-next-line:max-line-length
-  getSheetButtonContent(sheetElement: SheetElement, definition: Untold.ClientInnerDefinition, modelMapping: string, listNumber: number): string {
+  getSheetButtonContent(sheetElement: SheetElement, definitions: Untold.ClientInnerDefinition[], modelMapping: string, listNumber: number): string {
+    const lastDefinition = definitions[definitions.length - 1];
     let ngExtend = '';
 
     if (sheetElement.chat) {
       ngExtend = '(click)="chat(\'' + sheetElement.chat + '\')"';
     }
 
-    let elementHtml = '<button class="pure-button" ' + ngExtend + '>'
-    elementHtml += sheetElement.content ? sheetElement.content : 'Button';
+    let elementHtml = '<button class="pure-button" ' + ngExtend + '>';
+
+    const inPredefinedList = definitions.some(def => def.isList && def.isPredefinedList);
+    if (sheetElement.listElementLabelResolve && inPredefinedList) {
+      const lists = definitions.filter(def => def.isList);
+      const indexOf = lists.findIndex(def => def.occurrenceGuid === sheetElement.listElementLabelResolve);
+
+      if (indexOf > -1) {
+        elementHtml += '{{list' + (indexOf + 1) + '}}';
+      } else {
+        elementHtml += 'Missing';
+      }
+
+    } else {
+      elementHtml += sheetElement.content ? sheetElement.content : 'Button';
+    }
+
     elementHtml += '</button>';
 
     return elementHtml;

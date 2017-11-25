@@ -1,6 +1,6 @@
 <app-sheet-mock (onClick)="childClick($event)" [sheetElement]="sheetElement" *ngIf="sheetElement"></app-sheet-mock>
 <p-sidebar [(visible)]="definitionPickerVisible"[fullScreen]="true">
-    <app-genesis-definitions-chart *ngIf="definitionPickerVisible" [simplified]="true" [definition]="pickedDefinition" (onDefinitionClick)="onDefinitionClick($event)"></app-genesis-definitions-chart>
+    <app-genesis-definitions-chart *ngIf="definitionPickerVisible" [simplified]="true" [definition]="elementScopeDefinition" (onDefinitionClick)="onDefinitionClick($event)"></app-genesis-definitions-chart>
 </p-sidebar>
 
 <p-sidebar [(visible)]="editorVisible" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
@@ -11,6 +11,7 @@
                 <h3 *ngIf="selectedSheetElement.type === 'grid'">Grid ({{selectedSheetElement.numerator + (selectedSheetElement.denominator ? '-' + selectedSheetElement.denominator : '')}})</h3>
                 <h3 *ngIf="selectedSheetElement.type === 'text'">Text - {{selectedSheetElement.content}}</h3>
                 <h3 *ngIf="selectedSheetElement.type === 'property'">Property - {{selectedSheetElement.content}}</h3>
+                <h3 *ngIf="selectedSheetElement.type === 'button'">Button - {{selectedSheetElement.content}}</h3>
             </div>
             <br/>
 
@@ -26,17 +27,25 @@
                         </div>
                         <div class="ui-g-12">
                             <div class="ui-g form-group" > 
-                                <div class="ui-g-6">   
-                                    <span class="md-inputfield">             
-                                        <input type="text" pInputText [(ngModel)]="selectedSheetElement.content">
-                                    <label>{{selectedSheetElement.type === 'grid' ? 'Legend' : 'Label'}}</label>
-                                    </span>
-                                </div>
-                                <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'grid'">
-                                    <p-dropdown [options]="gridSizes" [(ngModel)]="updateGridSize" (onChange)="gridSizeUpdated()"></p-dropdown>
-                                </div>
-                                <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'property'">
-                                    <button pButton type="button" class='green-btn' (click)="showDefinitionPicker()" label="Pick" icon="ui-icon-text-fields"></button>           
+                                <div class="ui-g-12">
+                                    <div class="ui-g-6">   
+                                        <span class="md-inputfield">             
+                                            <input type="text" pInputText [(ngModel)]="selectedSheetElement.content">
+                                        <label>{{selectedSheetElement.type === 'grid' ? 'Legend' : 'Label'}}</label>
+                                        </span>
+                                    </div>
+                                    <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'button' && elementScopeDefinitionOccurance.isList && elementScopeDefinitionOccurance.isPredefinedList">   
+                                        <div class="ui-g-12"><p-radioButton name="group1" value="" label="Use Label" [(ngModel)]="selectedSheetElement.listElementLabelResolve" inputId="optnull"></p-radioButton></div>
+                                        <div class="ui-g-12" *ngFor="let chainElement of predefinedListChain; let i = index;">
+                                            <p-radioButton name="group1" value="{{chainElement.occurrenceGuid}}" label="Use {{chainElement.name}} list" [(ngModel)]="selectedSheetElement.listElementLabelResolve" inputId="opt{{i}}"></p-radioButton>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'grid'">
+                                        <p-dropdown [options]="gridSizes" [(ngModel)]="updateGridSize" (onChange)="gridSizeUpdated()"></p-dropdown>
+                                    </div>
+                                    <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'property'">
+                                        <button pButton type="button" class='green-btn' (click)="showDefinitionPicker()" label="Pick" icon="ui-icon-text-fields"></button>           
+                                    </div>
                                 </div>
                                 <div class="ui-g-12" *ngIf="selectedSheetElement.type === 'button'">
                                     <div class="ui-g-6">   

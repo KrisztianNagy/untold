@@ -188,7 +188,7 @@ export class SheetCreatorComponent implements OnInit, OnDestroy {
 
     if (this.visiblePreview) {
       this.sheetCss = this.sheetEnhancerService.getSheetCss(this.sheet);
-      this.sheetHtml = this.sheetEnhancerService.getSheetHtml(this.sheet, this.definition);
+      this.sheetHtml = this.sheetEnhancerService.getSheetHtml(this.sheet, [<any> this.definition]);
     }
   }
 
@@ -198,6 +198,6 @@ export class SheetCreatorComponent implements OnInit, OnDestroy {
   }
 
   onCommandExecuted(commandName: string) {
-    
+
   }
 }

@@ -25,8 +25,11 @@ export class SheetBuilderComponent implements OnInit {
   updateGridSize: any;
   addTextValue: string;
   targetDefinition: Untold.ClientDefinition;
-  pickedDefinition: Untold.ClientDefinition;
-
+  elementScopeDefinition: Untold.ClientDefinition;
+  elementScopeDefinitionOccurance: Untold.ClientInnerDefinition;
+  occuranceChain: Untold.ClientInnerDefinition[];
+  listChain: Untold.ClientInnerDefinition[];
+  predefinedListChain: Untold.ClientInnerDefinition[];
   constructor(private realmDefinitionService: RealmDefinitionService,
               private definitionEnhancerService: DefinitionEnhancerService) { }
 
@@ -49,13 +52,26 @@ export class SheetBuilderComponent implements OnInit {
     this.addGridSize = this.gridSizes[0].value;
     this.updateGridSize = this.gridSizes[this.getGridChoicePosition(event.numerator, event.denominator)].value;
     this.addTextValue = '';
+    // tslint:disable-next-line:max-line-length
+    this.selectedSheetElement.listElementLabelResolve = this.selectedSheetElement.listElementLabelResolve ? this.selectedSheetElement.listElementLabelResolve : '';
 
     // tslint:disable-next-line:max-line-length
     if (this.selectedSheetElement.parentDefinitionOccuranceGuid) {
-      const occurance = this.definitionEnhancerService.getInnerDefinition(<Untold.ClientInnerDefinition> this.definition, this.selectedSheetElement.parentDefinitionOccuranceGuid);
-      this.pickedDefinition = this.definitionEnhancerService.findDefinitionIfExist(this.definition, <string> occurance.definitionGuid);
+      this.elementScopeDefinitionOccurance = this.definitionEnhancerService.getInnerDefinition(<Untold.ClientInnerDefinition> this.definition, this.selectedSheetElement.parentDefinitionOccuranceGuid);
+      // tslint:disable-next-line:max-line-length
+      this.elementScopeDefinition = this.definitionEnhancerService.findDefinitionIfExist(this.definition, <string> this.elementScopeDefinitionOccurance.definitionGuid);
+
+      // tslint:disable-next-line:max-line-length
+      this.occuranceChain = this.definitionEnhancerService.findDefinitionContainerChain(<Untold.ClientInnerDefinition> this.definition, this.elementScopeDefinitionOccurance);
+
+      this.listChain = this.occuranceChain.filter(element => element.isList);
+      this.predefinedListChain = this.occuranceChain.filter(element => element.isList && element.isPredefinedList);
     } else {
-      this.pickedDefinition = this.definition;
+      this.elementScopeDefinition = this.definition;
+      this.elementScopeDefinitionOccurance = null;
+      this.occuranceChain = [];
+      this.listChain = [];
+      this.predefinedListChain = [];
     }
   }
 
@@ -92,7 +108,7 @@ export class SheetBuilderComponent implements OnInit {
       denominator: this.addGridSize.denominator,
       innerElements: [],
       parentDefinitionOccuranceGuid: sheetElement.definitionOccurenceGuid || sheetElement.parentDefinitionOccuranceGuid || null
-    }
+    };
 
     this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: operation, subject: element, targetId: sheetElement.id});
     this.editorVisible = false;
@@ -108,7 +124,7 @@ export class SheetBuilderComponent implements OnInit {
           content: '',
           innerElements: [],
           parentDefinitionOccuranceGuid: sheetElement.definitionOccurenceGuid || sheetElement.parentDefinitionOccuranceGuid || null
-        }
+        };
 
         this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: 'add', subject: element, targetId: sheetElement.id});
         this.editorVisible = false;
@@ -124,7 +140,7 @@ export class SheetBuilderComponent implements OnInit {
       content: '',
       innerElements: [],
       parentDefinitionOccuranceGuid: sheetElement.definitionOccurenceGuid || sheetElement.parentDefinitionOccuranceGuid || null
-    }
+    };
 
     this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: 'add', subject: element, targetId: sheetElement.id});
     this.editorVisible = false;
@@ -140,7 +156,7 @@ export class SheetBuilderComponent implements OnInit {
       content: '',
       innerElements: [],
       parentDefinitionOccuranceGuid: sheetElement.definitionOccurenceGuid || sheetElement.parentDefinitionOccuranceGuid || null
-    }
+    };
 
     this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: 'add', subject: element, targetId: sheetElement.id});
     this.editorVisible = false;
@@ -171,7 +187,7 @@ export class SheetBuilderComponent implements OnInit {
         cloned.innerElements.push(operation.subject);
       }
 
-      const result = this.rebuildRecursively(child, operation)
+      const result = this.rebuildRecursively(child, operation);
 
       if (result) {
         cloned.innerElements.push(result);
@@ -193,7 +209,7 @@ export class SheetBuilderComponent implements OnInit {
     currentMaxId = element.id > currentMaxId ? element.id : currentMaxId;
 
     element.innerElements.forEach(child => {
-      currentMaxId = this.getMaxId(child, currentMaxId)
+      currentMaxId = this.getMaxId(child, currentMaxId);
     });
 
     return currentMaxId;
