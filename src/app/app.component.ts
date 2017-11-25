@@ -138,7 +138,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         event.preventDefault();
     }
 
-    onChatClick() {
+    onChatClick($event, messages) {
         this.chatVisible = !this.chatVisible;
     }
 

@@ -12,28 +12,28 @@ export class SheetActions {
     static DELETE_SHEET = 'DELETE_SHEET';
 
     addSheets(sheets: Array<Sheet>): Action {
-        return {
+        return <Action> {
             type: SheetActions.SET_SHEETS,
             payload: sheets
         };
     }
 
     addSheet(sheet: Sheet): Action {
-        return {
+        return <Action> {
             type: SheetActions.ADD_SHEET,
             payload: sheet
         };
     }
 
-    updateSheet(entity: Sheet): Action {
-        return {
+    updateSheet(sheet: Sheet): Action {
+        return <Action> {
             type: SheetActions.UPDATE_SHEET,
             payload: sheet
         };
     }
 
-    deleteSheet(entity: Sheet): Action {
-        return {
+    deleteSheet(sheet: Sheet): Action {
+        return <Action> {
             type: SheetActions.DELETE_SHEET,
             payload: sheet
         };

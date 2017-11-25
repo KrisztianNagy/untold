@@ -13,35 +13,35 @@ export class EntityActions {
     static KEEP_ENTITIES = 'KEEP_ENTITIES';
 
     addEntities(entities: Array<Untold.ClientEntity>): Action {
-        return {
+        return <Action> {
             type: EntityActions.SET_ENTITIES,
             payload: entities
         };
     }
 
     addEntity(entity: Untold.ClientEntity): Action {
-        return {
+        return <Action> {
             type: EntityActions.ADD_ENTITY,
             payload: entity
         };
     }
 
     keepEntities(entities: Untold.ClientEntity[]): Action {
-        return {
+        return <Action> {
             type: EntityActions.KEEP_ENTITIES,
             payload: entities
         };
     }
 
     updateEntity(entity: Untold.ClientEntity): Action {
-        return {
+        return <Action> {
             type: EntityActions.UPDATE_ENTITY,
             payload: entity
         };
     }
 
     deleteEntity(entity: Untold.ClientEntity): Action {
-        return {
+        return <Action> {
             type: EntityActions.DELETE_ENTITY,
             payload: entity
         };

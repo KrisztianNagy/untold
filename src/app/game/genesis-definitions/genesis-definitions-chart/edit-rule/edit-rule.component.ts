@@ -30,7 +30,7 @@ export class EditRuleComponent implements OnInit {
   selectedTargetDefinition: string;
   resolvedExpresion: string;
   isReadOnly: boolean;
-  expressionInvokeKey: number = 1;
+  expressionInvokeKey = 1;
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private calculatedExpressionService: CalculatedExpressionService,
@@ -83,12 +83,12 @@ export class EditRuleComponent implements OnInit {
       this.rule.expression = this.rule.expression.substr(0, this.caretPos) + event + this.rule.expression.substr(this.caretPos);
     }
 
-    this.expressionChanged();
+    this.expressionChanged(event);
   }
 
-  expressionChanged() {
+  expressionChanged($event?: any) {
     this.expressionInvokeKey++;
-    let currKey = this.expressionInvokeKey;
+    const currKey = this.expressionInvokeKey;
     console.log('Subscription started - ' + currKey);
     setTimeout(() => {
       this.resolvedExpresion = '';
@@ -161,8 +161,6 @@ export class EditRuleComponent implements OnInit {
             this.testResult = err;
             this.changeDetectorRef.markForCheck();
           });
-
-          
       }
     }, 0);
   }

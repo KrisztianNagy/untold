@@ -151,7 +151,7 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
     this.editNameEntity = JSON.parse(JSON.stringify(entity));
   }
 
-  closeNameEditor(decision: true) {
+  closeNameEditor(decision: boolean) {
     if (decision) {
       this.updateEntityName(this.editNameEntity);
     }

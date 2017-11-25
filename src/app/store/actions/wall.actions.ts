@@ -11,21 +11,21 @@ export class WallActions {
     static SET_WALLS = 'SET_WALLS';
 
     addWall(wall: Wall): Action {
-        return {
+        return <Action> {
             type: WallActions.ADD_WALL,
             payload: wall
         };
     }
 
     updateWall(wall: Wall): Action {
-        return {
+        return <Action> {
             type: WallActions.UPDATE_WALL,
             payload: wall
         };
     }
 
     setWalls(walls: Wall[]): Action {
-        return {
+        return <Action> {
             type: WallActions.SET_WALLS,
             payload: walls
         };

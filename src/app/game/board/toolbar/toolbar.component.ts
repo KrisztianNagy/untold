@@ -25,7 +25,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   private interactionSubscription;
   private selectedTokenSubscription;
-  private game;
+  public game;
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private store: Store<AppStore>,

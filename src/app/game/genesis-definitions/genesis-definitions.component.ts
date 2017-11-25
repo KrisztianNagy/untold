@@ -178,7 +178,7 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
     this.addDefinitionParent = parent;
   }
 
-  closeAddDefinition(decision: true) {
+  closeAddDefinition(decision: boolean) {
     if (decision) {
       const definition: Untold.ClientDefinition = <Untold.ClientDefinition> {
         name: this.definitionName,

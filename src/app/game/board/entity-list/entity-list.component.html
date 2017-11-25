@@ -1,6 +1,6 @@
 
 <span class="md-inputfield">
-    <input type="text" pInputText [(ngModel)]="searchFilter" (change)="filterImages(imgscr)"/>
+    <input type="text" pInputText [(ngModel)]="searchFilter" (change)="filterImages()"/>
     <label>Filter</label>
 </span>
 <p-dataScroller *ngIf="game" [value]="images" [rows]="4" [inline]="true" scrollHeight="400px" [loader]="loadButton" [lazy]="true" (onLazyLoad)="loadData($event)" #imgscr>

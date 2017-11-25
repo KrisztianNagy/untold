@@ -98,7 +98,7 @@ export class EditDefinitionComponent implements OnInit {
       isCalculated: isComplex ?  false : (this.addedMemberIsCalculated ? true : false),
       isList: this.addedMemberIsList,
       occurrenceGuid: null,
-      rules: []
+      rules: [],
     }];
 
     this.selectedDataType = this.availableDataTypes[0];
@@ -110,7 +110,7 @@ export class EditDefinitionComponent implements OnInit {
     this.changeDetectorRef.markForCheck();
   }
 
-  memberNameChanged() {
+  memberNameChanged($event) {
     this.changeDetectorRef.markForCheck();
   }
 

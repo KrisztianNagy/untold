@@ -50,7 +50,7 @@ export class BoardComponent implements OnInit, OnDestroy {
               private resizeRenderService: ResizeRenderService,
               private tokenRenderService: TokenRenderService,
               private interactionService: InteractionService,
-              private gameService: GameService,
+              public gameService: GameService,
               private router: Router,
               private gridService: GridService,
               private realmHubSenderService: RealmHubSenderService,

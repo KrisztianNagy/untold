@@ -190,7 +190,6 @@ import { BoardSideBarComponent } from './side-bar/board-side-bar/board-side-bar.
 import { EntityWrapperComponent } from './entity-wrapper/entity-wrapper.component';
 import { SheetSideBarComponent } from './side-bar/sheet-side-bar/sheet-side-bar.component';
 import { GenesisSheetsComponent } from './game/genesis-sheets/genesis-sheets.component';
-import { EditSheetComponent } from './game/genesis-sheets/edit-sheet/edit-sheet.component';
 import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
 // tslint:disable-next-line:max-line-length
 import { DefinitionListConfigComponent } from './game/genesis-definitions/genesis-definitions-chart/definition-list-config/definition-list-config.component';
@@ -342,7 +341,6 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
         EntityWrapperComponent,
         SheetSideBarComponent,
         GenesisSheetsComponent,
-        EditSheetComponent,
         SheetViewerComponent,
         DefinitionListConfigComponent,
         DefinitionChoiceConfigComponent,
@@ -357,7 +355,6 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
         SheetCreatorComponent,
         SheetGridElementComponent,
         SheetTabListComponent,
-        //AceEditorComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

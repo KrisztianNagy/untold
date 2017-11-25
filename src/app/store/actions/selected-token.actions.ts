@@ -8,7 +8,7 @@ export class SelectedTokenActions {
 
     static SET_SELECTED_TOKEN = 'SET_SELECTED_TOKEN';
     setSelectedToken(token: Token): Action {
-        return {
+        return <Action> {
             type: SelectedTokenActions.SET_SELECTED_TOKEN,
             payload: token
         };

@@ -8,7 +8,7 @@ export class VisibleAreaActions {
 
     static SET_VISIBLEAREA = 'SET_VISIBLEAREA';
     setVisibleArea(visibleArea: VisibleArea): Action {
-        return {
+        return <Action> {
             type: VisibleAreaActions.SET_VISIBLEAREA,
             payload: visibleArea
         };

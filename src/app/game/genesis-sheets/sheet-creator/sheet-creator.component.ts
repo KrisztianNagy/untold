@@ -22,38 +22,38 @@ import { SheetElement } from '../../../shared/models/sheet-element';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SheetCreatorComponent implements OnInit, OnDestroy {
-  private previewVisible: boolean;
-  private sheet: Sheet;
-  private model: any;
-  private buildResultIcon: string;
-  private id: number;
-  private routeSub: any;
-  private sheetSub: any;
-  private entities: Array<SelectItem>;
-  private commands: Array<SelectItem>;
-  private tabList: Array<SelectItem>;
-  private selectedEntity: Untold.ClientEntity;
-  private sheetVisible: boolean;
-  private modelMappings: Array<SelectItem>;
-  private selectedMapping: string;
-  private snippet: any;
-  private displayDefinitionsChart: boolean;
-  private definition: Untold.ClientDefinition;
-  private snippetDefinition: Untold.ClientInnerDefinition;
-  private options: object;
-  private selectedCommand: SheetScript
-  private selectedScript: string;
-  private selectedTab: SheetTab;
-  private commandResult: any;
-  private snippetCollapsed = true;
-  private commandTestFormat: string;
-  private commandTestInput: string;
-  private tabIndex = 0;
-  private sheetTabVisible = false;
-  private definitionPickerVisible: boolean;
-  private visiblePreview: boolean;
-  private sheetHtml: string;
-  private sheetCss: string;
+  previewVisible: boolean;
+  sheet: Sheet;
+  model: any;
+  buildResultIcon: string;
+  id: number;
+  routeSub: any;
+  sheetSub: any;
+  entities: Array<SelectItem>;
+  commands: Array<SelectItem>;
+  tabList: Array<SelectItem>;
+  selectedEntity: Untold.ClientEntity;
+  sheetVisible: boolean;
+  modelMappings: Array<SelectItem>;
+  selectedMapping: string;
+  snippet: any;
+  displayDefinitionsChart: boolean;
+  definition: Untold.ClientDefinition;
+  snippetDefinition: Untold.ClientInnerDefinition;
+  options: object;
+  selectedCommand: SheetScript;
+  selectedScript: string;
+  selectedTab: SheetTab;
+  commandResult: any;
+  snippetCollapsed = true;
+  commandTestFormat: string;
+  commandTestInput: string;
+  tabIndex = 0;
+  sheetTabVisible = false;
+  definitionPickerVisible: boolean;
+  visiblePreview: boolean;
+  sheetHtml: string;
+  sheetCss: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -169,7 +169,7 @@ export class SheetCreatorComponent implements OnInit, OnDestroy {
     }
   }
 
-  private saveSheet() {
+  saveSheet() {
     this.sheet.json = this.tabList.map(tab => tab.value);
     this.gameWorkflowSheetService.saveSheetContent(this.sheet);
   }

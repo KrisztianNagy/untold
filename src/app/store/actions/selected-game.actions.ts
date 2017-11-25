@@ -8,7 +8,7 @@ export class SelectedGameActions {
 
     static SET_SELECTED_GAME = 'SET_SELECTED_GAME';
     setSelectedToken(game: Untold.ClientGameRealmDetails): Action {
-        return {
+        return <Action> {
             type: SelectedGameActions.SET_SELECTED_GAME,
             payload: game
         };

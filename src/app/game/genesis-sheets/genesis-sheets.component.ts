@@ -87,7 +87,7 @@ export class GenesisSheetsComponent implements OnInit, OnDestroy {
     this.editNameSheet = JSON.parse(JSON.stringify(sheet));
   }
 
-  closeNameEditor(decision: true) {
+  closeNameEditor(decision: boolean) {
     if (decision) {
       this.updateSheetName(this.editNameSheet);
     }

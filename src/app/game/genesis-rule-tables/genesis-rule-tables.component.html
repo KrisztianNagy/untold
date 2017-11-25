@@ -32,7 +32,7 @@
         </div>
         
     </div>
-    <div *ngIf="!importMode && selectedTable" class="ui-g-12">           
+    <div *ngIf="!importMode && !!selectedTable" class="ui-g-12">           
         <app-show-rule-table [table]="selectedTable"></app-show-rule-table>                     
     </div>
     <div class="ui-g-12">

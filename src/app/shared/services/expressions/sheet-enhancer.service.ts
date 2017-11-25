@@ -286,7 +286,7 @@ export class SheetEnhancerService {
 
         // tslint:disable-next-line:max-line-length
         elementHtml += '<select type="text" [(ngModel)]="' + modelMapping + '" id="' + htmlId + '" class="pure-u-23-24">';
-        elementHtml += '<option *ngFor="let choiceOption of getChoiceOptions(' + modelMapping + ')">{{choiceOption}}</option>'
+        elementHtml += '<option *ngFor="let choiceOption of getChoiceOptions(' + modelMapping + ')"> {{choiceOption}}</option>'
         elementHtml += '</select>';
       }
     }

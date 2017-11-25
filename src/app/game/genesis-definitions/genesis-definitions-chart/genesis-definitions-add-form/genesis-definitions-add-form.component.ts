@@ -68,7 +68,7 @@ export class GenesisDefinitionsAddFormComponent implements OnInit {
     this.updateDraftItem();
   }
 
-  updateDraftItem() {
+  updateDraftItem($event?: any) {
     const isComplex = this.selectedDataType.dataType === 'Definition';
 
     this.draftDefinition.definitionGuid = isComplex ? this.selectedDataType.definition.definitionGuid : '';

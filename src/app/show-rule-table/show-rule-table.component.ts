@@ -244,7 +244,7 @@ export class ShowRuleTableComponent implements OnInit, OnChanges {
     this.showEditName = true;
   }
 
-  closeNameEditor(decision: true) {
+  closeNameEditor(decision: boolean) {
     if (decision) {
       this.table.name = this.nameDraft;
       this.saveTableSchema();

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
+import 'jquery';
 
 import { MenuItem, SelectItem } from 'primeng/primeng';
 
@@ -19,7 +20,7 @@ import { GameService } from '../../../store/services/game.service';
 })
 export class RuleTableImportWizardComponent implements OnInit {
   @Input() module: Untold.ClientModuleTables;
- 
+
   private keyValueColumns: Array<string>;
   stepsMenu: MenuItem[];
   currentStep: number;
@@ -90,7 +91,7 @@ export class RuleTableImportWizardComponent implements OnInit {
       }
     });
 
-    $('#csvinput').click();
+    jQuery('#csvinput').click();
   }
 
   gotoImport() {

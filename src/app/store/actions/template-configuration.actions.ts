@@ -8,7 +8,7 @@ export class TemplateConfigurationActions {
 
     static SET_TEMPLATECONFIGURATION = 'SET_TEMPLATECONFIGURATION';
     setInteraction(templateConfiguration: TemplateConfiguration): Action {
-        return {
+        return <Action> {
             type: TemplateConfigurationActions.SET_TEMPLATECONFIGURATION,
             payload: templateConfiguration
         };

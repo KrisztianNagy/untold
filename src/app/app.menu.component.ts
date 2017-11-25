@@ -13,7 +13,7 @@ import {AppComponent} from './app.component';
 })
 export class AppMenuComponent implements OnInit {
 
-    private model: any[];
+    public model: any[];
 
     constructor(@Inject(forwardRef(() => AppComponent)) public app:AppComponent) {}
 

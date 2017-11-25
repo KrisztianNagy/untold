@@ -8,7 +8,7 @@ export class RealmTableActions {
 
     static SET_REALMTABLES = 'SET_REALMTABLES';
     setInteraction(realmTables: Untold.ClientRealmTables): Action {
-        return {
+        return <Action> {
             type: RealmTableActions.SET_REALMTABLES,
             payload: realmTables
         };

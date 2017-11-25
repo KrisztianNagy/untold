@@ -8,7 +8,7 @@ declare var Auth0Lock: any;
 
 @Injectable()
 export class AuthService {
-  userProfile: Object;
+  userProfile: any;
   lock = new Auth0Lock('3xRrx59vnaZWyZDbBGtuMFTtmbJhRJST', 'untold.eu.auth0.com', {});
   ready: AsyncSubject<boolean>;
 

@@ -42,7 +42,8 @@ export class SheetTabListComponent implements OnInit {
         id: 1,
         type: 'root',
         denominator: 1,
-        innerElements: []
+        innerElements: [],
+        parentDefinitionOccuranceGuid: null
       }
     }];
     this.addedTabName = '';

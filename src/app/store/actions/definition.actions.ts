@@ -9,7 +9,7 @@ export class DefinitionActions {
     static SET_DEFINITIONS = 'SET_DEFINITIONS';
 
     setDefinitions(definitions: Array<Untold.ClientModuleDefinitions>): Action {
-        return {
+        return <Action> {
             type: DefinitionActions.SET_DEFINITIONS,
             payload: definitions
         };

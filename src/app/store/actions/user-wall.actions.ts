@@ -10,14 +10,14 @@ export class UserWallActions {
     static DELETE_USERWALL = 'DELETE_USERWALL';
 
     addWall(wall: Wall): Action {
-        return {
+        return <Action> {
             type: UserWallActions.ADD_USERWALL,
             payload: wall
         };
     }
 
     setWalls(wall: Wall): Action {
-        return {
+        return <Action> {
             type: UserWallActions.DELETE_USERWALL,
             payload: wall
         };

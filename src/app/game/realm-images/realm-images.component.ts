@@ -15,7 +15,7 @@ export class RealmImagesComponent implements OnInit {
   images: Array<Untold.ClientImage>;
   totalRecords: number;
 
-  private game: Untold.ClientGameRealmDetails;
+  game: Untold.ClientGameRealmDetails;
 
   constructor(private fileDataService: FileDataService,
               private gameService: GameService) {

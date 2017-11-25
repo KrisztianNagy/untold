@@ -4,7 +4,7 @@
     </div>
 
     <div class="topbar-right">
-        <a id="menu-button" href="#" (click)="app.onMenuButtonClick($event)" [ngClass]="{'menu-button-rotate': app.rotateMenuButton}">
+        <a id="menu-button" href="#">
             <i></i>
         </a>
         
@@ -12,41 +12,6 @@
             <i class="material-icons">menu</i>
         </a>
         <ul class="topbar-items animated fadeInDown" [ngClass]="{'topbar-items-visible': app.topbarMenuActive}">
-            <li #profile class="profile-item" *ngIf="app.profileMode==='top'||app.isHorizontal()"
-                [ngClass]="{'active-top-menu':app.activeTopbarItem === profile}">
-
-                <a href="#" (click)="app.onTopbarItemClick($event,profile)">                            
-                    <div class="profile-image"></div>
-                    <span class="topbar-item-name">Jane Williams</span>
-                </a>
-                
-                <ul class="ultima-menu animated fadeInDown">
-                    <li role="menuitem">
-                        <a href="#">
-                            <i class="material-icons">person</i>
-                            <span>Profile</span>
-                        </a>
-                    </li>
-                    <li role="menuitem">
-                        <a href="#">
-                            <i class="material-icons">security</i>
-                            <span>Privacy</span>
-                        </a>
-                    </li>
-                    <li role="menuitem">
-                        <a href="#">
-                            <i class="material-icons">settings_applications</i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                    <li role="menuitem">
-                        <a href="#">
-                            <i class="material-icons">power_settings_new</i>
-                            <span>Logout</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
             <li #settings [ngClass]="{'active-top-menu':app.activeTopbarItem === settings}">
                 <a href="#" (click)="app.onTopbarItemClick($event,settings)"> 
                     <i class="topbar-icon material-icons">settings</i>

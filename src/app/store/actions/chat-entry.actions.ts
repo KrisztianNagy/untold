@@ -10,14 +10,14 @@ export class ChatEntryActions {
     static MARK_CHAT_ENTRY_AS_READ = 'MARK_CHAT_ENTRY_AS_READ';
 
     addChatEntry(entries: Array<ChatEntry>): Action {
-        return {
+        return <Action> {
             type: ChatEntryActions.ADD_CHAT_ENTRY,
             payload: entries
         };
     }
 
     markAsRead(entries: Array<ChatEntry>): Action {
-        return {
+        return <Action> {
             type: ChatEntryActions.MARK_CHAT_ENTRY_AS_READ,
             payload: entries
         };

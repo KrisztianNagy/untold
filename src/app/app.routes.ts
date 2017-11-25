@@ -12,7 +12,6 @@ import { GenesisDefinitionsComponent } from './game/genesis-definitions/genesis-
 import { GenesisTemplatesComponent } from './game/genesis-templates/genesis-templates.component';
 import { GenesisEntitiesComponent } from './game/genesis-entities/genesis-entities.component';
 import { GenesisSheetsComponent } from './game/genesis-sheets/genesis-sheets.component';
-import { EditSheetComponent } from './game/genesis-sheets/edit-sheet/edit-sheet.component';
 import { SheetCreatorComponent } from './game/genesis-sheets/sheet-creator/sheet-creator.component';
 import { EntityWrapperComponent } from './entity-wrapper/entity-wrapper.component';
 import { RealmImagesComponent } from './game/realm-images/realm-images.component';

@@ -10,14 +10,14 @@ export class TokenActions {
     static UPDATE_TOKEN = 'UPDATE_TOKEN';
 
     addTokens(tokens: Token[]): Action {
-        return {
+        return <Action> {
             type: TokenActions.ADD_TOKENS,
             payload: tokens
         };
     }
 
     updateToken(token: Token): Action {
-        return {
+        return <Action> {
             type: TokenActions.UPDATE_TOKEN,
             payload: token
         };

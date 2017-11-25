@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Subject} from 'rxjs/Subject';
-
 import { AuthService } from '../../shared/services/auth.service';
+
 
 @Injectable()
 export class SignalRService {
@@ -12,7 +12,7 @@ export class SignalRService {
 
   constructor(private authService: AuthService) {
     this.connectionSubject = new Subject<boolean>();
-    this.connection = $.hubConnection('/signalr');
+    this.connection = (<any> $).hubConnection('/signalr');
 
     this.realmHub = this.connection.createHubProxy('realmHub');
 

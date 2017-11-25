@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef,ViewChild } from '@angular/core';
 
 import {DataScroller} from 'primeng/primeng';
 
@@ -60,7 +60,7 @@ export class EntityListComponent implements OnInit {
 
   }
 
-  filterImages(scroller: DataScroller) {
+  filterImages() {
     this.images = [];
     this.loadImages(1);
 

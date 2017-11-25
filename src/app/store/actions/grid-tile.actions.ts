@@ -10,14 +10,14 @@ export class GridTileActions {
     static UPDATE_GRIDTILE = 'UPDATE_GRIDTILE';
 
     addGrid(gridTiles: GridTile[]): Action {
-        return {
+        return <Action> {
             type: GridTileActions.ADD_GRID,
             payload: gridTiles
         };
     }
 
     updateGridTile(gridTile: GridTile): Action {
-        return {
+        return <Action> {
             type: GridTileActions.UPDATE_GRIDTILE,
             payload: gridTile
         };

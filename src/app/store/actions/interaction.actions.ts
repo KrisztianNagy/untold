@@ -8,7 +8,7 @@ export class InteractionActions {
 
     static SET_INTERACTION = 'SET_INTERACTION';
     setInteraction(interaction: Interaction): Action {
-        return {
+        return <Action> {
             type: InteractionActions.SET_INTERACTION,
             payload: interaction
         };
