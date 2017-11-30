@@ -126,6 +126,7 @@ import { EntityService } from './store/services/entity.service';
 import { SheetService } from './store/services/sheet.service';
 import { ChatEntryService } from './store/services/chat-entry.service';
 import { CalculatedExpressionService } from './shared/services/expressions/calculated-expression.service';
+import { CommandExpressionService } from './shared/services/expressions/command-expression.service';
 import { ExpressionEvaluatorService } from './shared/services/expressions/expression-evaluator.service';
 import { ExpressionOperatorService } from './shared/services/expressions/expression-operator.service';
 import { ExpressionFunctionService } from './shared/services/expressions/expression-function.service';
@@ -398,6 +399,7 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
         WebWorkerService,
         AuthService,
         CalculatedExpressionService,
+        CommandExpressionService,
         ExpressionEvaluatorService,
         ExpressionOperatorService,
         ExpressionFunctionService,

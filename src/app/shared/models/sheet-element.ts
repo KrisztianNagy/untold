@@ -1,3 +1,5 @@
+import { Untold } from '../models/backend-export';
+
 export class SheetElement {
     id: number;
     type: string;
@@ -21,4 +23,19 @@ export class SheetElementOperation {
     action: string;
     targetId: number;
 }
+
+export class SheetProcessingParameters {
+    sheetElement: SheetElement;
+    definitions: Untold.ClientInnerDefinition[];
+    modelMapping: string;
+    listNumber: number;
+    sheetModels: SheetModel[];
+}
+
+export class SheetModel {
+    name: string;
+    entity: object;
+    definition?: Untold.ClientInnerDefinition;
+}
+
 

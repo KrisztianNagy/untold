@@ -12,7 +12,6 @@ import { RuleDefinition } from '../../models/rule-definition';
 import { GenesisEntity, GenesisEntityValue } from '../../models/genesis-entity';
 import { CalculatedExpressionService } from './calculated-expression.service';
 import { ExpressionEvaluatorService } from './expression-evaluator.service';
-
 declare var LZString;
 
 @Injectable()

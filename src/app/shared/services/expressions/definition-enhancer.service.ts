@@ -159,6 +159,10 @@ export class DefinitionEnhancerService {
   getInnerDefinition(definition: Untold.ClientInnerDefinition, occuranceGuid: string): Untold.ClientInnerDefinition {
     let found: Untold.ClientInnerDefinition = null;
 
+    if (definition.occurrenceGuid === occuranceGuid) {
+      return definition;
+    }
+
     if (definition.definitions) {
       definition.definitions.forEach(def => {
         if (found) {
