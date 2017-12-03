@@ -70,7 +70,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
                       .forEach(sheet => {
                         this.sheet = sheet;
                         this.sheetCss = this.sheetEnhancerService.getSheetCss(this.sheet);
-                        this.sheetHtml = this.sheetEnhancerService.getSheetHtml(this.sheet, this.definition);
+                        this.sheetHtml = this.sheetEnhancerService.getSheetHtml(this.sheet, <Untold.ClientInnerDefinition> this.definition);
                       });
                   } else {
                     this.hasSheet = false;

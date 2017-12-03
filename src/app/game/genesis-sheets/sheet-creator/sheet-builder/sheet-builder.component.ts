@@ -7,6 +7,7 @@ import { Sheet } from '../../../../store/models/sheet';
 import { Untold } from '../../../../shared/models/backend-export';
 import { RealmDefinitionService } from '../../../../store/services/realm-definition.service';
 import { DefinitionEnhancerService } from '../../../../shared/services/expressions/definition-enhancer.service';
+import { SheetEnhancerService } from '../../../../shared/services/expressions/sheet-enhancer.service';
 
 @Component({
   selector: 'app-sheet-builder',
@@ -21,17 +22,23 @@ export class SheetBuilderComponent implements OnInit {
   definitionPickerVisible: boolean;
   selectedSheetElement: SheetElement;
   gridSizes: SelectItem[];
+  IsDefinitionPickerForProperties: boolean;
   addGridSize: any;
   updateGridSize: any;
   addTextValue: string;
   targetDefinition: Untold.ClientDefinition;
   elementScopeDefinition: Untold.ClientDefinition;
   elementScopeDefinitionOccurance: Untold.ClientInnerDefinition;
+  pickerDefinition: Untold.ClientDefinition;
   occuranceChain: Untold.ClientInnerDefinition[];
   listChain: Untold.ClientInnerDefinition[];
   predefinedListChain: Untold.ClientInnerDefinition[];
+  propertyName: string;
+  expressionPickerDefinitionGuid: string;
+  expressionMapping: string;
   constructor(private realmDefinitionService: RealmDefinitionService,
-              private definitionEnhancerService: DefinitionEnhancerService) { }
+              private definitionEnhancerService: DefinitionEnhancerService,
+              private sheetEnhancerService: SheetEnhancerService) { }
 
   ngOnInit() {
 
@@ -52,6 +59,8 @@ export class SheetBuilderComponent implements OnInit {
     this.addGridSize = this.gridSizes[0].value;
     this.updateGridSize = this.gridSizes[this.getGridChoicePosition(event.numerator, event.denominator)].value;
     this.addTextValue = '';
+    this.expressionPickerDefinitionGuid = '';
+    this.expressionMapping = '';
     // tslint:disable-next-line:max-line-length
     this.selectedSheetElement.listElementLabelResolve = this.selectedSheetElement.listElementLabelResolve ? this.selectedSheetElement.listElementLabelResolve : '';
 
@@ -72,6 +81,12 @@ export class SheetBuilderComponent implements OnInit {
       this.occuranceChain = [];
       this.listChain = [];
       this.predefinedListChain = [];
+    }
+
+    if (this.selectedSheetElement.definitionOccurenceGuid) {
+      // tslint:disable-next-line:max-line-length
+      const pickedDefinition = this.definitionEnhancerService.getInnerDefinition(<Untold.ClientInnerDefinition> this.definition, this.selectedSheetElement.definitionOccurenceGuid);
+      this.propertyName = pickedDefinition ? pickedDefinition.name : '[NOT SET]';
     }
   }
 
@@ -215,17 +230,61 @@ export class SheetBuilderComponent implements OnInit {
     return currentMaxId;
   }
 
-  showDefinitionPicker() {
+  showDefinitionPickerForProperties() {
     this.definitionPickerVisible = true;
     this.editorVisible = false;
+    this.IsDefinitionPickerForProperties = true;
+    this.pickerDefinition = this.elementScopeDefinition;
+  }
+
+  showDefinitionPickerForExpressions() {
+    this.definitionPickerVisible = true;
+    this.editorVisible = false;
+    this.IsDefinitionPickerForProperties = false;
+
+    if (this.expressionPickerDefinitionGuid) {
+      this.pickerDefinition = this.definitionEnhancerService.findDefinitionIfExist(this.definition, this.expressionPickerDefinitionGuid);
+    } else {
+      this.pickerDefinition = this.definition;
+    }
   }
 
   onDefinitionClick(definition: Untold.ClientInnerDefinition) {
     this.definitionPickerVisible = false;
     this.editorVisible = true;
-    this.selectedSheetElement.definitionOccurenceGuid = <string> definition.occurrenceGuid;
-    this.selectedSheetElement.content = definition.name;
-    this.selectedSheetElement.propertyType = definition.dataType;
-    this.selectedSheetElement.isList = definition.isList;
+
+    if (this.IsDefinitionPickerForProperties) {
+      this.selectedSheetElement.definitionOccurenceGuid = <string> definition.occurrenceGuid;
+      this.selectedSheetElement.content = definition.name;
+      this.selectedSheetElement.propertyType = definition.dataType;
+      this.selectedSheetElement.isList = definition.isList;
+    } else {
+      this.expressionMapping = '';
+
+      if (this.definition === this.pickerDefinition) {
+        this.expressionMapping = 'entity';
+      } else {
+        // tslint:disable-next-line:max-line-length
+        const chainToFindList = this.definitionEnhancerService.findDefinitionContainerChain(<Untold.ClientInnerDefinition> this.definition, <Untold.ClientInnerDefinition> this.elementScopeDefinitionOccurance);
+        const listNamePart = this.sheetEnhancerService.getListNamePart(chainToFindList);
+
+        this.expressionMapping = 'listOf' + listNamePart;
+      }
+
+      // tslint:disable-next-line:max-line-length
+      let chainToFindelement = this.definitionEnhancerService.findDefinitionContainerChain(<Untold.ClientInnerDefinition> this.pickerDefinition, definition);
+
+      if (chainToFindelement. length < 2) {
+        this.expressionMapping = '';
+        return;
+      }
+
+      chainToFindelement = chainToFindelement.splice(1);
+      chainToFindelement.forEach(def => {
+        this.expressionMapping += '[\'' + definition.name + '\']';
+      });
+
+      this.expressionMapping = '{{ ' + this.expressionMapping + ' }}';
+    }
   }
 }

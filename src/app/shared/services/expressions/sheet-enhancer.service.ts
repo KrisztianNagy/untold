@@ -121,9 +121,7 @@ export class SheetEnhancerService {
         const sheetProcessingParameters: SheetProcessingParameters = {
           sheetElement: sheet.json[0].sheet,
           definitions: [definition],
-          listNumber: 0,
           sheetModels: [{
-            entity: null,
             name: 'entity',
             definition: definition
           }],
@@ -141,10 +139,9 @@ export class SheetEnhancerService {
           const sheetProcessingParameters: SheetProcessingParameters = {
             sheetElement: tab.sheet,
             definitions: [definition],
-            listNumber: 0,
             sheetModels: [{
-              entity: null,
-              name: 'entity'
+              name: 'entity',
+              definition: definition
             }],
             modelMapping: 'entity'
           } ;
@@ -225,7 +222,9 @@ export class SheetEnhancerService {
     let elementHtml = '<div class="pure-u-' + sheetProcessingParameters.sheetElement.numerator + (sheetProcessingParameters.sheetElement.denominator ? '-' + sheetProcessingParameters.sheetElement.denominator : '' ) + '">';
 
     if (sheetProcessingParameters.sheetElement.content) {
-      elementHtml += '<legend style="text-align: center">' + sheetProcessingParameters.sheetElement.content + '</legend>';
+      // tslint:disable-next-line:max-line-length
+      const resolvedContent = this.resolveAngularExpressions(sheetProcessingParameters.sheetElement.content, sheetProcessingParameters, true);
+      elementHtml += '<legend style="text-align: center">' + resolvedContent + '</legend>';
     }
 
     elementHtml += sheetProcessingParameters.sheetElement.innerElements.map(element => {
@@ -240,8 +239,10 @@ export class SheetEnhancerService {
   }
 
   getSheetTextContent(sheetProcessingParameters: SheetProcessingParameters): string {
+    const resolvedContent = this.resolveAngularExpressions(sheetProcessingParameters.sheetElement.content, sheetProcessingParameters, true);
+
     let elementHtml = '<div style="text-align: center">';
-    elementHtml += '<span style="text-align: center;letter-spacing: 0;">' + sheetProcessingParameters.sheetElement.content + '</span>';
+    elementHtml += '<span style="text-align: center;letter-spacing: 0;">' + resolvedContent + '</span>';
     elementHtml += '</div>';
 
     return elementHtml;
@@ -261,23 +262,27 @@ export class SheetEnhancerService {
     let elementHtml = '';
 
     if (selectedDefinition.isList) {
-      sheetProcessingParameters.listNumber++;
-      const listId = 'list' + sheetProcessingParameters.listNumber;
+      const listNamePart = this.getListNamePart(sheetProcessingParameters.definitions);
+
+      const listId = 'listOf' + listNamePart;
 
       if (selectedDefinition.isPredefinedList) {
-        const listName = 'listName' + sheetProcessingParameters.listNumber;
+        const listName = 'listNameOf' + listNamePart;
+        sheetProcessingParameters.modelMapping =  sheetProcessingParameters.modelMapping + '[' + listName + ']';
+
         // tslint:disable-next-line:max-line-length
         elementHtml += '<div *ngFor="let ' + listName + ' of ' + '[' + selectedDefinition.predefinedListItems.map(item => '\'' + item + '\'') + '];">\n';
-        sheetProcessingParameters.modelMapping =  sheetProcessingParameters.modelMapping + '[' + listName + ']';
+        elementHtml += '<div *ngIf="' + sheetProcessingParameters.modelMapping + ' as ' + listId + '">';
+
         sheetProcessingParameters.sheetModels = [
           ...sheetProcessingParameters.sheetModels,
           {
-            entity: null,
             name: listId,
             definition: selectedDefinition
           }];
       } else {
         elementHtml += '<div *ngFor="let ' + listId + ' of ' + sheetProcessingParameters.modelMapping + '">\n';
+        elementHtml += '<div>';
       }
 
       elementHtml += sheetProcessingParameters.sheetElement.innerElements.map(element => {
@@ -286,7 +291,7 @@ export class SheetEnhancerService {
         return(this.getSheetContent(sheetProcessingParameters));
       }).join('');
 
-      elementHtml += '</div>';
+      elementHtml += '</div></div>';
     } else {
       if (sheetProcessingParameters.sheetElement.propertyType === 'text') {
         let ngExtend = selectedDefinition.isCalculated ?
@@ -294,7 +299,9 @@ export class SheetEnhancerService {
         '[(ngModel)]="' + sheetProcessingParameters.modelMapping + '"';
 
         if (sheetProcessingParameters.sheetElement.content) {
-          elementHtml += '<label for="' + htmlId + '">' + sheetProcessingParameters.sheetElement.content + '</label>';
+          // tslint:disable-next-line:max-line-length
+          const resolvedContent = this.resolveAngularExpressions(sheetProcessingParameters.sheetElement.content, sheetProcessingParameters, true);
+          elementHtml += '<label for="' + htmlId + '">' + resolvedContent + '</label>';
         }
 
         ngExtend += ' class="pure-u-23-24"';
@@ -308,7 +315,9 @@ export class SheetEnhancerService {
         '[(ngModel)]="' + sheetProcessingParameters.modelMapping + '"';
 
         if (sheetProcessingParameters.sheetElement.content) {
-          elementHtml += '<label for="' + htmlId + '">' + sheetProcessingParameters.sheetElement.content + '</label>';
+          // tslint:disable-next-line:max-line-length
+          const resolvedContent = this.resolveAngularExpressions(sheetProcessingParameters.sheetElement.content, sheetProcessingParameters, true);
+          elementHtml += '<label for="' + htmlId + '">' + resolvedContent + '</label>';
         }
 
         ngExtend += ' class="pure-u-23-24"';
@@ -321,8 +330,11 @@ export class SheetEnhancerService {
         'readonly="readonly" (ngModel)="' + sheetProcessingParameters.modelMapping + '"' :
         '[(ngModel)]="' + sheetProcessingParameters.modelMapping + '"';
 
+        // tslint:disable-next-line:max-line-length
+        const resolvedContent = this.resolveAngularExpressions(sheetProcessingParameters.sheetElement.content, sheetProcessingParameters, true);
+
         elementHtml += '<label for="' + htmlId + '">';
-        elementHtml += '<input id="' + htmlId + '" type="checkbox" ' + ngExtend + '>' + sheetProcessingParameters.sheetElement.content;
+        elementHtml += '<input id="' + htmlId + '" type="checkbox" ' + ngExtend + '>' + resolvedContent;
         elementHtml += '</label>';
 
         elementHtml += '<input type="number"  id="' + htmlId + '" ' + ngExtend + '>';
@@ -330,7 +342,9 @@ export class SheetEnhancerService {
 
       if (sheetProcessingParameters.sheetElement.propertyType === 'choice') {
         if (sheetProcessingParameters.sheetElement.content) {
-          elementHtml += '<label for="' + htmlId + '">' + sheetProcessingParameters.sheetElement.content + '</label>';
+          // tslint:disable-next-line:max-line-length
+          const resolvedContent = this.resolveAngularExpressions(sheetProcessingParameters.sheetElement.content, sheetProcessingParameters, true);
+          elementHtml += '<label for="' + htmlId + '">' + resolvedContent + '</label>';
         }
 
         // tslint:disable-next-line:max-line-length
@@ -350,7 +364,8 @@ export class SheetEnhancerService {
     let ngExtend = '';
 
     if (sheetProcessingParameters.sheetElement.chat) {
-      const resolved = this.resolveAngularExpressions('\'' + sheetProcessingParameters.sheetElement.chat + '\'', sheetProcessingParameters);
+      // tslint:disable-next-line:max-line-length
+      const resolved = this.resolveAngularExpressions('\'' + sheetProcessingParameters.sheetElement.chat + '\'', sheetProcessingParameters, true);
       ngExtend = '(click)="chat(' + resolved + ')"';
     }
 
@@ -359,16 +374,29 @@ export class SheetEnhancerService {
     const inPredefinedList = sheetProcessingParameters.definitions.some(def => def.isList && def.isPredefinedList);
     if (sheetProcessingParameters.sheetElement.listElementLabelResolve && inPredefinedList) {
       const lists = sheetProcessingParameters.definitions.filter(def => def.isList);
-      const indexOf = lists.findIndex(def => def.occurrenceGuid === sheetProcessingParameters.sheetElement.listElementLabelResolve);
 
-      if (indexOf > -1) {
-        elementHtml += '{{listName' + (indexOf + 1) + '}}';
+      const chainDefinitions = [];
+      let found = false;
+
+      sheetProcessingParameters.definitions.forEach(def => {
+        if (!found) {
+          chainDefinitions.push(def);
+
+          found = def.occurrenceGuid === sheetProcessingParameters.sheetElement.listElementLabelResolve;
+        }
+      });
+
+      if (found) {
+        const listNamePart = this.getListNamePart(chainDefinitions);
+        elementHtml += '{{listNameOf' + listNamePart + '}}';
       } else {
         elementHtml += 'Missing';
       }
 
     } else {
-      elementHtml += sheetProcessingParameters.sheetElement.content ? sheetProcessingParameters.sheetElement.content : 'Button';
+      // tslint:disable-next-line:max-line-length
+      const resolvedContent = this.resolveAngularExpressions(sheetProcessingParameters.sheetElement.content, sheetProcessingParameters, true);
+      elementHtml += resolvedContent ? resolvedContent : 'Button';
     }
 
     elementHtml += '</button>';
@@ -376,10 +404,10 @@ export class SheetEnhancerService {
     return elementHtml;
   }
 
-  resolveAngularExpressions(text: string, sheetProcessingParameters: SheetProcessingParameters) {
+  resolveAngularExpressions(text: string, sheetProcessingParameters: SheetProcessingParameters, inMethod: boolean) {
     const braceExpression = /\{\{(.*?)\}\}/g;
     const matches = text.match(braceExpression);
-    
+
     if (!matches) {
       return text;
     }
@@ -391,7 +419,9 @@ export class SheetEnhancerService {
       const resolvable = this.validateAngularExpression(sheetProcessingParameters.sheetModels, withoutBraces);
 
       if (resolvable) {
-        text = text.replace(match, '\' + ' +  withoutBraces + ' + \'');
+        if (inMethod) {
+          text = text.replace(match, '\' + ' +  withoutBraces + ' + \'');
+        }
       } else {
         text = text.replace(match, '');
       }
@@ -402,9 +432,22 @@ export class SheetEnhancerService {
 
   validateAngularExpression(models: SheetModel[], expression: string): boolean {
     const tree = this.calculatedExpressionService.parseTree(expression);
-    const resolvable = this.commandExpressionService.resolveNode(tree.tree, models);
+    try {
+      const resolvable = this.commandExpressionService.resolveNode(tree.tree, models);
+      return !!resolvable;
+    } catch (err) {
+      return false;
+    }
+  }
 
-    return !!resolvable;
+  getListNamePart(definitions: Untold.ClientInnerDefinition[]) {
+    let namePart = '';
+
+    definitions.forEach(definition => {
+      namePart += definition.name.replace(/ /g, '');
+    });
+
+    return namePart;
   }
 
   getSheetCss(sheet: Sheet): string {

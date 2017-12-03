@@ -38,7 +38,7 @@ export class DefinitionEnhancerService {
   }
 
   // tslint:disable-next-line:max-line-length
-  findDefinitionContainerChain(rootDefinition: Untold.ClientInnerDefinition, targetDefinition: Untold.ClientInnerDefinition) : Array<Untold.ClientInnerDefinition> {
+  findDefinitionContainerChain(rootDefinition: Untold.ClientInnerDefinition, targetDefinition: Untold.ClientInnerDefinition): Array<Untold.ClientInnerDefinition> {
     if (!targetDefinition.occurrenceGuid) {
       return [targetDefinition];
     }

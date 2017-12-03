@@ -28,14 +28,13 @@ export class SheetProcessingParameters {
     sheetElement: SheetElement;
     definitions: Untold.ClientInnerDefinition[];
     modelMapping: string;
-    listNumber: number;
     sheetModels: SheetModel[];
 }
 
 export class SheetModel {
     name: string;
-    entity: object;
-    definition?: Untold.ClientInnerDefinition;
+    definition: Untold.ClientInnerDefinition;
 }
+
 
 
