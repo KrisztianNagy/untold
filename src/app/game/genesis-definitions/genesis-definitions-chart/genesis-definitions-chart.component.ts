@@ -8,6 +8,7 @@ import { Dialog } from 'primeng/primeng';
 import { OrderList } from 'primeng/primeng';
 
 import { Untold } from '../../../shared/models/backend-export';
+import { DefinitionChartConfig } from '../../../shared/models/definition-chart-config';
 import { TreeNodeService } from '../../../shared/services/tree-node.service';
 
 @Component({
@@ -20,8 +21,9 @@ import { TreeNodeService } from '../../../shared/services/tree-node.service';
 export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
   @Input() definition: Untold.ClientDefinition;
   @Input() realmDefinitions: Array<Untold.ClientModuleDefinitions>;
-  @Input() simplified: boolean;
+  @Input() config: DefinitionChartConfig;
   @Output() onDefinitionClick = new EventEmitter<Untold.ClientDefinition>();
+  @Output() onDefinitionChainClick = new EventEmitter<Untold.ClientDefinition[]>();
   @Output() onDraftUpdated = new EventEmitter<Untold.ClientDefinition>();
 
   organizationTree: TreeNode[];
@@ -67,20 +69,40 @@ export class GenesisDefinitionsChartComponent implements OnInit, OnChanges {
     this.onDraftUpdated.emit(this.draftDefinition);
 
     setTimeout(() => {
-      this.organizationTree = this.treeNodeService.getOrganizationChartFromDefinitions(this.draftDefinition, this.simplified);
+      this.organizationTree = this.treeNodeService.getOrganizationChartFromDefinitions(this.draftDefinition, this.config);
       this.changeDetectorRef.markForCheck();
     }, 40);
   }
 
-  definitionClick(definition: Untold.ClientInnerDefinition) {
+  definitionClick(node: TreeNode) {
+    const definition: Untold.ClientInnerDefinition = node.data;
 
-    if (!this.simplified || definition.dataType !== 'Definition' || definition.isList) {
-      this.onDefinitionClick.emit(definition);
+    if (!this.config.clickableNonListProperty && definition.isList) {
+      return;
     }
+
+    if (!this.config.clickableUserListProperty && definition.isList && definition.isPredefinedList) {
+      return;
+    }
+
+    if (!this.config.clickablePredefinedListProperty && definition.isList && !definition.isPredefinedList) {
+      return;
+    }
+
+    this.onDefinitionClick.emit(node.data);
+
+    let iteratorNode = node;
+    let definitionChain = [];
+    while (iteratorNode) {
+      definitionChain = [iteratorNode.data, ...definitionChain];
+      iteratorNode = iteratorNode.parent;
+    }
+
+    this.onDefinitionChainClick.emit(definitionChain);
   }
 
   editName(definition: Untold.ClientInnerDefinition) {
-    if (this.simplified) {
+    if (this.config.edit) {
       return;
     }
 

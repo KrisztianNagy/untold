@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="ui-g-12">            
-        <app-sheet-builder style="width: 100%;" [sheetElement]="selectedTab.sheet" *ngIf="selectedTab" (onSheetElementUpdate)="sheetElementUpdated($event)" [definition]="definition"></app-sheet-builder>
+        <app-sheet-builder style="width: 100%;" [rootElement]="selectedTab.sheet" *ngIf="selectedTab" (onSheetElementUpdate)="sheetElementUpdated($event)" [definition]="definition"></app-sheet-builder>
       </div>
     </div>
   </p-tabPanel>  

@@ -44,8 +44,16 @@
             </label>
           </div>
       </div>
-      
-      <div *ngIf="sheet.definitionOccurenceGuid &&sheet.isList">
+    </div>
+  </div>
+</div>
+<div *ngIf="sheet.type === 'repeater'" (click)="sheetElementClick($event)">
+  <div class="pure-u-1" style="text-align: center">
+    <div class="sheet-property" (click)="sheetElementClick($event)"  >
+      <span *ngIf="!sheet.definitionOccurenceGuid"  >
+        {{sheet.content ? sheet.content : 'REPEATER'}}
+      </span>     
+      <div *ngIf="sheet.definitionOccurenceGuid && sheet.isList">
           <legend (click)="sheetElementClick($event)" style="text-align: center;letter-spacing: 0;cursor: pointer;" (mouseenter)="hover(true)"  (mouseleave)="hover(false)">[{{sheet.content ? sheet.content : '[PROPERTY]'}}]</legend>
           <app-sheet-grid-element *ngFor="let sheetElement of sheet.innerElements; let i = index"  [sheet]="sheetElement"
           [class]="sheetElement.type === 'grid' ? 'sheet-grid pure-u-' + sheetElement.numerator + (sheetElement.denominator ? '-' + sheetElement.denominator : '' ) : 'pure-u-1'" 

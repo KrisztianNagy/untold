@@ -1,21 +1,26 @@
 import { Untold } from '../models/backend-export';
 
-export class SheetElement {
+export class   SheetElement {
     id: number;
     type: string;
     innerElements?: Array<SheetElement>;
     content?: string;
-    definitionOccurenceGuid?: string;
-    parentDefinitionOccuranceGuid: string;
+    definitionOccurenceGuidChain?: OccuranceChainElement[];
+    parentId: number;
     elementClass?: string;
     numerator?: number;
     denominator?: number;
     inputType?: string;
     mapping?: string;
-    isList?: boolean;
     propertyType?: string;
     chat?: string;
     listElementLabelResolve?: string;
+    parentScope: number;
+}
+
+export class OccuranceChainElement {
+    occuranceGuid: string;
+    listElementName?: string;
 }
 
 export class SheetElementOperation {

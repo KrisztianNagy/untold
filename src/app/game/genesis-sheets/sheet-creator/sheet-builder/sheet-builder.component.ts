@@ -2,43 +2,42 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { SelectItem } from 'primeng/primeng';
 
-import { SheetElement, SheetElementOperation } from '../../../../shared/models/sheet-element';
+import { SheetElement, SheetElementOperation, OccuranceChainElement } from '../../../../shared/models/sheet-element';
 import { Sheet } from '../../../../store/models/sheet';
 import { Untold } from '../../../../shared/models/backend-export';
 import { RealmDefinitionService } from '../../../../store/services/realm-definition.service';
 import { DefinitionEnhancerService } from '../../../../shared/services/expressions/definition-enhancer.service';
 import { SheetEnhancerService } from '../../../../shared/services/expressions/sheet-enhancer.service';
-
+import { SheetBuilderService } from '../../../../shared/services/expressions/sheet-builder.service';
+import { DefinitionChartConfig } from '../../../../shared/models/definition-chart-config';
 @Component({
   selector: 'app-sheet-builder',
   templateUrl: './sheet-builder.component.html',
   styleUrls: ['./sheet-builder.component.scss']
 })
 export class SheetBuilderComponent implements OnInit {
-  @Input() sheetElement: SheetElement;
+  @Input() rootElement: SheetElement;
   @Input() definition: Untold.ClientDefinition;
   @Output() onSheetElementUpdate = new EventEmitter<SheetElement>();
   editorVisible: boolean;
   definitionPickerVisible: boolean;
   selectedSheetElement: SheetElement;
   gridSizes: SelectItem[];
+  scopes: SelectItem[];
   IsDefinitionPickerForProperties: boolean;
   addGridSize: any;
   updateGridSize: any;
   addTextValue: string;
   targetDefinition: Untold.ClientDefinition;
-  elementScopeDefinition: Untold.ClientDefinition;
-  elementScopeDefinitionOccurance: Untold.ClientInnerDefinition;
+  elementScopes: OccuranceChainElement[][];
   pickerDefinition: Untold.ClientDefinition;
-  occuranceChain: Untold.ClientInnerDefinition[];
-  listChain: Untold.ClientInnerDefinition[];
-  predefinedListChain: Untold.ClientInnerDefinition[];
   propertyName: string;
-  expressionPickerDefinitionGuid: string;
   expressionMapping: string;
+  definitionChartConfig: DefinitionChartConfig;
   constructor(private realmDefinitionService: RealmDefinitionService,
               private definitionEnhancerService: DefinitionEnhancerService,
-              private sheetEnhancerService: SheetEnhancerService) { }
+              private sheetEnhancerService: SheetEnhancerService,
+              private sheetBuilderService: SheetBuilderService) { }
 
   ngOnInit() {
 
@@ -48,9 +47,14 @@ export class SheetBuilderComponent implements OnInit {
       {label: '33% (1-3)', value: {numerator: 1, denominator: 3}},
       {label: '66% (2-3)', value: {numerator: 2, denominator: 3}},
       {label: '25% (1-4)', value: {numerator: 1, denominator: 4}},
-      {label: '50% (2-4)', value: {numerator: 2, denominator: 4}},
       {label: '75% (3-4)', value: {numerator: 3, denominator: 4}},
+      {label: '12% (1-8)', value: {numerator: 1, denominator: 8}},
+      {label: '37% (3-8)', value: {numerator: 3, denominator: 8}},
+      {label: '62% (5-8)', value: {numerator: 5, denominator: 8}},
+      {label: '87% (7-8)', value: {numerator: 7, denominator: 8}},
     ];
+
+    this.scopes = [];
   }
 
   childClick(event: SheetElement) {
@@ -59,34 +63,34 @@ export class SheetBuilderComponent implements OnInit {
     this.addGridSize = this.gridSizes[0].value;
     this.updateGridSize = this.gridSizes[this.getGridChoicePosition(event.numerator, event.denominator)].value;
     this.addTextValue = '';
-    this.expressionPickerDefinitionGuid = '';
     this.expressionMapping = '';
+    this.scopes = [];
     // tslint:disable-next-line:max-line-length
     this.selectedSheetElement.listElementLabelResolve = this.selectedSheetElement.listElementLabelResolve ? this.selectedSheetElement.listElementLabelResolve : '';
 
-    // tslint:disable-next-line:max-line-length
-    if (this.selectedSheetElement.parentDefinitionOccuranceGuid) {
-      this.elementScopeDefinitionOccurance = this.definitionEnhancerService.getInnerDefinition(<Untold.ClientInnerDefinition> this.definition, this.selectedSheetElement.parentDefinitionOccuranceGuid);
-      // tslint:disable-next-line:max-line-length
-      this.elementScopeDefinition = this.definitionEnhancerService.findDefinitionIfExist(this.definition, <string> this.elementScopeDefinitionOccurance.definitionGuid);
-
-      // tslint:disable-next-line:max-line-length
-      this.occuranceChain = this.definitionEnhancerService.findDefinitionContainerChain(<Untold.ClientInnerDefinition> this.definition, this.elementScopeDefinitionOccurance);
-
-      this.listChain = this.occuranceChain.filter(element => element.isList);
-      this.predefinedListChain = this.occuranceChain.filter(element => element.isList && element.isPredefinedList);
+    if (this.selectedSheetElement.parentId) {
+      this.elementScopes = this.sheetBuilderService.getElementScopes(this.rootElement, this.selectedSheetElement);
     } else {
-      this.elementScopeDefinition = this.definition;
-      this.elementScopeDefinitionOccurance = null;
-      this.occuranceChain = [];
-      this.listChain = [];
-      this.predefinedListChain = [];
+      this.elementScopes = [];
     }
 
-    if (this.selectedSheetElement.definitionOccurenceGuid) {
+    this.scopes = this.elementScopes.map(scope => {
+      const def = this.sheetBuilderService.getInnerDefinitionFromScope(<any> this.definition, scope);
+      return {
+        label: def.name,
+        value: def
+      };
+    });
+
+    this.scopes = [{label : this.definition.name, value: this.definition}, ... this.scopes];
+    this.pickerDefinition = this.scopes[0].value;
+
+    if (this.selectedSheetElement.definitionOccurenceGuidChain) {
       // tslint:disable-next-line:max-line-length
-      const pickedDefinition = this.definitionEnhancerService.getInnerDefinition(<Untold.ClientInnerDefinition> this.definition, this.selectedSheetElement.definitionOccurenceGuid);
+      const pickedDefinition = this.sheetBuilderService.getInnerDefinitionFromScope(<any> this.definition, this.selectedSheetElement.definitionOccurenceGuidChain);
       this.propertyName = pickedDefinition ? pickedDefinition.name : '[NOT SET]';
+    } else {
+      this.propertyName = '[NOT SET]';
     }
   }
 
@@ -108,156 +112,123 @@ export class SheetBuilderComponent implements OnInit {
   }
 
   deleteElement(sheetElement: SheetElement) {
-    this.sheetElement = this.rebuildRecursively(this.sheetElement, {action: 'delete', subject: null, targetId: sheetElement.id});
+    this.rootElement = this.sheetBuilderService.deleteElement(this.rootElement, sheetElement);
     this.editorVisible = false;
-    this.onSheetElementUpdate.emit(this.sheetElement);
+    this.onSheetElementUpdate.emit(this.rootElement);
   }
 
   addGrid(sheetElement: SheetElement, operation: string) {
-    const maxId = this.getMaxId(this.sheetElement);
+    this.rootElement = this.sheetBuilderService.addGrid(this.rootElement,
+      sheetElement, operation, this.addGridSize.numerator, this.addGridSize.denominator);
 
-    const element: SheetElement = {
-      type: 'grid',
-      id: maxId + 1,
-      numerator: this.addGridSize.numerator,
-      denominator: this.addGridSize.denominator,
-      innerElements: [],
-      parentDefinitionOccuranceGuid: sheetElement.definitionOccurenceGuid || sheetElement.parentDefinitionOccuranceGuid || null
-    };
-
-    this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: operation, subject: element, targetId: sheetElement.id});
     this.editorVisible = false;
-    this.onSheetElementUpdate.emit(this.sheetElement);
+    this.onSheetElementUpdate.emit(this.rootElement);
   }
 
   addTextControl(sheetElement: SheetElement) {
-    const maxId = this.getMaxId(this.sheetElement);
+    this.rootElement = this.sheetBuilderService.addTextControl(this.rootElement, sheetElement);
 
-        const element: SheetElement = {
-          type: 'text',
-          id: maxId + 1,
-          content: '',
-          innerElements: [],
-          parentDefinitionOccuranceGuid: sheetElement.definitionOccurenceGuid || sheetElement.parentDefinitionOccuranceGuid || null
-        };
-
-        this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: 'add', subject: element, targetId: sheetElement.id});
-        this.editorVisible = false;
-        this.onSheetElementUpdate.emit(this.sheetElement);
+    this.editorVisible = false;
+    this.onSheetElementUpdate.emit(this.rootElement);
   }
 
   addPropertyControl(sheetElement: SheetElement) {
-    const maxId = this.getMaxId(this.sheetElement);
+    this.rootElement = this.sheetBuilderService.addPropertyControl(this.rootElement, sheetElement);
 
-    const element: SheetElement = {
-      type: 'property',
-      id: maxId + 1,
-      content: '',
-      innerElements: [],
-      parentDefinitionOccuranceGuid: sheetElement.definitionOccurenceGuid || sheetElement.parentDefinitionOccuranceGuid || null
-    };
-
-    this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: 'add', subject: element, targetId: sheetElement.id});
     this.editorVisible = false;
-    this.onSheetElementUpdate.emit(this.sheetElement);
+    this.onSheetElementUpdate.emit(this.rootElement);
+  }
+
+  addRepeater(sheetElement: SheetElement) {
+    this.rootElement = this.sheetBuilderService.addRepeater(this.rootElement, sheetElement);
+
+    this.editorVisible = false;
+    this.onSheetElementUpdate.emit(this.rootElement);
   }
 
   addButton(sheetElement: SheetElement) {
-    const maxId = this.getMaxId(this.sheetElement);
+    this.rootElement = this.sheetBuilderService.addButton(this.rootElement, sheetElement);
 
-    const element: SheetElement = {
-      type: 'button',
-      id: maxId + 1,
-      content: '',
-      innerElements: [],
-      parentDefinitionOccuranceGuid: sheetElement.definitionOccurenceGuid || sheetElement.parentDefinitionOccuranceGuid || null
-    };
-
-    this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: 'add', subject: element, targetId: sheetElement.id});
     this.editorVisible = false;
-    this.onSheetElementUpdate.emit(this.sheetElement);
+    this.onSheetElementUpdate.emit(this.rootElement);
   }
 
   update(sheetElement: SheetElement) {
-    this.sheetElement = this.rebuildRecursively(this.sheetElement, { action: 'update', subject: sheetElement, targetId: sheetElement.id});
+    // tslint:disable-next-line:max-line-length
+    this.rootElement = this.sheetBuilderService.rebuildRecursively(this.rootElement, { action: 'update', subject: sheetElement, targetId: sheetElement.id});
     this.editorVisible = false;
-    this.onSheetElementUpdate.emit(this.sheetElement);
-  }
-
-  rebuildRecursively(element: SheetElement, operation: SheetElementOperation): SheetElement {
-    if (operation.action === 'delete' && operation.targetId === element.id) {
-      return null;
-    }
-
-    let cloned: SheetElement = JSON.parse(JSON.stringify(element));
-
-    if (operation.action === 'update' && operation.targetId === element.id) {
-      cloned = JSON.parse(JSON.stringify(operation.subject));
-    }
-
-    cloned.innerElements =  [] ;
-    element.innerElements.forEach(child =>  {
-
-      if (operation.action === 'addbefore' && operation.targetId === child.id) {
-        cloned.innerElements.push(operation.subject);
-      }
-
-      const result = this.rebuildRecursively(child, operation);
-
-      if (result) {
-        cloned.innerElements.push(result);
-      }
-
-      if (operation.action === 'addafter' && operation.targetId === child.id) {
-        cloned.innerElements.push(operation.subject);
-      }
-    });
-
-    if (operation.action === 'add' && operation.targetId === element.id) {
-      cloned.innerElements.push(operation.subject);
-    }
-
-    return cloned;
-  }
-
-  getMaxId(element: SheetElement, currentMaxId: number = 0): number {
-    currentMaxId = element.id > currentMaxId ? element.id : currentMaxId;
-
-    element.innerElements.forEach(child => {
-      currentMaxId = this.getMaxId(child, currentMaxId);
-    });
-
-    return currentMaxId;
+    this.onSheetElementUpdate.emit(this.rootElement);
   }
 
   showDefinitionPickerForProperties() {
+    this.definitionChartConfig = {
+      edit: false,
+      clickableListMembers: true,
+      clickableNonListProperty: true,
+      clickablePredefinedListProperty: false,
+      clickableUserListProperty: false,
+      showListMembers: true,
+      showNonListProperty: true,
+      showPredefinedListProperty: true,
+      showUserListProperty: false
+    };
+
     this.definitionPickerVisible = true;
     this.editorVisible = false;
     this.IsDefinitionPickerForProperties = true;
-    this.pickerDefinition = this.elementScopeDefinition;
+  }
+
+  showDefinitionPickerForListProperties() {
+    this.definitionChartConfig = {
+      edit: false,
+      clickableListMembers: false,
+      clickableNonListProperty: false,
+      clickablePredefinedListProperty: true,
+      clickableUserListProperty: true,
+      showListMembers: true,
+      showNonListProperty: false,
+      showPredefinedListProperty: true,
+      showUserListProperty: true
+    };
+
+    this.definitionPickerVisible = true;
+    this.editorVisible = false;
+    this.IsDefinitionPickerForProperties = true;
   }
 
   showDefinitionPickerForExpressions() {
+    this.definitionChartConfig = {
+      edit: false,
+      clickableListMembers: true,
+      clickableNonListProperty: true,
+      clickablePredefinedListProperty: false,
+      clickableUserListProperty: false,
+      showListMembers: true,
+      showNonListProperty: true,
+      showPredefinedListProperty: true,
+      showUserListProperty: false
+    };
+
     this.definitionPickerVisible = true;
     this.editorVisible = false;
     this.IsDefinitionPickerForProperties = false;
-
-    if (this.expressionPickerDefinitionGuid) {
-      this.pickerDefinition = this.definitionEnhancerService.findDefinitionIfExist(this.definition, this.expressionPickerDefinitionGuid);
-    } else {
-      this.pickerDefinition = this.definition;
-    }
   }
 
-  onDefinitionClick(definition: Untold.ClientInnerDefinition) {
+  onDefinitionChainClick(definitionChain: Untold.ClientInnerDefinition[]) {
     this.definitionPickerVisible = false;
     this.editorVisible = true;
 
     if (this.IsDefinitionPickerForProperties) {
-      this.selectedSheetElement.definitionOccurenceGuid = <string> definition.occurrenceGuid;
-      this.selectedSheetElement.content = definition.name;
-      this.selectedSheetElement.propertyType = definition.dataType;
-      this.selectedSheetElement.isList = definition.isList;
+      this.selectedSheetElement.definitionOccurenceGuidChain =
+        definitionChain.filter(def => def.occurrenceGuid).map(def => {
+          return {
+            occuranceGuid: <string> def.occurrenceGuid
+          };
+        });
+
+        const lastDefinition = definitionChain[definitionChain.length - 1];
+        this.selectedSheetElement.content = lastDefinition.name;
+        this.selectedSheetElement.propertyType = lastDefinition.dataType;
     } else {
       this.expressionMapping = '';
 
@@ -265,26 +236,11 @@ export class SheetBuilderComponent implements OnInit {
         this.expressionMapping = 'entity';
       } else {
         // tslint:disable-next-line:max-line-length
-        const chainToFindList = this.definitionEnhancerService.findDefinitionContainerChain(<Untold.ClientInnerDefinition> this.definition, <Untold.ClientInnerDefinition> this.elementScopeDefinitionOccurance);
+       /* const chainToFindList = this.definitionEnhancerService.findDefinitionContainerChain(<Untold.ClientInnerDefinition> this.definition, <Untold.ClientInnerDefinition> this.elementScopeDefinitionOccurance);
         const listNamePart = this.sheetEnhancerService.getListNamePart(chainToFindList);
 
-        this.expressionMapping = 'listOf' + listNamePart;
+        this.expressionMapping = 'listOf' + listNamePart;*/
       }
-
-      // tslint:disable-next-line:max-line-length
-      let chainToFindelement = this.definitionEnhancerService.findDefinitionContainerChain(<Untold.ClientInnerDefinition> this.pickerDefinition, definition);
-
-      if (chainToFindelement. length < 2) {
-        this.expressionMapping = '';
-        return;
-      }
-
-      chainToFindelement = chainToFindelement.splice(1);
-      chainToFindelement.forEach(def => {
-        this.expressionMapping += '[\'' + definition.name + '\']';
-      });
-
-      this.expressionMapping = '{{ ' + this.expressionMapping + ' }}';
     }
   }
 }

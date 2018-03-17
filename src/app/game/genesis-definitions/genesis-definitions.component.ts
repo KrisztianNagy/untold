@@ -12,7 +12,7 @@ import { Untold } from '../../shared/models/backend-export';
 import { RealmHubSenderService } from '../../shared/services/realm-hub-sender.service';
 import { GameWorkflowEntityService } from '../../shared/services/game-flow/game-workflow-entity.service';
 import { GameWorkflowSheetService } from '../../shared/services/game-flow/game-workflow-sheet.service';
-
+import { DefinitionChartConfig } from '../../shared/models/definition-chart-config';
 @Component({
   selector: 'app-genesis-definitions',
   templateUrl: './genesis-definitions.component.html',
@@ -31,6 +31,7 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
   definitionName: string;
   showAddDefinition: boolean;
   addDefinitionParent: Untold.ClientDefinition;
+  definitionChartConfig: DefinitionChartConfig;
   private definitionSubscription;
 
   constructor(private treeNodeService: TreeNodeService,
@@ -64,6 +65,18 @@ export class GenesisDefinitionsComponent implements OnInit, OnDestroy {
       this.realmDefinitions = realmDefinitions;
       this.prepareDropdowns();
     });
+
+    this.definitionChartConfig = {
+      clickableListMembers: true,
+      clickableNonListProperty: true,
+      clickablePredefinedListProperty: true,
+      clickableUserListProperty: true,
+      edit: true,
+      showListMembers: true,
+      showNonListProperty: true,
+      showPredefinedListProperty: true,
+      showUserListProperty: true
+    };
   }
 
   ngOnDestroy() {

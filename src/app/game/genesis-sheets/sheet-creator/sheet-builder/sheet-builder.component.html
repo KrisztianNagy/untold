@@ -1,6 +1,6 @@
-<app-sheet-mock (onClick)="childClick($event)" [sheetElement]="sheetElement" *ngIf="sheetElement"></app-sheet-mock>
+<app-sheet-mock (onClick)="childClick($event)" [sheetElement]="rootElement" *ngIf="rootElement"></app-sheet-mock>
 <p-sidebar [(visible)]="definitionPickerVisible"[fullScreen]="true">
-    <app-genesis-definitions-chart *ngIf="definitionPickerVisible" [simplified]="true" [definition]="pickerDefinition" (onDefinitionClick)="onDefinitionClick($event)"></app-genesis-definitions-chart>
+    <app-genesis-definitions-chart *ngIf="definitionPickerVisible" [config]="definitionChartConfig" [definition]="pickerDefinition" (onDefinitionChainClick)="onDefinitionChainClick($event)"></app-genesis-definitions-chart>
 </p-sidebar>
 
 <p-sidebar [(visible)]="editorVisible" position="right" [baseZIndex]="10000" styleClass="ui-sidebar-md">
@@ -11,6 +11,7 @@
                 <h3 *ngIf="selectedSheetElement.type === 'grid'">Grid ({{selectedSheetElement.numerator + (selectedSheetElement.denominator ? '-' + selectedSheetElement.denominator : '')}})</h3>
                 <h3 *ngIf="selectedSheetElement.type === 'text'">Text - {{selectedSheetElement.content}}</h3>
                 <h3 *ngIf="selectedSheetElement.type === 'property'">Property - {{selectedSheetElement.content}}</h3>
+                <h3 *ngIf="selectedSheetElement.type === 'repeater'">Repeater - {{selectedSheetElement.content}}</h3>
                 <h3 *ngIf="selectedSheetElement.type === 'button'">Button - {{selectedSheetElement.content}}</h3>
             </div>
             <br/>
@@ -27,7 +28,7 @@
                         </div>
                         <div class="ui-g-12">
                             <div class="ui-g form-group" > 
-                                <div class="ui-g-12">
+                                <div class="ui-g-12"> 
                                     <div class="ui-g-12">
                                         <div class="ui-g-6">   
                                             <span class="md-inputfield">             
@@ -35,10 +36,14 @@
                                             <label>{{selectedSheetElement.type === 'grid' ? 'Legend' : 'Label'}}</label>
                                             </span>
                                         </div>
-                                        <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'button' && elementScopeDefinitionOccurance.isList && elementScopeDefinitionOccurance.isPredefinedList">   
-                                            <div class="ui-g-12"><p-radioButton name="group1" value="" label="Use Label" [(ngModel)]="selectedSheetElement.listElementLabelResolve" inputId="optnull"></p-radioButton></div>
-                                            <div class="ui-g-12" *ngFor="let chainElement of predefinedListChain; let i = index;">
-                                                <p-radioButton name="group1" value="{{chainElement.occurrenceGuid}}" label="Use {{chainElement.name}} list" [(ngModel)]="selectedSheetElement.listElementLabelResolve" inputId="opt{{i}}"></p-radioButton>
+                                        <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'button'">   
+                                            <div class="ui-g-12">
+                                                <p-radioButton name="group1" value="" label="Use Label" [(ngModel)]="selectedSheetElement.listElementLabelResolve" inputId="optnull"></p-radioButton>
+                                            </div>
+                                            <div class="ui-g-12" *ngFor="let element of scopes; let i = index;">
+                                                <div *ngIf="element.isList && element.isPredefinedList">
+                                                    <p-radioButton name="group1" value="{{element.occurrenceGuid}}" label="Use {{element.name}} list" [(ngModel)]="selectedSheetElement.listElementLabelResolve" inputId="opt{{i}}"></p-radioButton>
+                                                </div>
                                             </div>
                                         </div>                                   
                                         <div class="ui-g-6" *ngIf="selectedSheetElement.type === 'grid'">
@@ -48,10 +53,49 @@
                                     <div class="ui-g-12" *ngIf="selectedSheetElement.type === 'property'">
                                         <legend>Property configuration</legend>
                                         <div class="ui-g-6">
-                                            {{propertyName}}           
+                                            Select the scope:
                                         </div>
                                         <div class="ui-g-6">
-                                            <button pButton type="button" class='green-btn' (click)="showDefinitionPickerForProperties()" label="Set Property" icon="ui-icon-text-fields"></button>           
+                                            <p-dropdown [options]="scopes" [(ngModel)]="pickerDefinition"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12"  *ngFor="let scopeDefinition of scopes; let last = last">
+                                            <div class="ui-g-6">
+                                                {{scopeDefinition.name}}
+                                            </div>
+                                            <div class="ui-g-6" *ngIf="!last && scopeDefinition.isList && scopeDefinition.isPredefinedList">
+                                                <p-dropdown [options]="scopeDefinition.predefinedListItems" [(ngModel)]="scopeDefinition.listElementName" ></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-4">
+                                        </div>
+                                        <div class="ui-g-4">
+                                        </div>
+                                        <div class="ui-g-4">
+                                            <button pButton type="button" class='green-btn' (click)="showDefinitionPickerForProperties()" label="Pick Property From Scope" icon="ui-icon-text-fields"></button>           
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12" *ngIf="selectedSheetElement.type === 'repeater'">
+                                        <legend>Repeater configuration</legend>
+                                        <div class="ui-g-6">
+                                            Select the scope:
+                                        </div>
+                                        <div class="ui-g-6">
+                                            <p-dropdown [options]="scopes" [(ngModel)]="pickerDefinition"></p-dropdown>
+                                        </div>
+                                        <div class="ui-g-12"  *ngFor="let scopeDefinition of scopes; let last = last">
+                                            <div class="ui-g-6">
+                                                {{scopeDefinition.name}}
+                                            </div>
+                                            <div class="ui-g-6" *ngIf="!last && scopeDefinition.isList && scopeDefinition.isPredefinedList">
+                                                <p-dropdown [options]="scopeDefinition.predefinedListItems" [(ngModel)]="scopeDefinition.listElementName" ></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-4">
+                                        </div>
+                                        <div class="ui-g-4">
+                                        </div>
+                                        <div class="ui-g-4">
+                                            <button pButton type="button" class='green-btn' (click)="showDefinitionPickerForListProperties()" label="Pick Property From Scope" icon="ui-icon-text-fields"></button>           
                                         </div>
                                     </div>
                                 </div>
@@ -65,14 +109,14 @@
                                 </div>
                                 <div class="ui-g-12">
                                     <legend>Available Expressions</legend>
-                                    <div class="ui-g-6">   
-                                        <div class="ui-g-12"><p-radioButton name="group2" value="" label="From Root" [(ngModel)]="expressionPickerDefinitionGuid" inputId="expnull"></p-radioButton></div>
-                                        <div class="ui-g-12" *ngFor="let chainElement of listChain; let i = index;">
-                                            <p-radioButton name="group2" value="{{chainElement.definitionGuid}}" label="From {{chainElement.name}} list" [(ngModel)]="expressionPickerDefinitionGuid" inputId="exp{{i}}"></p-radioButton>
-                                        </div>
-                                    </div>
                                     <div class="ui-g-6">
-                                        <button pButton type="button" class='blue-btn' (click)="showDefinitionPickerForExpressions()" label="Pick member" icon="ui-icon-text-fields"></button>           
+                                            Select the scope:
+                                        </div>
+                                        <div class="ui-g-6">
+                                            <p-dropdown [options]="scopes" [(ngModel)]="pickerDefinition"></p-dropdown>
+                                        </div>
+                                    <div class="ui-g-6">
+                                        <button pButton type="button" class='blue-btn' (click)="showDefinitionPickerForExpressions()" label="Pick Member From Scope" icon="ui-icon-text-fields"></button>           
                                     </div> 
                                     <div class="ui-g-12" *ngIf="expressionMapping">
                                         Please use the following expression in the text: <br />
@@ -85,9 +129,10 @@
                 </p-accordionTab>
                 <p-accordionTab header="Add Grid" *ngIf="selectedSheetElement.type === 'root' || selectedSheetElement.type === 'grid' || (selectedSheetElement.type === 'property' && selectedSheetElement.isList)">
                     <div class="ui-g">
-                        <div class="ui-g-12" >
+                        <div class="ui-g-12">
                             <div class="ui-g-8">
-                                <p-dropdown [options]="gridSizes" [(ngModel)]="addGridSize"></p-dropdown>
+                                <p-dropdown [options]="gridSizes" [(ngModel)]="addGridSize">
+                                </p-dropdown>
                             </div>
                             <div class="ui-g-4">
                                 <button pButton type="button" class='green-btn' (click)="addGrid(selectedSheetElement, 'add')" label="Add Inside" icon="ui-icon-exposure-plus-1"></button>                            
@@ -108,18 +153,20 @@
                                 <button pButton type="button" class='green-btn' (click)="addTextControl(selectedSheetElement)" label="Add Text" icon="ui-icon-text-fields"></button>           
                             </div>
                             <div class="ui-g-6">
-                                <button pButton type="button" class='green-btn' (click)="addPropertyControl(selectedSheetElement)" label="Add Property" icon="ui-icon-text-fields"></button>           
+                                <button pButton type="button" class='green-btn' (click)="addPropertyControl(selectedSheetElement)" label="Add Property" icon="ui-icon-layers"></button>           
                             </div>
                         </div>
                         <div class="ui-g-12">
                             <div class="ui-g-6">
-                                <button pButton type="button" class='green-btn' (click)="addButton(selectedSheetElement)" label="Add Button" icon="ui-icon-text-fields"></button>           
+                                <button pButton type="button" class='green-btn' (click)="addButton(selectedSheetElement)" label="Add Button" icon="ui-icon-chat-bubble"></button>           
                             </div>
                             <div class="ui-g-6">
+                                <button pButton type="button" class='green-btn' (click)="addRepeater(selectedSheetElement)" label="Add Repeater" icon="ui-icon-repeat"></button>
                             </div>
                         </div>
                     </div>
-                </p-accordionTab>                   
+                </p-accordionTab> 
+                                 
             </p-accordion>
         </div>
     </div>

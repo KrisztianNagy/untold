@@ -37,28 +37,6 @@ export class DefinitionEnhancerService {
     return chain;
   }
 
-  // tslint:disable-next-line:max-line-length
-  findDefinitionContainerChain(rootDefinition: Untold.ClientInnerDefinition, targetDefinition: Untold.ClientInnerDefinition): Array<Untold.ClientInnerDefinition> {
-    if (!targetDefinition.occurrenceGuid) {
-      return [targetDefinition];
-    }
-
-    for (let i = 0; i < rootDefinition.definitions.length; i++ ) {
-      if (rootDefinition.definitions[i].occurrenceGuid === targetDefinition.occurrenceGuid) {
-        return [rootDefinition, targetDefinition];
-      }
-
-      if (rootDefinition.definitions[i].definitions) {
-        const checkBelow = this.findDefinitionContainerChain(rootDefinition.definitions[i], targetDefinition);
-        if (checkBelow.length) {
-          return[rootDefinition, ...checkBelow];
-        }
-      }
-    }
-
-    return [];
-  }
-
   getAllChoiceOptions(definition: Untold.ClientInnerDefinition): AsyncSubject<object> {
     const subject = new AsyncSubject<object>();
 
@@ -156,31 +134,25 @@ export class DefinitionEnhancerService {
     return pickedDefinition;
   }
 
-  getInnerDefinition(definition: Untold.ClientInnerDefinition, occuranceGuid: string): Untold.ClientInnerDefinition {
-    let found: Untold.ClientInnerDefinition = null;
-
-    if (definition.occurrenceGuid === occuranceGuid) {
-      return definition;
+  getInnerDefinition(definition: Untold.ClientInnerDefinition, occuranceGuids: string[]): Untold.ClientInnerDefinition {
+    if (occuranceGuids.length === 0) {
+      return null;
     }
 
-    if (definition.definitions) {
-      definition.definitions.forEach(def => {
-        if (found) {
-          return;
-        }
+    const nextOccurance = occuranceGuids[occuranceGuids.length - 1];
 
-        if (def.occurrenceGuid === occuranceGuid) {
-          found = def;
-          return;
-        }
-        const childCheck = this.getInnerDefinition(def, occuranceGuid);
+    for (let i = 0; i < definition.definitions.length; i++) {
+      const currentDefinition = definition.definitions[i];
 
-        if (childCheck) {
-          found = childCheck;
+      if (currentDefinition.occurrenceGuid === nextOccurance) {
+        if (occuranceGuids.length === 1) {
+          return currentDefinition;
+        } else {
+          return this.getInnerDefinition(currentDefinition, occuranceGuids.slice(1));
         }
-      });
+      }
     }
 
-    return found;
+   return null;
   }
 }

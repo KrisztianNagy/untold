@@ -11,7 +11,7 @@ import { SheetTab } from '../../../../store/models/sheet';
 export class SheetTabListComponent implements OnInit {
   @Input() tabs: Array<SheetTab>;
   @Output() onUpdate = new EventEmitter<Array<SheetTab>>();
- 
+
   temporaryTabList: Array<SheetTab>;
   addedTabName: string;
 
@@ -43,7 +43,8 @@ export class SheetTabListComponent implements OnInit {
         type: 'root',
         denominator: 1,
         innerElements: [],
-        parentDefinitionOccuranceGuid: null
+        parentScope: null,
+        parentId: null
       }
     }];
     this.addedTabName = '';
@@ -53,7 +54,6 @@ export class SheetTabListComponent implements OnInit {
     this.temporaryTabList = this.temporaryTabList.filter(currTab => currTab !== tab);
   }
 
-  
   save() {
     this.onUpdate.emit(this.temporaryTabList);
   }

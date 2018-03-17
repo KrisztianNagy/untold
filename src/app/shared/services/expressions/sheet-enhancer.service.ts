@@ -254,7 +254,11 @@ export class SheetEnhancerService {
     const lastDefinition = sheetProcessingParameters.definitions[sheetProcessingParameters.definitions.length - 1];
 
     // tslint:disable-next-line:max-line-length
-    const selectedDefinition = this.definitionEnhancerService.getInnerDefinition(lastDefinition, sheetProcessingParameters.sheetElement.definitionOccurenceGuid);
+    const occuranceGuids =  sheetProcessingParameters.sheetElement.definitionOccurenceGuidChain
+      .filter(element => element.occuranceGuid)
+     .map(element => element.occuranceGuid);
+
+    const selectedDefinition = this.definitionEnhancerService.getInnerDefinition(lastDefinition, occuranceGuids);
     sheetProcessingParameters.definitions = [...sheetProcessingParameters.definitions, selectedDefinition];
     sheetProcessingParameters.modelMapping += '[\'' + selectedDefinition.name + '\']';
     const htmlId = selectedDefinition.name.replace(/ /g, '_');

@@ -3,6 +3,7 @@ import { TreeNode } from 'primeng/primeng';
 
 import { Untold } from '../../shared/models/backend-export';
 import { GenesisEntity, GenesisEntityValue, GenesisTreeNode } from '../../shared/models/genesis-entity';
+import { DefinitionChartConfig } from '../../shared/models/definition-chart-config';
 
 @Injectable()
 export class TreeNodeService {
@@ -11,7 +12,7 @@ export class TreeNodeService {
 
   }
 
-  getOrganizationChartFromDefinitions(definition: Untold.ClientDefinition, simplified?: boolean) {
+  getOrganizationChartFromDefinitions(definition: Untold.ClientDefinition, config: DefinitionChartConfig) {
     const organizationTree =  [{
         label: definition.name,
         data: definition,
@@ -19,12 +20,17 @@ export class TreeNodeService {
         type: 'definition',
       }];
 
-      this.updateTreeLayerFromDefinitions(organizationTree[0], definition.definitions, simplified);
+      this.updateTreeLayerFromDefinitions(organizationTree[0], definition.definitions, config, false);
       return organizationTree;
   }
 
-  updateTreeLayerFromDefinitions(parentNode: TreeNode, definitions: Array<Untold.ClientInnerDefinition>, simplified?: boolean) {
+  updateTreeLayerFromDefinitions(parentNode: TreeNode,
+    definitions: Array<Untold.ClientInnerDefinition>, config: DefinitionChartConfig, inList: boolean) {
     parentNode.children = [];
+
+    if (inList && ! config.showListMembers) {
+        return;
+    }
 
     definitions.forEach(definition => {
         const hasChildren = definitions.filter(def => {
@@ -42,8 +48,19 @@ export class TreeNodeService {
             parent: parentNode
         };
 
-        if (definition.definitions && !(definition.isList && simplified )) {
-            this.updateTreeLayerFromDefinitions(node, definition.definitions);
+        if (definition.definitions) {
+            if (definition.isList &&
+                ((definition.isPredefinedList && config.showPredefinedListProperty) ||
+                (!definition.isPredefinedList && config.showUserListProperty))) {
+
+                    this.updateTreeLayerFromDefinitions(node, definition.definitions, config, true);
+            }
+
+            if (!definition.isList) {
+                if (config.showNonListProperty) {
+                    this.updateTreeLayerFromDefinitions(node, definition.definitions, config, inList);
+                }
+            }
         }
 
         parentNode.children.push(node);

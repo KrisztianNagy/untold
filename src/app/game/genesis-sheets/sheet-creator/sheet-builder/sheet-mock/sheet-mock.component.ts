@@ -18,7 +18,7 @@ export class SheetMockComponent implements OnInit {
   }
 
   ngOnInit() {
-    var a = 5;
+   
   }
 
   childClick(event: any) {

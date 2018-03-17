@@ -2,8 +2,8 @@
     <p-organizationChart [value]="organizationTree" *ngIf="organizationTree" styleClass="definition">
         <ng-template let-node pTemplate="definition">
             <div class="node-header ui-corner-top" [style.background-color]="getColor(node.data)" >
-            <span (click)="definitionClick(node.data)">{{node.label}}</span>
-            <i class="material-icons" (click)="editName(node.data)" *ngIf="!simplified && ((node.data.definitionGuid && node.data.definitionGuid === definition.definitionGuid) || getIfFirstChild(node.data))" style="float: right; vertical-align: super; font-size: inherit;">edit</i>
+            <span (click)="definitionClick(node)">{{node.label}}</span>
+            <i class="material-icons" (click)="editName(node.data)" *ngIf="config.edit && ((node.data.definitionGuid && node.data.definitionGuid === definition.definitionGuid) || getIfFirstChild(node.data))" style="float: right; vertical-align: super; font-size: inherit;">edit</i>
             <hr *ngIf="node.data.isList" />
             <span *ngIf="node.data.isList">
                 List
@@ -13,22 +13,22 @@
             <span *ngIf="node.data && node.data.dataType && node.data.dataType !== 'Definition'"> 
                 {{node.data.dataType}}
             </span>
-            <div *ngIf="!simplified && node.data.definitionGuid && node.data.definitionGuid === draftDefinition.definitionGuid">
+            <div *ngIf="config.edit && node.data.definitionGuid && node.data.definitionGuid === draftDefinition.definitionGuid">
                 <button pButton type="button" class='green-btn'  label="Add child definition" icon="ui-icon-plus-one" (click)="clickAddChild()"></button> 
                 <br/><br/>
                 <button pButton type="button" class='blue-btn'  label="Reorder" icon="ui-icon-compare-arrows" (click)="clickOrder(node.data)"></button>
                 <br/> <br/>
                 <button pButton type="button" class='blue-btn'  label="Rules ({{node.data.rules ? node.data.rules.length : 0 }})" icon="ui-icon-work" (click)="clickRule(node.data)"></button> 
             </div>
-            <div *ngIf="!simplified && node.data.isList">
+            <div *ngIf="config.edit && node.data.isList">
                 <br/>
                 <button pButton type="button" class='green-blue'  label="Config" icon="ui-icon-format-list-bulleted" (click)="clickList(node.data)" ></button> 
             </div>
-            <div *ngIf="!simplified && node.data.dataType === 'choice'">
+            <div *ngIf="config.edit && node.data.dataType === 'choice'">
                 <br/>
                 <button pButton type="button" class='blue-btn'  label="Config" icon="ui-icon-select-all" (click)="clickChoice(node.data)"></button> 
             </div>
-            <div *ngIf="!simplified && getIfFirstChild(node.data)">
+            <div *ngIf="config.edit && getIfFirstChild(node.data)">
                 <br/>
                 <button pButton type="button" class='red-btn'  label="Remove" icon="ui-icon-clear" (click)="clickRemove(node.data)"></button> 
             </div>         

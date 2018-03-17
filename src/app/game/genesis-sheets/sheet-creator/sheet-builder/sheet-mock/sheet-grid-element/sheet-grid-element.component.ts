@@ -15,7 +15,6 @@ export class SheetGridElementComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    var a = 5;
   }
 
   sheetElementClick(event: any) {

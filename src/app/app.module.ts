@@ -133,6 +133,7 @@ import { ExpressionFunctionService } from './shared/services/expressions/express
 import { ExpressionTableCacheService } from './shared/services/expressions/expression-table-cache.service';
 import { EntityEnhancerService } from './shared/services/expressions/entity-enhancer.service';
 import { SheetEntityService } from './shared/services/expressions/sheet-entity.service';
+import { SheetBuilderService } from './shared/services/expressions/sheet-builder.service';
 import { DefinitionEnhancerService } from './shared/services/expressions/definition-enhancer.service';
 import { SheetEnhancerService } from './shared/services/expressions/sheet-enhancer.service';
 import { CanActivateSelectedRealmGuard } from './shared/guards/can-activate-selected-realm.guard';
@@ -359,7 +360,7 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
-        //{provide: ErrorHandler, useClass: UntoldErrorHandler},
+        // {provide: ErrorHandler, useClass: UntoldErrorHandler},
         { provide: RouteReuseStrategy, useClass: PreventErrorRouteReuseStrategy },
         WebApiService,
         TemplateConfigurationService,
@@ -414,7 +415,8 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
         DragulaService,
         ChatEntryService,
         ChatService,
-        DiceService
+        DiceService,
+        SheetBuilderService
     ],
     bootstrap:[AppComponent]
 })
