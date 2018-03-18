@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import 'jquery';
 
 import { MenuItem, SelectItem } from 'primeng/primeng';
+import { PapaParseResult } from 'ngx-papaparse';
 
 import { GenesisDataService } from '../../../shared/services/rest/genesis-data.service';
 import { Untold, System } from '../../../shared/models/backend-export';
@@ -26,7 +27,7 @@ export class RuleTableImportWizardComponent implements OnInit {
   currentStep: number;
   tableName: string;
   file: File;
-  parsedCsv: PapaParse.ParseResult;
+  parsedCsv: PapaParseResult;
   columnTypes: Array<SelectItem>;
   columns: Array<Untold.ClientRuleTableColumn>;
   progressMeter: number;

@@ -1,39 +1,30 @@
 import {Component, AfterViewInit, ViewChild, OnDestroy, ElementRef} from '@angular/core';
+import {ScrollPanel} from 'primeng/primeng';
 
-declare var jQuery: any;
 
 @Component({
-    // tslint:disable-next-line:component-selector
+    /* tslint:disable:component-selector */
     selector: 'app-sidebarTabContent',
+    /* tslint:enable:component-selector */
     template: `
         <div class="layout-submenu-content" (click)="onClick($event)">
-            <div #scroller class="nano">
-                <div class="nano-content menu-scroll-content">
-                    <ng-content></ng-content>
-                </div>
-            </div>
+            <p-scrollPanel #scroller [style]="{height: '100%'}">
+                <ng-content></ng-content>
+            </p-scrollPanel>
         </div>
     `
 })
-// tslint:disable-next-line:component-class-suffix
-export class AppSidebarTabContent implements AfterViewInit, OnDestroy {
-    @ViewChild('scroller') layoutMenuScrollerViewChild: ElementRef;
-    scroller: HTMLDivElement;
+export class AppSidebartabcontentComponent implements AfterViewInit {
+
+    @ViewChild('scroller') layoutMenuScrollerViewChild: ScrollPanel;
 
     ngAfterViewInit() {
-        this.scroller = <HTMLDivElement> this.layoutMenuScrollerViewChild.nativeElement;
-        setTimeout(() => {
-            jQuery(this.scroller).nanoScroller({flash: true});
-        }, 10);
+      setTimeout(() => {this.layoutMenuScrollerViewChild.moveBar(); }, 100);
     }
 
-    onClick($event) {
-        setTimeout(() => {
-            jQuery(this.scroller).nanoScroller();
-        }, 500);
-    }
-
-    ngOnDestroy() {
-        jQuery(this.scroller).nanoScroller({destroy: true});
+    onClick(event: Event) {
+      setTimeout(() => {
+        this.layoutMenuScrollerViewChild.moveBar();
+      }, 450);
     }
 }

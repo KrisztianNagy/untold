@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 import { saveAs } from 'file-saver';
+import { PapaParseService, PapaParseResult } from 'ngx-papaparse';
 
 import { AzureTableRow, DataTable } from '../models/data-table';
 
 @Injectable()
 export class CsvFileService {
 
-  constructor() { }
+  constructor(private papaParseService: PapaParseService) { }
 
   saveRuleTable(dataTable: DataTable) {
     const header = dataTable.columns.map(col => this.escapeComma(col.name)) + '\r\n';
@@ -30,10 +31,10 @@ export class CsvFileService {
     return text.indexOf(',') > 0 ? '"' + text + '"' : text;
   }
 
-  parseCsv(file: File): Subject<PapaParse.ParseResult> {
-    const subject = new Subject<PapaParse.ParseResult>();
+  parseCsv(file: File): Subject<PapaParseResult> {
+    const subject = new Subject<PapaParseResult>();
 
-    Papa.parse(file, {
+    this.papaParseService.parse(file, {
       header: true,
       complete: results => {
         subject.next(results);

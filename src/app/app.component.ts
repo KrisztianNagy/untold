@@ -1,6 +1,8 @@
-import {Component, AfterViewInit, ElementRef, Renderer, ViewChild,
-        ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {
+    Component, AfterViewInit, ElementRef, Renderer, ViewChild,
+    ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, OnInit, NgZone
+} from '@angular/core';
+import { Router } from '@angular/router';
 
 import { TemplateConfigurationService } from './store/services/template-configuration.service';
 import { AuthService } from './shared/services/auth.service';
@@ -8,17 +10,16 @@ import { GameWorkflowService } from './shared/services/game-flow/game-workflow.s
 import { UserDataService } from './shared/services/rest/user-data.service';
 import { Untold } from './shared/models/backend-export';
 import { GrowlService } from './shared/services/growl.service';
-import { Sidebar} from 'primeng/components/sidebar/sidebar';
 enum MenuOrientation {
     STATIC,
     OVERLAY
 }
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     authenticated: boolean;
@@ -32,17 +33,19 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     topbarItemClick: boolean;
     activeTopbarItem: any;
     documentClickListener: Function;
+    rippleInitListener: any;
+    rippleMouseDownListener: any;
     chatVisible: boolean;
 
     constructor(private changeDetectorRef: ChangeDetectorRef,
-                public renderer: Renderer,
-                private el: ElementRef,
-                private router: Router,
-                private templateConfigurationService: TemplateConfigurationService,
-                private gameWorkflowService: GameWorkflowService,
-                private userDataService: UserDataService,
-                private authService: AuthService,
-                private growlService: GrowlService) {
+        public renderer: Renderer,
+        public zone: NgZone,
+        private router: Router,
+        private templateConfigurationService: TemplateConfigurationService,
+        private gameWorkflowService: GameWorkflowService,
+        private userDataService: UserDataService,
+        private authService: AuthService,
+        private growlService: GrowlService) {
         this.chatVisible = false;
         this.templateConfigurationService.update({
             showFrame: true
@@ -55,6 +58,115 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         });
     }
 
+    bindRipple() {
+        this.rippleInitListener = this.init.bind(this);
+        document.addEventListener('DOMContentLoaded', this.rippleInitListener);
+    }
+
+    init() {
+        this.rippleMouseDownListener = this.rippleMouseDown.bind(this);
+        document.addEventListener('mousedown', this.rippleMouseDownListener, false);
+    }
+
+    rippleMouseDown(e) {
+        for (let target = e.target; target && target !== this; target = target['parentNode']) {
+            if (!this.isVisible(target)) {
+                continue;
+            }
+
+            // Element.matches() -> https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
+            if (this.selectorMatches(target, '.ripplelink, .ui-button')) {
+                const element = target;
+                this.rippleEffect(element, e);
+                break;
+            }
+        }
+    }
+
+    selectorMatches(el, selector) {
+        const p = Element.prototype;
+        const f = p['matches'] || p['webkitMatchesSelector'] || p['mozMatchesSelector'] || p['msMatchesSelector'] || function (s) {
+            return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
+        };
+        return f.call(el, selector);
+    }
+
+    isVisible(el) {
+        return !!(el.offsetWidth || el.offsetHeight);
+    }
+
+    rippleEffect(element, e) {
+        if (element.querySelector('.ink') === null) {
+            const inkEl = document.createElement('span');
+            this.addClass(inkEl, 'ink');
+
+            if (this.hasClass(element, 'ripplelink') && element.querySelector('span')) {
+                element.querySelector('span').insertAdjacentHTML('afterend', '<span class=\'ink\'></span>');
+            } else {
+                element.appendChild(inkEl);
+            }
+        }
+
+        const ink = element.querySelector('.ink');
+        this.removeClass(ink, 'ripple-animate');
+
+        if (!ink.offsetHeight && !ink.offsetWidth) {
+            const d = Math.max(element.offsetWidth, element.offsetHeight);
+            ink.style.height = d + 'px';
+            ink.style.width = d + 'px';
+        }
+
+        const x = e.pageX - this.getOffset(element).left - (ink.offsetWidth / 2);
+        const y = e.pageY - this.getOffset(element).top - (ink.offsetHeight / 2);
+
+        ink.style.top = y + 'px';
+        ink.style.left = x + 'px';
+        ink.style.pointerEvents = 'none';
+        this.addClass(ink, 'ripple-animate');
+    }
+
+    hasClass(element, className) {
+        if (element.classList) {
+            return element.classList.contains(className);
+        } else {
+            return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
+        }
+    }
+
+    addClass(element, className) {
+        if (element.classList) {
+            element.classList.add(className);
+        } else {
+            element.className += ' ' + className;
+        }
+    }
+
+    removeClass(element, className) {
+        if (element.classList) {
+            element.classList.remove(className);
+        } else {
+            element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
+    }
+
+    getOffset(el) {
+        const rect = el.getBoundingClientRect();
+
+        return {
+            top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
+            left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0),
+        };
+    }
+
+    unbindRipple() {
+        if (this.rippleInitListener) {
+            document.removeEventListener('DOMContentLoaded', this.rippleInitListener);
+        }
+        if (this.rippleMouseDownListener) {
+            document.removeEventListener('mousedown', this.rippleMouseDownListener);
+        }
+    }
+
     ngAfterViewInit() {
         this.documentClickListener = this.renderer.listenGlobal('body', 'click', (event) => {
             if (!this.topbarItemClick) {
@@ -62,13 +174,24 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
                 this.topbarMenuActive = false;
             }
 
-            if (!this.sidebarClick && this.overlay) {
+            if (!this.sidebarClick && (this.overlay || !this.isDesktop())) {
                 this.sidebarActive = false;
             }
 
             this.topbarItemClick = false;
             this.sidebarClick = false;
         });
+    }
+
+    isDesktop() {
+        return window.innerWidth > 1024;
+    }
+
+    ngOnDestroy() {
+        if (this.documentClickListener) {
+            this.documentClickListener();
+        }
+        this.unbindRipple();
     }
 
     ngOnInit() {
@@ -152,11 +275,5 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
     changeToOverlayMenu() {
         this.layoutMode = MenuOrientation.OVERLAY;
-    }
-
-    ngOnDestroy() {
-        if (this.documentClickListener) {
-            this.documentClickListener();
-        }
     }
 }

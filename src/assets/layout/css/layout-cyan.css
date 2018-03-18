@@ -164,10 +164,12 @@
   -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
   border: 0 none !important; }
 
-.ui-g.form-group > div {
-  padding: .75em 1em; }
-.ui-g.form-group-m > div {
-  padding: 1em; }
+.ui-g {
+  -ms-flex-wrap: wrap; }
+  .ui-g.form-group > div {
+    padding: 1em; }
+  .ui-g.form-group-m > div {
+    padding: 1em; }
 
 /* Ripple Effect Style like Google Material Buttons Effect*/
 .ripplelink {
@@ -1116,7 +1118,7 @@ body {
   -webkit-font-smoothing: antialiased;
   padding: 0;
   margin: 0;
-  height: 100%; }
+  min-height: 100%; }
   body.main-body {
     background-color: #fcfbfb; }
   body a {
@@ -1434,26 +1436,24 @@ body {
         .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content {
           padding: 8px 0;
           height: 100%;
-          overflow: auto; }
-          .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano > .nano-content {
-            padding-right: 6px; }
-            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano > .nano-content.menu-scroll-content {
-              display: block;
-              height: 100%;
-              overflow-x: hidden;
-              overflow-y: scroll;
-              position: relative; }
-            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano > .nano-content > *:last-child {
-              display: block;
-              padding-bottom: 150px; }
-          .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano > .nano-pane {
-            background: transparent; }
-            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano > .nano-pane > .nano-slider {
+          overflow: visible; }
+          .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .ui-scrollpanel {
+            background: transparent;
+            border-radius: 0;
+            border: none; }
+            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .ui-scrollpanel .ui-scrollpanel-bar-y {
               background-color: #aaa;
               opacity: 0.4; }
+            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .ui-scrollpanel .ui-scrollpanel-hidden {
+              display: block;
+              visibility: hidden; }
+            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .ui-scrollpanel .ui-scrollpanel-content > *:last-child {
+              overflow: visible;
+              padding-bottom: 170px;
+              padding-right: 22px; }
           .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu {
             margin: 0;
-            padding: 0;
+            padding: 0 22px 0 0;
             list-style-type: none; }
             .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li a {
               display: block;
@@ -1580,23 +1580,14 @@ body {
 
 .layout-wrapper .footer {
   padding: .5em; }
-  .layout-wrapper .footer img {
-    width: 36px;
-    margin-right: 8px;
-    vertical-align: middle;
-    opacity: 0.6;
-    filter: alpha(opacity=60); }
-  .layout-wrapper .footer span {
-    vertical-align: middle; }
-  .layout-wrapper .footer a {
-    float: right;
-    margin-top: 4px;
-    font-size: 20px;
-    margin-left: 24px;
-    display: block;
-    color: #757575; }
-  .layout-wrapper .footer .footer-content > div {
-    padding: 0; }
+  .layout-wrapper .footer .footer-text-left {
+    float: left; }
+  .layout-wrapper .footer .footer-text-right {
+    color: #757575;
+    float: right; }
+    .layout-wrapper .footer .footer-text-right span {
+      vertical-align: middle;
+      display: inline-block; }
 
 .layout-wrapper.layout-rtl .layout-sidebar {
   right: 0; }
@@ -1608,21 +1599,6 @@ body {
       left: auto; }
       .layout-wrapper.layout-rtl .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content {
         padding: 6px 6px 6px 0px; }
-        .layout-wrapper.layout-rtl .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano .nano-content {
-          margin-right: 0px !important;
-          margin-left: -17px;
-          padding-right: 0px;
-          padding-left: 6px; }
-          .layout-wrapper.layout-rtl .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano .nano-content .navigation-menu li > a i:first-child {
-            margin-right: 0px;
-            margin-left: 4px; }
-          .layout-wrapper.layout-rtl .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano .nano-content .navigation-menu li > a i:last-child {
-            float: left; }
-          .layout-wrapper.layout-rtl .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano .nano-content .navigation-menu li > ul {
-            padding: 0px 18px 0px 0px; }
-        .layout-wrapper.layout-rtl .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .nano > .nano-pane {
-          right: auto;
-          left: 0; }
       .layout-wrapper.layout-rtl .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-title .menu-button {
         float: left; }
       .layout-wrapper.layout-rtl .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-title .menu-pin-button {
@@ -2037,7 +2013,8 @@ body {
 .splash-screen {
   background: #1F796D;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  position: fixed; }
   .splash-screen .splash-loader {
     position: absolute;
     left: 50%;

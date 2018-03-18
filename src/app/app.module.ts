@@ -8,6 +8,7 @@ import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {AppRoutes , PreventErrorRouteReuseStrategy} from './app.routes';
 import {StoreModule} from '@ngrx/store';
 import {enableProdMode} from '@angular/core';
+import { PapaParseModule } from 'ngx-papaparse';
 import 'rxjs/add/operator/toPromise';
 
 // PrimeNG components
@@ -52,6 +53,7 @@ import {OrderListModule} from 'primeng/primeng';
 import {OverlayPanelModule} from 'primeng/primeng';
 import {PaginatorModule} from 'primeng/primeng';
 import {PanelModule} from 'primeng/primeng';
+import {ScrollPanelModule} from 'primeng/primeng';
 import {PanelMenuModule} from 'primeng/primeng';
 import {PasswordModule} from 'primeng/primeng';
 import {PickListModule} from 'primeng/primeng';
@@ -83,7 +85,7 @@ import {AceEditorModule} from 'ng2-ace-editor';
 import {AppComponent} from './app.component';
 import {AppMenuComponent, AppSubMenu} from './app.menu.component';
 import {AppSideBarComponent} from './app.sidebar.component';
-import {AppSidebarTabContent} from './app.sidebartabcontent.component';
+import {AppSidebartabcontentComponent} from './app.sidebartabcontent.component';
 import {AppTopBar} from './app.topbar.component';
 import {AppFooter} from './app.footer.component';
 
@@ -195,6 +197,7 @@ import { GenesisSheetsComponent } from './game/genesis-sheets/genesis-sheets.com
 import { SheetViewerComponent } from './sheet-viewer/sheet-viewer.component';
 // tslint:disable-next-line:max-line-length
 import { DefinitionListConfigComponent } from './game/genesis-definitions/genesis-definitions-chart/definition-list-config/definition-list-config.component';
+// tslint:disable-next-line:max-line-length
 import { DefinitionChoiceConfigComponent } from './game/genesis-definitions/genesis-definitions-chart/definition-choice-config/definition-choice-config.component';
 import { GenesisDefinitionsChartComponent } from './game/genesis-definitions/genesis-definitions-chart/genesis-definitions-chart.component';
 // tslint:disable-next-line:max-line-length
@@ -267,6 +270,7 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
         RadioButtonModule,
         RatingModule,
         ScheduleModule,
+        ScrollPanelModule,
         SelectButtonModule,
         SlideMenuModule,
         SliderModule,
@@ -286,6 +290,7 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
         InplaceModule,
         SidebarModule,
         AceEditorModule,
+        PapaParseModule,
         StoreModule.forRoot(CombinedReducers)
     ],
     declarations: [
@@ -293,7 +298,7 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
         AppMenuComponent,
         AppSubMenu,
         AppSideBarComponent,
-        AppSidebarTabContent,
+        AppSidebartabcontentComponent,
         AppTopBar,
         AppFooter,
         BoardComponent,
