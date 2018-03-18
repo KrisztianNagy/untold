@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrateg
 
 import { MenuItem } from 'primeng/primeng';
 
-import { Untold} from '../shared/models/backend-export'
+import { Untold} from '../shared/models/backend-export';
 import { ChatEntryService } from '../store/services/chat-entry.service';
 import { GameService } from '../store/services/game.service';
 import { GameWorkflowChatService } from '../shared/services/game-flow/game-workflow-chat.service';

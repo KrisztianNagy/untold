@@ -7,7 +7,7 @@ export class ErrorHandlingService {
   constructor() { }
 
   handleError() {
-    
+
   }
 
 }

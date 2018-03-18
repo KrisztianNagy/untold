@@ -83,7 +83,7 @@ export class WallRenderService {
   }
 
   private optimizedAddWall(walls: Wall[], nextWall: Wall): Wall[] {
-    let optimizedWall: Wall[] = [];
+    const optimizedWall: Wall[] = [];
     let found = false;
 
     walls.forEach(wall => {
@@ -153,7 +153,7 @@ export class WallRenderService {
     const userWalls = this.wallService.getCurrentUserWalls();
 
     calculatedWalls.forEach((wall: Wall, index: number) => {
-      let line = new createjs.Shape();
+      const line = new createjs.Shape();
       line.name = 'CALCULATEDWALL' + index;
       line.graphics
         .setStrokeStyle(4)
@@ -166,7 +166,7 @@ export class WallRenderService {
     });
 
     userWalls.forEach((wall: Wall) => {
-      let line = new createjs.Shape();
+      const line = new createjs.Shape();
       line.name = 'USERWALL' + wall.id;
       line.graphics
         .setStrokeStyle(4)

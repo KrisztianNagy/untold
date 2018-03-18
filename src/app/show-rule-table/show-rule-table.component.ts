@@ -37,6 +37,7 @@ export class ShowRuleTableComponent implements OnInit, OnChanges {
               private csvFileService: CsvFileService,
               private gameService: GameService,
               private realmHubSenderService: RealmHubSenderService,
+              // tslint:disable-next-line:no-shadowed-variable
               private NgZone: NgZone) { }
 
   ngOnInit() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef,ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 
 import {DataScroller} from 'primeng/primeng';
 
@@ -65,7 +65,7 @@ export class EntityListComponent implements OnInit {
     this.loadImages(1);
 
   /*  setTimeout(() => {
-      scroller.reset();  
+      scroller.reset();
       this.changeDetectorRef.markForCheck();
     }, 1);*/
   }

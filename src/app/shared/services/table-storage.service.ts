@@ -61,9 +61,9 @@ export class TableStorageService {
       });
   }
 
-  saveDataTable(dataTable: DataTable){
+  saveDataTable(dataTable: DataTable) {
     const schemaUpdateRequired = dataTable.name !== dataTable.oldName ||
-                               JSON.stringify(dataTable.oldColumns) !== JSON.stringify(dataTable.columns);
+      JSON.stringify(dataTable.oldColumns) !== JSON.stringify(dataTable.columns);
 
     const rowsToUpdate = dataTable.rows.filter(row => {
       return row.rowStatus === DataRowStatusConstants.Changed;
@@ -161,14 +161,14 @@ export class TableStorageService {
 
   private deleterows(dataTable: DataTable, rows: Array<AzureTableRow>) {
     const url = '' + dataTable.uniqueName + dataTable.editorAccessSignature;
-    
+
     rows.forEach(row => {
       if (row.PartitionKey && row.RowKey) {
         const data = this.rowToTableEntity(row, dataTable, row.RowKey);
         this.storageDataService.delete(data, dataTable.uniqueName, dataTable.editorAccessSignature).subscribe(() => {
         });
       }
-      
+
       dataTable.rows = dataTable.rows.filter(innerRow => innerRow !== row);
     });
   }
@@ -186,7 +186,7 @@ export class TableStorageService {
     delete data.rowStatus;
     delete data._$visited;
 
-   return data;
+    return data;
   }
 
   public getNextRowKey(dataTable: DataTable): string {
@@ -205,8 +205,8 @@ export class TableStorageService {
         max = maxVal;
       });
 
-      const nextRowKey = max ? max + 1 : 1;
+    const nextRowKey = max ? max + 1 : 1;
 
-      return this.padNumber(nextRowKey);
+    return this.padNumber(nextRowKey);
   }
 }

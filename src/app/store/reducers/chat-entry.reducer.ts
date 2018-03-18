@@ -13,5 +13,5 @@ export function ChatEntryReducer(state = [], action) {
             });
         default:
             return state;
-    };
+    }
 }

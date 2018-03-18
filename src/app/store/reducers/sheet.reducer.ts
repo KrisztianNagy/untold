@@ -18,5 +18,5 @@ export function SheetReducer(state = [], action) {
                 entity.id !== action.payload.id);
         default:
             return state;
-    };
+    }
 }

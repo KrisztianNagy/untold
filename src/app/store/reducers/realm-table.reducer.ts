@@ -8,5 +8,5 @@ export function RealmTableReducer(state = [], action) {
             return [...action.payload];
         default:
             return state;
-    };
+    }
 }

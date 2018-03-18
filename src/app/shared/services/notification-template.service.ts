@@ -37,7 +37,7 @@ export class NotificationTemplateService {
     let template: string = this.templates[notification.notificationTypeId];
     const tokens = <any>JSON.parse(notification.data);
 
-    let placeholders = [];
+    const placeholders = [];
     let start = 0;
 
     // Getting the placeholders

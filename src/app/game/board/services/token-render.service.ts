@@ -110,7 +110,7 @@ export class TokenRenderService {
         forEach(token => {
           const name = token.id.toString();
 
-          let bitmap = new createjs.Bitmap(token.loadedImage);
+          const bitmap = new createjs.Bitmap(token.loadedImage);
           bitmap.name = name;
           bitmap.x = token.x - token.width / 2;
           bitmap.y = token.y - token.height / 2;
@@ -165,8 +165,8 @@ export class TokenRenderService {
 
     const name = <string> event.target.name;
 
-    let shape = layer.getChildByName(name);
-    let token = this.tokenService.getTokenById(parseInt(name, 10));
+    const shape = layer.getChildByName(name);
+    const token = this.tokenService.getTokenById(parseInt(name, 10));
     const tokenLayer = this.getLayerFromToken(token);
 
     if (layer !== tokenLayer) {
@@ -188,7 +188,7 @@ export class TokenRenderService {
 
   private tokenPressUp(event: createjs.MouseEvent) {
     const name = <string> event.target.name;
-    let token = this.tokenService.getTokenById(parseInt(name, 10));
+    const token = this.tokenService.getTokenById(parseInt(name, 10));
     token.beingDragged = false;
 
     this.updateToken(token);

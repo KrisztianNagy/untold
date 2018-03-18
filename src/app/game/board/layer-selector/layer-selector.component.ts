@@ -24,7 +24,7 @@ export class LayerSelectorComponent implements OnInit {
   constructor(private store: Store<AppStore>,
               private interactionService: InteractionService,
               private stageRenderService: StageRenderService,
-              private SimpleDungeonService: SimpleDungeonService,
+              private simpleDungeonService: SimpleDungeonService,
               private gridService: GridService) {
     store.select(s => s.Interaction).
       subscribe(interaction => {
@@ -40,7 +40,7 @@ export class LayerSelectorComponent implements OnInit {
    /* this.interactionService.update({
       cursor: this.cursor,
       layerId: parseInt(this.layerId),
-      isTokenEditorOpen:           
+      isTokenEditorOpen:
     }); */
   }
 
@@ -49,8 +49,8 @@ export class LayerSelectorComponent implements OnInit {
   }
 
   generate() {
-    const map = this.SimpleDungeonService.generate(100, 100);
-    let tiles: Array<GridTile> = [];
+    const map = this.simpleDungeonService.generate(100, 100);
+    const tiles: Array<GridTile> = [];
 
     map.forEach((row, index) => {
       row.forEach((value, index2) => {

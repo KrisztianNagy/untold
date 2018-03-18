@@ -2,7 +2,7 @@ import {ActionReducer, Action} from '@ngrx/store';
 import {GridTileActions} from '../actions/grid-tile.actions';
 import {GridTile} from '../models/grid-tile';
 
-let nextId = 0;
+const nextId = 0;
 
 export function GridTileReducer(state = [], action) {
     switch (action.type) {
@@ -17,5 +17,5 @@ export function GridTileReducer(state = [], action) {
             });
         default:
             return state;
-    };
+    }
 }

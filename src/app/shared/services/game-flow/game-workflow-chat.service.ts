@@ -38,7 +38,7 @@ export class GameWorkflowChatService {
       senderId: userId,
       whisperToIds: whisperToIds ? whisperToIds : [],
       secret: secret
-    }
+    };
 
     this.chatService.sendMessage(this.gameService.getCurrent(), chatEntry).subscribe(() => {
       this.realmHubSenderService.newMessage(this.gameService.getCurrent().realm.id);

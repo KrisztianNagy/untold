@@ -18,9 +18,9 @@ declare var LZString;
 export class EntityEnhancerService {
 
   constructor(private realmDefinitionService: RealmDefinitionService,
-              private storageDataService: StorageDataService,
-              private expressionEvaluatorService: ExpressionEvaluatorService,
-              private calculatedExpressionService: CalculatedExpressionService) {
+    private storageDataService: StorageDataService,
+    private expressionEvaluatorService: ExpressionEvaluatorService,
+    private calculatedExpressionService: CalculatedExpressionService) {
 
   }
 
@@ -30,7 +30,7 @@ export class EntityEnhancerService {
     modules.forEach(mod => {
       mod.definitions.forEach(def => {
         if (def.definitionGuid === entity.definitionGuid) {
-          entity.definition = <Untold.ClientInnerDefinition> def;
+          entity.definition = <Untold.ClientInnerDefinition>def;
           return;
         }
       });
@@ -49,7 +49,7 @@ export class EntityEnhancerService {
         if (def.definitionGuid === entity.definitionGuid) {
           subject.next({
             entity: entity.entity,
-            definition: <Untold.ClientInnerDefinition> def
+            definition: <Untold.ClientInnerDefinition>def
           });
           subject.complete();
         }
@@ -119,7 +119,7 @@ export class EntityEnhancerService {
         subject.complete();
       });
 
-      return subject;
+    return subject;
   }
 
   recalculate(entity: Untold.ClientEntity): AsyncSubject<Untold.ClientEntity> {
@@ -127,7 +127,7 @@ export class EntityEnhancerService {
 
     entity = JSON.parse(JSON.stringify(entity));
     const calcFunctions = [];
-    const rules = this.flattenRules(<Untold.ClientInnerDefinition> entity.definition);
+    const rules = this.flattenRules(<Untold.ClientInnerDefinition>entity.definition);
 
     if (rules.length) {
       const rulesSubject = new Subject<number>();
@@ -135,8 +135,7 @@ export class EntityEnhancerService {
       rulesSubject.subscribe(pos => {
         const rule = rules[pos];
 
-        this.recalculateRule(entity.entity, rule).subscribe(() => {;
-
+        this.recalculateRule(entity.entity, rule).subscribe(() => {
           if (pos < rules.length - 1) {
             rulesSubject.next(pos + 1);
           } else {
@@ -159,8 +158,8 @@ export class EntityEnhancerService {
   private recalculateRule(entity: any, rule: RuleDefinition): AsyncSubject<boolean> {
     const subject = new AsyncSubject<boolean>();
 
-    const ruleScopes = this.getContainers(entity, <string> rule.rule.target)
-     .map(obj => {
+    const ruleScopes = this.getContainers(entity, <string>rule.rule.target)
+      .map(obj => {
         return {
           entity: obj,
           definition: rule.definition
@@ -180,16 +179,16 @@ export class EntityEnhancerService {
         // const targetContainer = this.getContainers(scope.entity, <string> rule.rule.target);
 
         // if (targetContainer && targetContainer.length > 0) {
-          this.calculatedExpressionService.resolveNode(tree.tree, <any> scope.definition);
-          this.expressionEvaluatorService.processExpression(tree.tree, scope)
-            .subscribe(val => {
-              scope.entity[<string> rule.rule.target] = val;
-              subject.next(true);
-              subject.complete();
-            }, err => {
-              subject.next(false);
-              subject.complete();
-            });
+        this.calculatedExpressionService.resolveNode(tree.tree, <any>scope.definition);
+        this.expressionEvaluatorService.processExpression(tree.tree, scope)
+          .subscribe(val => {
+            scope.entity[<string>rule.rule.target] = val;
+            subject.next(true);
+            subject.complete();
+          }, err => {
+            subject.next(false);
+            subject.complete();
+          });
         /*} else {
           subject.next(false);
           subject.complete();
@@ -215,7 +214,7 @@ export class EntityEnhancerService {
         }
 
         const property = container[propertyName];
-        const isObject = typeof(property) === 'object';
+        const isObject = typeof (property) === 'object';
         const listElements = property ? property['listElements'] : null;
 
         if (isObject && !listElements) {
@@ -223,7 +222,7 @@ export class EntityEnhancerService {
         }
 
         if (listElements) {
-          (<Array<Object>> listElements).forEach(element => {
+          (<Array<Object>>listElements).forEach(element => {
             this.getContainers(element, targetName).forEach(obj => retVal.push(obj));
           });
         }
@@ -260,26 +259,26 @@ export class EntityEnhancerService {
     }
 
     definition.definitions.forEach(def => {
-      const existingObject: GenesisEntityValue = targetEntity[<string> def.occurrenceGuid];
+      const existingObject: GenesisEntityValue = targetEntity[<string>def.occurrenceGuid];
       const exist = typeof existingObject !== 'undefined';
 
       if (!exist) {
         if (def.isList) {
-          targetEntity[<string> def.occurrenceGuid] = {listElements: []};
+          targetEntity[<string>def.occurrenceGuid] = { listElements: [] };
 
           if (def.isPredefinedList && def.predefinedListItems) {
             const inner = {};
             this.ensureEntityStructure(inner, def);
 
             def.predefinedListItems.forEach(item => {
-              targetEntity[<string> def.occurrenceGuid].listElements.push(JSON.parse(JSON.stringify(inner)));
+              targetEntity[<string>def.occurrenceGuid].listElements.push(JSON.parse(JSON.stringify(inner)));
             });
           }
         } else if (def.dataType === 'Definition') {
-          targetEntity[<string> def.occurrenceGuid] = {};
-          this.ensureEntityStructure(targetEntity[<string> def.occurrenceGuid], def);
+          targetEntity[<string>def.occurrenceGuid] = {};
+          this.ensureEntityStructure(targetEntity[<string>def.occurrenceGuid], def);
         } else {
-          targetEntity[<string> def.occurrenceGuid] = '';
+          targetEntity[<string>def.occurrenceGuid] = '';
         }
       } else {
         if (def.isList) {
@@ -304,17 +303,17 @@ export class EntityEnhancerService {
             }
           }
         } else if (def.dataType === 'Definition') {
-          this.ensureEntityStructure(targetEntity[<string> def.occurrenceGuid], def);
+          this.ensureEntityStructure(targetEntity[<string>def.occurrenceGuid], def);
         }
       }
     });
 
-    for (const key of Object.keys(targetEntity)){
-     const foundInDefinition = definition.definitions.some(def => def.occurrenceGuid === key);
+    for (const key of Object.keys(targetEntity)) {
+      const foundInDefinition = definition.definitions.some(def => def.occurrenceGuid === key);
 
-     if (!foundInDefinition) {
+      if (!foundInDefinition) {
         delete targetEntity[key];
-     }
-   }
+      }
+    }
   }
 }

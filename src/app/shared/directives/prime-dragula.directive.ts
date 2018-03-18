@@ -1,5 +1,7 @@
-import { Directive, OnChanges, AfterViewInit, OnInit, OnDestroy, 
-         Input, Output, ElementRef, SimpleChange, EventEmitter } from '@angular/core';
+import {
+  Directive, OnChanges, AfterViewInit, OnInit, OnDestroy,
+  Input, Output, ElementRef, SimpleChange, EventEmitter
+} from '@angular/core';
 import { DragulaService, dragula } from 'ng2-dragula';
 
 @Directive({
@@ -46,14 +48,15 @@ export class PrimeDragulaDirective implements OnChanges, OnInit, OnDestroy, Afte
 
   // since we dont have access to the ngprime datatable body or table itself we need to bing laters in the angular event cycle
   // Once this fires we have a tbody tag to attach to and create the drag drop area from.
-  // because we need to setup dragula later we needed to create our own version of the directive so we have access to the private property container.
+  // because we need to setup dragula later we needed to create our own version of the directive so we have access
+  // to the private property container.
   // If ngdragula ever changes that to protected we can just extend that directive outright and override the container.
   protected initialize() {
 
-    if(this.options.childContainerSelector){
-        this.container = this.el.nativeElement.querySelector(this.options.childContainerSelector);
-        this.options.mirrorContainer = this.container;
-      }
+    if (this.options.childContainerSelector) {
+      this.container = this.el.nativeElement.querySelector(this.options.childContainerSelector);
+      this.options.mirrorContainer = this.container;
+    }
 
     const bag = this.dragulaService.find(this.primeDragula);
     const checkModel = () => {

@@ -10,10 +10,10 @@ export class VisibilityService {
   constructor() { }
 
   getVisibleTriangles(lightSource: createjs.Point, walls: Wall[]) {
-    let segments = this.getSegmentsFromWalls(walls);
+    const segments = this.getSegmentsFromWalls(walls);
     this.processSegments(lightSource, segments);
 
-    let endPoints: EndPoint[] = [];
+    const endPoints: EndPoint[] = [];
 
     segments.forEach(segment => {
       endPoints.push(segment.p1);
@@ -34,7 +34,7 @@ export class VisibilityService {
   private getSegmentsFromWalls(walls: Wall[]): LineSegment[] {
 
     return walls.map(wall => {
-      let segment: LineSegment = {
+      const segment: LineSegment = {
         p1 : {
           angle: undefined,
           beginsSegment: true,
@@ -73,7 +73,7 @@ export class VisibilityService {
     segment.d = (dx * dx) + (dy * dy);
     segment.p1.angle = Math.atan2(segment.p1.y - lightSource.y, segment.p1.x - lightSource.x);
     segment.p2.angle = Math.atan2(segment.p2.y - lightSource.y, segment.p2.x - lightSource.x);
-  };
+  }
 
   private setSegmentBeginning(segment: LineSegment) {
     let dAngle = segment.p2.angle - segment.p1.angle;
@@ -91,16 +91,16 @@ export class VisibilityService {
   }
 
   private calculateVisibility(origin: EndPoint, endpoints: EndPoint[]): createjs.Point[][] {
-    let openSegments: LineSegment[] = [];
-    let output: createjs.Point[][] = [];
+    const openSegments: LineSegment[] = [];
+    const output: createjs.Point[][] = [];
     let beginAngle = 0;
 
     endpoints.sort(this.endPointCompare);
 
     for (let pass = 0; pass < 2; pass += 1) {
       for (let i = 0; i < endpoints.length; i += 1) {
-        let endpoint = endpoints[i];
-        let openSegment = openSegments[0];
+        const endpoint = endpoints[i];
+        const openSegment = openSegments[0];
 
         if (endpoint.beginsSegment) {
           let index = 0;
@@ -116,7 +116,7 @@ export class VisibilityService {
             openSegments.splice(index, 0, endpoint.segment);
           }
         } else {
-          let index = openSegments.indexOf(endpoint.segment);
+          const index = openSegments.indexOf(endpoint.segment);
           if (index > -1) {
              openSegments.splice(index, 1);
           }
@@ -124,7 +124,7 @@ export class VisibilityService {
 
         if (openSegment !== openSegments[0]) {
           if (pass === 1) {
-            let trianglePoints = this.getTrianglePoints(origin, beginAngle, endpoint.angle, openSegment);
+            const trianglePoints = this.getTrianglePoints(origin, beginAngle, endpoint.angle, openSegment);
             output.push(trianglePoints);
           }
           beginAngle = endpoint.angle;

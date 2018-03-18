@@ -19,7 +19,7 @@ export class DomService {
       const width = window.innerWidth - widthOffset;
       const height = window.innerHeight - heightOffset;
 
-      let canvas = <any> $('#demoCanvas')[0];
+      const canvas = <any> $('#demoCanvas')[0];
 
       if (canvas) {
         canvas.width = width;

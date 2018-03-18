@@ -13,5 +13,5 @@ export function TokenReducer(state = [], action) {
             });
         default:
             return state;
-    };
+    }
 }

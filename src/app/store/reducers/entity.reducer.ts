@@ -30,5 +30,5 @@ export function EntityReducer(state = [], action) {
             });
         default:
             return state;
-    };
+    }
 }

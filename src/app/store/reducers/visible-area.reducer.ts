@@ -8,5 +8,5 @@ export function VisibleAreaReducer(state = [], action) {
             return action.payload;
         default:
             return state;
-    };
+    }
 }

@@ -69,7 +69,7 @@ export class SignalRService {
     this.stop();
     this.setTokenCookie(token);
     this.start();
-  };
+  }
 
   setTokenCookie(token: string) {
     if (token) {

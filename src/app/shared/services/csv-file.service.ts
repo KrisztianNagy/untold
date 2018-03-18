@@ -11,13 +11,13 @@ export class CsvFileService {
   constructor() { }
 
   saveRuleTable(dataTable: DataTable) {
-    let header = dataTable.columns.map(col => this.escapeComma(col.name)) + '\r\n';
+    const header = dataTable.columns.map(col => this.escapeComma(col.name)) + '\r\n';
 
-    let text = header + dataTable.rows.map(row => {
+    const text = header + dataTable.rows.map(row => {
       return dataTable.columns.map(col => this.escapeComma(row['c' + col.id])).join(',');
     }).join('\r\n');
 
-    let file = new Blob([text],  {type: 'text/plain;charset=utf-8'});
+    const file = new Blob([text],  {type: 'text/plain;charset=utf-8'});
 
     saveAs(file, dataTable.name + '.csv');
   }
@@ -31,7 +31,7 @@ export class CsvFileService {
   }
 
   parseCsv(file: File): Subject<PapaParse.ParseResult> {
-    let subject = new Subject<PapaParse.ParseResult>();
+    const subject = new Subject<PapaParse.ParseResult>();
 
     Papa.parse(file, {
       header: true,

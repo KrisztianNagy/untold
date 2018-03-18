@@ -17,7 +17,7 @@ export class DefinitionChoiceConfigComponent implements OnInit {
   @Input() definition: Untold.ClientInnerDefinition;
   @Output() onUpdated = new EventEmitter<Untold.ClientInnerDefinition>();
   draftDefinition: Untold.ClientInnerDefinition;
-  optionChoice: string = 'table';
+  optionChoice = 'table';
   listItems: Array<any>;
   addedItemName: string;
   modules: Array<SelectItem>;

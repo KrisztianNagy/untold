@@ -67,14 +67,14 @@ export class GridRenderService {
 
   private drawBasicLayer() {
    for (let step = 0; step <= MapConstants.MapSize; step++ ) {
-      let line1 = new createjs.Shape();
+      const line1 = new createjs.Shape();
       line1.graphics.beginStroke('Black')
         .setStrokeStyle(1)
         .moveTo(step * MapConstants.GridSize, 0)
         .lineTo(step * MapConstants.GridSize, MapConstants.MapSize * MapConstants.GridSize)
         .cp();
 
-      let line2 = new createjs.Shape();
+      const line2 = new createjs.Shape();
       line2.graphics
         .beginStroke('Black')
         .setStrokeStyle(1)
@@ -100,7 +100,7 @@ export class GridRenderService {
     filteredGridTiles.forEach(gridTile => {
       const name = gridTile.row + '|' + gridTile.column;
 
-      let tile = new createjs.Shape();
+      const tile = new createjs.Shape();
       tile.graphics
         .beginFill(gridTile.isBlock ? 'Blue' : 'White')
         .drawRect(gridTile.row * MapConstants.GridSize,

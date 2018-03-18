@@ -8,5 +8,5 @@ import { Untold } from '../../shared/models/backend-export';
 export class FiltersRuleTableColumnsPipe implements PipeTransform {
     transform(columns: Array<Untold.ClientRuleTableColumn>): Array<any> {
         return columns.filter(col => !col.deleted);
-    };
+    }
 }

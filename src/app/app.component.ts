@@ -12,7 +12,7 @@ import { Sidebar} from 'primeng/components/sidebar/sidebar';
 enum MenuOrientation {
     STATIC,
     OVERLAY
-};
+}
 
 @Component({
   selector: 'app-root',

@@ -8,5 +8,5 @@ export function SelectedGameReducer(state = {}, action) {
             return  action.payload ?  JSON.parse(JSON.stringify(action.payload)) : null;
         default:
             return state;
-    };
+    }
 }

@@ -3,7 +3,7 @@ export class ChatEntry {
     isRead: boolean;
     sentByMe: boolean;
     senderName: string;
-    message: ChatEntryMessage
+    message: ChatEntryMessage;
 }
 
 export class ChatEntryMessage {

@@ -21,7 +21,7 @@
     "@angular/platform-browser": "5.0.0",
     "@angular/platform-browser-dynamic": "5.0.0",
     "@angular/router": "5.0.0",
-    "@ngrx/store": "^4.0.3",        
+    "@ngrx/store": "^4.0.3",
     "angular2-jwt": "^0.2.2",
     "auth0-lock": "^10.10.2",
     "chart.js": "2.1.3",

@@ -62,7 +62,7 @@ export class GameWorkflowRealmService {
     });
 
     this.realmHubListenerService.responseClearLocalTableCache.subscribe(rr => {
-      this.expressionTableCacheService.removeCachedTable(rr.Data.uniqueTableName)
+      this.expressionTableCacheService.removeCachedTable(rr.Data.uniqueTableName);
     });
 
     this.realmHubListenerService.responseReloadRealmDefinitionModules.subscribe(rr => {

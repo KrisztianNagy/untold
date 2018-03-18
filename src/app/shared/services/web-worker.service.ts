@@ -15,7 +15,7 @@ export class WebWorkerService {
   private getCommandWorkerJavascript(userJavascript: string, ...parameters: any[]): string {
     const input = JSON.stringify(parameters);
 
-    let workerOuterJavaScript = 'onmessage = function(e) {\n'
+    let workerOuterJavaScript = 'onmessage = function(e) {\n';
     workerOuterJavaScript += 'var entity = e.data;\n';
     workerOuterJavaScript += 'var params = ' + input + ';\n';
     workerOuterJavaScript += 'function command() {\n';
@@ -23,7 +23,7 @@ export class WebWorkerService {
     workerOuterJavaScript += '}\n\n';
     workerOuterJavaScript += 'try {\n';
     workerOuterJavaScript += '\tvar result = command()\n';
-    workerOuterJavaScript += '\tpostMessage({entity: entity, result: result});\n'
+    workerOuterJavaScript += '\tpostMessage({entity: entity, result: result});\n';
     workerOuterJavaScript += '}\n';
     workerOuterJavaScript += 'catch(err) {\n';
     workerOuterJavaScript += '\tpostMessage({error: err});\n';

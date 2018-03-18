@@ -81,7 +81,7 @@ import {AceEditorModule} from 'ng2-ace-editor';
 
 // Barcelona layout
 import {AppComponent} from './app.component';
-import {AppMenuComponent,AppSubMenu} from './app.menu.component';
+import {AppMenuComponent, AppSubMenu} from './app.menu.component';
 import {AppSideBarComponent} from './app.sidebar.component';
 import {AppSidebarTabContent} from './app.sidebartabcontent.component';
 import {AppTopBar} from './app.topbar.component';
@@ -418,7 +418,7 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
         DiceService,
         SheetBuilderService
     ],
-    bootstrap:[AppComponent]
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

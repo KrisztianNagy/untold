@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, 
+import { Component, Input, OnInit, ChangeDetectorRef, ChangeDetectionStrategy,
          EventEmitter, ViewChild, Inject, forwardRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';

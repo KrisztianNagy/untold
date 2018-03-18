@@ -50,10 +50,10 @@ export class SightRenderService {
 
     if (interaction.layerId !== LayerPositionConstants.Foreground || !token.id) {
       if (this.layer.numChildren > 0) {
-        const visibleArea =  this.visibleAreaService.getCurrent();
+        const innervisibleArea =  this.visibleAreaService.getCurrent();
 
         this.layer.removeAllChildren();
-        this.layer.cache(visibleArea.fromX, visibleArea.fromY, visibleArea.toX, visibleArea.toY);
+        this.layer.cache(innervisibleArea.fromX, innervisibleArea.fromY, innervisibleArea.toX, innervisibleArea.toY);
         this.renderService.update();
       }
       return ;
@@ -71,15 +71,15 @@ export class SightRenderService {
 
     this.layer.removeAllChildren();
 
-    let blackBox = new createjs.Shape();
+    const blackBox = new createjs.Shape();
     blackBox.graphics.beginFill('Black');
     blackBox.graphics.drawRect(visibleArea.fromX, visibleArea.fromY, visibleArea.toX, visibleArea.toY);
     this.layer.addChild(blackBox);
     this.layer.cache(visibleArea.fromX, visibleArea.fromY, visibleArea.toX, visibleArea.toY);
     this.layer.removeChild(blackBox);
 
-    let shape = new createjs.Shape();
-    let graphics = shape.graphics.s('Green').ss(3).mt(lightSource.x, lightSource.y);
+    const shape = new createjs.Shape();
+    const graphics = shape.graphics.s('Green').ss(3).mt(lightSource.x, lightSource.y);
     triangles.forEach(trianglePoints => {
       graphics
         .beginFill('Green')

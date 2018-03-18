@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import 'rxjs/add/operator/merge';
 
-import { RealmHubSenderService }from '../shared/services/realm-hub-sender.service';
-import { WebApiService }from '../shared/services/rest/web-api.service';
+import { RealmHubSenderService } from '../shared/services/realm-hub-sender.service';
+import { WebApiService } from '../shared/services/rest/web-api.service';
 
 @Component({
   selector: 'app-error-dialog',
@@ -11,7 +11,7 @@ import { WebApiService }from '../shared/services/rest/web-api.service';
 })
 export class ErrorDialogComponent implements OnInit {
 
-  display: boolean = false;
+  display = false;
   errorMessage: string;
 
   constructor(private realmHubSenderService: RealmHubSenderService,

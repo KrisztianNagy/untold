@@ -230,7 +230,7 @@ export class ExpressionBuilderComponent implements OnInit {
     return {
       label: displayName,
       value: definition,
-    }
+    };
   }
 
 }

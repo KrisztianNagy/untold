@@ -31,7 +31,7 @@ export class StageRenderService {
         return;
       }
 
-      let offset = {
+      const offset = {
         x: this.renderService.stage.x - e.stageX,
         y: this.renderService.stage.y - e.stageY
       };

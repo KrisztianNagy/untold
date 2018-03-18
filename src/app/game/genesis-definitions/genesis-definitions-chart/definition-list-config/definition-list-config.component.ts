@@ -13,7 +13,7 @@ export class DefinitionListConfigComponent implements OnInit {
   @Input() definition: Untold.ClientInnerDefinition;
   @Output() onUpdated = new EventEmitter<Untold.ClientInnerDefinition>();
   draftDefinition: Untold.ClientInnerDefinition;
-  optionChoice: string = 'user';
+  optionChoice = 'user';
   listItems: Array<any>;
   addedItemName: string;
 

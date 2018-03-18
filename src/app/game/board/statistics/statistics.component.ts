@@ -12,7 +12,7 @@ import {RenderService} from '../services/render.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatisticsComponent implements OnInit {
-  private display: boolean = true;
+  private display = true;
 
   constructor(private wallService: WallService,
               private visibleAreaService: VisibleAreaService,

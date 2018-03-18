@@ -32,7 +32,7 @@ export class DefinitionEnhancerService {
       } else {
         break;
       }
-    };
+    }
 
     return chain;
   }

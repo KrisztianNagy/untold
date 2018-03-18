@@ -96,7 +96,7 @@ createMessageParts(message: string): Array<ChatEntryMessagePart> {
                   message: message,
                   sentByMe: member.length && member[0].user.id === game.localMembership.user.id,
                   senderName: member.length ? member[0].user.displayName : 'UNKNOWN'
-                }
+                };
 
                 return entry;
               });
@@ -124,13 +124,13 @@ createMessageParts(message: string): Array<ChatEntryMessagePart> {
         message: sum.toString() + ' (' + diceText + ')',
         type: 'roll',
         command: JSON.stringify(result)
-      }
+      };
     } catch (err) {
       return {
         message: 'Invalid dice throw',
         type: 'roll',
         command: JSON.stringify([])
-      }
+      };
     }
   }
 }

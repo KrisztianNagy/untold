@@ -8,5 +8,5 @@ export function TemplateConfigurationReducer(state = [], action) {
             return action.payload;
         default:
             return state;
-    };
+    }
 }

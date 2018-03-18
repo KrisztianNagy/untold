@@ -21,7 +21,7 @@ export class HomeSideBarComponent implements OnInit, OnDestroy {
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private gameService: GameService,
               private realmHubSenderService: RealmHubSenderService,
-              private router: Router,) {
+              private router: Router) {
 
     this.selectedGame = null;
 

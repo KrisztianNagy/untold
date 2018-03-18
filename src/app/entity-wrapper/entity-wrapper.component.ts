@@ -136,7 +136,7 @@ export class EntityWrapperComponent implements OnInit, OnDestroy {
               if (typeof row === 'string') {
                 this.gameWorkflowChatService.sendMessage(row, null, false);
               }
-            })
+            });
           }
       };
       worker.postMessage(this.model);

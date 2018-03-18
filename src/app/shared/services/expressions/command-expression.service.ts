@@ -69,7 +69,7 @@ export class CommandExpressionService {
     }
   }
 
-  private resolveCallExpression(callExpression: ICallExpression, models: SheetModel[]){
+  private resolveCallExpression(callExpression: ICallExpression, models: SheetModel[]) {
     return null;
   }
 }

@@ -16,5 +16,5 @@ export function UserWallReducer(state = [], action) {
             return state.filter(wall => wall.id !== action.payload.id);
         default:
             return state;
-    };
+    }
 }
