@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Response} from '@angular/http';
+import { map } from 'rxjs/operators';
 
 import {WebApiService} from './web-api.service';
 import { Untold } from '../../models/backend-export';
@@ -25,12 +26,12 @@ export class FileDataService {
 
   getSize(): Observable<number> {
     return this.webApiService.get('/api/file/size')
-      .map(res => JSON.parse(res));
+      .pipe(map(res => JSON.parse(res)));
   }
 
   getMyImages(page: number, pageSize: number, search: string): Observable<Untold.ClientImageGridResult> {
     return this.webApiService.get('/api/file/images/' + page + '/take/' + pageSize + '/' + search)
-      .map(res => JSON.parse(res));
+      .pipe(map(res => JSON.parse(res)));
   }
 
   deleteImage(fileName: string): Observable<Response> {

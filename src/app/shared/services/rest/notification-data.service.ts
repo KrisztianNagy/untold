@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Response} from '@angular/http';
+import {Observable} from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import {WebApiService} from './web-api.service';
 import { Untold } from '../../models/backend-export';
@@ -14,12 +14,12 @@ export class NotificationDataService {
 
   getPagedNotifications(pageNum: number): Observable<Untold.ClientPagedNotifications> {
     return this.webApiService.get('/api/notification/' + pageNum)
-    .map(res => JSON.parse(res));
+    .pipe(map(res => JSON.parse(res)));
   }
 
   getRecentNotifications(): Observable<Untold.ClientRecentNotifications> {
     return this.webApiService.get('/api/notification/recent')
-    .map(res => JSON.parse(res));
+    .pipe(map(res => JSON.parse(res)));
   }
 
   readNotification(notificationId: number) {

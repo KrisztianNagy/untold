@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/merge';
+import { Injectable } from '@angular/core';;
+import { takeUntil } from 'rxjs/operators';
 
 import {RenderService} from '../services/render.service';
 import {GridService} from '../../../store/services/grid.service';
 import {VisibleAreaService} from '../../../store/services/visible-area.service';
 import {InteractionService} from '../../../store/services/interaction.service';
 import {GridTile} from '../../../store/models/grid-tile';
-import {VisibleArea} from '../../../store/models/visible-area';
-import {AreaBox} from '../../../shared/models/area-box';
-import {Interaction} from '../../../store/models/interaction';
 import {MapConstants} from '../../../shared/constants/map-constants';
 import {LayerPositionConstants} from '../../../shared/constants/layer-position-constants';
 import {SelectionModeConstants} from '../../../shared/constants/selection-mode-constants';
@@ -156,7 +152,8 @@ export class GridRenderService {
         isBlock: !firstGridTile.isBlock
       });
 
-      this.renderService.stageMouseMove.takeUntil(this.renderService.stageMouseUp).forEach(ev => {
+      this.renderService.stageMouseMove
+      .pipe(takeUntil(this.renderService.stageMouseUp)).forEach(ev => {
         lastGridPos = this.getGridFromPosition(ev.localX, ev.localY);
         lastGridTile = this.gridService.getByPosition(lastGridPos.x, lastGridPos.y);
 

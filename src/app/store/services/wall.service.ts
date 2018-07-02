@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs';
 
 import {AppStore} from '../app-store';
 import {Wall} from '../models/wall';
 import {WallActions} from '../actions/wall.actions';
 import {UserWallActions} from '../actions/user-wall.actions';
-import {InteractionService} from './interaction.service';
 
 @Injectable()
 export class WallService {

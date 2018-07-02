@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Response} from '@angular/http';
+import { map } from 'rxjs/operators';
 
-import {WebApiService} from './web-api.service';
+import { WebApiService } from './web-api.service';
 import { Untold } from '../../models/backend-export';
 
 @Injectable()
@@ -13,8 +14,8 @@ export class GenesisDataService {
   }
 
   getDefinitionsByRealm(realmId: number): Observable<Untold.ClientRealmDefinitions> {
-    return this.webApiService.get('/api/definition/realm/' + realmId).
-    map(res => JSON.parse(res));
+    return this.webApiService.get('/api/definition/realm/' + realmId)
+    .pipe(map(res => JSON.parse(res)));
   }
 
   deleteModule(id: number): Observable<Response> {
@@ -34,13 +35,13 @@ export class GenesisDataService {
   }
 
   getRuleTablesByRealm(realmId: number): Observable<Untold.ClientRealmTables> {
-    return this.webApiService.get('/api/ruletable/realm/' + realmId).
-    map(res => JSON.parse(res));
+    return this.webApiService.get('/api/ruletable/realm/' + realmId)
+    .pipe(map(res => JSON.parse(res)));
   }
 
   getRuleTablesByModule(realmId: number, moduleGuid: string): Observable<Untold.ClientRuleTable[]> {
-    return this.webApiService.get('/api/ruletable/realm/' + realmId + '/module/' + moduleGuid).
-    map(res => JSON.parse(res));
+    return this.webApiService.get('/api/ruletable/realm/' + realmId + '/module/' + moduleGuid)
+    .pipe(map(res => JSON.parse(res)));
   }
 
   saveRuleTableSchema(moduleId: number, ruleTable: Untold.ClientRuleTable) {
@@ -61,12 +62,12 @@ export class GenesisDataService {
 
   getOwnerEntities(realmId: number): Observable<Array<Untold.ClientEntity>> {
     return this.webApiService.get('/api/entity/owner/' + realmId)
-      .map(res => JSON.parse(res));
+      .pipe(map(res => JSON.parse(res)));
   }
 
   getPlayerEntities(realmId: number): Observable<Array<Untold.ClientEntity>> {
     return this.webApiService.get('/api/entity/player/' + realmId)
-      .map(res => JSON.parse(res));
+      .pipe(map(res => JSON.parse(res)));
   }
 
   createEntity(realmId: number, clientEntity: Untold.ClientEntity) {
@@ -95,6 +96,6 @@ export class GenesisDataService {
 
   getSheetsByRealm(realmId: number): Observable<Array<Untold.ClientSheet>> {
     return this.webApiService.get('/api/sheet/' + realmId)
-      .map(res => JSON.parse(res));
+      .pipe(map(res => JSON.parse(res)));
   }
 }

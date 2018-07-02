@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import 'rxjs/add/operator/first';
+import { first } from 'rxjs/operators';
 
 import { UserDataService } from '../../../../shared/services/rest/user-data.service';
 import { TokenService } from '../../../../store/services/token.service';
@@ -36,7 +35,7 @@ export class EditTokenComponent implements OnInit, OnDestroy {
   }
 
   searchMember(event) {
-    this.userDataService.searchUsers(event.query).first().forEach(response => {
+    this.userDataService.searchUsers(event.query).pipe(first()).forEach(response => {
       this.userResults = response;
     });
   }

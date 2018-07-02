@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
-import 'rxjs/add/operator/max';
-import 'rxjs/add/operator/map';
+import { Observable, from } from 'rxjs';
+import { map, max, first } from 'rxjs/operators';
+
 
 import { AzureTableRow, DataTable } from '../models/data-table';
 import { DataRowStatusConstants } from '../constants/data-row-status-constants';
@@ -29,7 +28,7 @@ export class TableStorageService {
     };
 
     return this.storageDataService.readColumns(dataTable.uniqueName, dataTable.readAccessSignature)
-      .map(res => {
+      .pipe(map(res => {
         const columns: any = JSON.parse(res);
 
         if (columns) {
@@ -46,19 +45,19 @@ export class TableStorageService {
         }
 
         return dataTable;
-      });
+      }));
   }
 
   populateDataTableFromStorage(dataTable: DataTable): Observable<DataTable> {
     const updatedTable = JSON.parse(JSON.stringify(dataTable));
 
     return this.storageDataService.readRows(dataTable.uniqueName, dataTable.readAccessSignature)
-      .map(res => {
+      .pipe(map(res => {
         const entities = JSON.parse(res);
         this.populateDataTable(updatedTable, entities.value);
 
         return updatedTable;
-      });
+      }));
   }
 
   saveDataTable(dataTable: DataTable) {
@@ -83,35 +82,35 @@ export class TableStorageService {
   }
 
   getNextColumnId(dataTable: DataTable): number {
-    let max: number;
+    let maxNumber: number;
 
     if (dataTable.columns.length) {
-      Observable.from(dataTable.columns)
-        .map(col => col.id)
-        .max()
-        .first()
+      from(dataTable.columns)
+        .pipe(map(col => col.id),
+          max(),
+          first())
         .forEach(maxVal => {
-          max = maxVal;
+          maxNumber = maxVal;
         });
     }
 
-    return max ? max + 1 : 1;
+    return maxNumber ? maxNumber + 1 : 1;
   }
 
   getNextColumnOrder(dataTable: DataTable): number {
-    let max: number;
+    let maxNumber: number;
 
     if (dataTable.columns.length) {
-      Observable.from(dataTable.columns)
-        .map(col => col.order)
-        .max()
-        .first()
+      from(dataTable.columns)
+        .pipe(map(col => col.order),
+          max(),
+          first())
         .forEach(maxVal => {
-          max = maxVal;
+          maxNumber = maxVal;
         });
     }
 
-    return max ? max + 1 : 1;
+    return maxNumber ? maxNumber + 1 : 1;
   }
 
   padNumber(position: number): string {
@@ -190,22 +189,22 @@ export class TableStorageService {
   }
 
   public getNextRowKey(dataTable: DataTable): string {
-    let max: number;
-    Observable.from(dataTable.rows)
-      .map(row => {
+    let maxNumber: number;
+    from(dataTable.rows)
+      .pipe(map(row => {
         if (parseInt(row.RowKey, 10).toString() === 'NaN') {
           return 0;
         } else {
           return parseInt(row.RowKey, 10);
         }
-      })
-      .max()
-      .first()
+      }),
+        max(),
+        first())
       .forEach(maxVal => {
-        max = maxVal;
+        maxNumber = maxVal;
       });
 
-    const nextRowKey = max ? max + 1 : 1;
+    const nextRowKey = maxNumber ? maxNumber + 1 : 1;
 
     return this.padNumber(nextRowKey);
   }

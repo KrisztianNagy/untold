@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Inject, forwardRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from '../../app.component';
-import 'rxjs/add/operator/first';
+import { first } from 'rxjs/operators';
 
 import { NotificationDataService } from '../../shared/services/rest/notification-data.service';
 import { NotificationTemplateService } from '../../shared/services/notification-template.service';
@@ -44,7 +44,7 @@ export class TopBarNotificationComponent implements OnInit, OnDestroy {
   openActionPage(notification: Untold.ClientNotification) {
     this.notificationDataService.
       readNotification(notification.id).
-      first().
+      pipe(first()).
       forEach(() => {
           this.loadNotifications();
           this.notificationTemplateService.openActionPage(notification);
@@ -54,7 +54,7 @@ export class TopBarNotificationComponent implements OnInit, OnDestroy {
   private loadNotifications() {
      this.notificationDataService.
       getRecentNotifications().
-      first().
+      pipe(first()).
       forEach(recent => {
         this.notifications = recent.recentNotifications;
         this.unread = recent.unreadCount;

@@ -5,8 +5,7 @@ import { DiceService } from './dice.service';
 import { ChatTableRow } from '../models/data-table';
 import { StorageDataService } from './rest/storage-data.service';
 import { Untold } from '../models/backend-export';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
-import { Subject } from 'rxjs/Subject';
+import { AsyncSubject } from 'rxjs';
 
 declare var LZString;
 

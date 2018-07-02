@@ -1,9 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
 import {Router} from '@angular/router';
-import 'rxjs/add/operator/first';
-
-import {PanelModule} from 'primeng/primeng';
 
 import { RealmHubSenderService } from '../shared/services/realm-hub-sender.service';
 import { AuthService } from '../shared/services/auth.service';

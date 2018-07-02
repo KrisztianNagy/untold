@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import 'rxjs/add/operator/first';
+import { first } from 'rxjs/operators';
 
 import { MapDataService } from '../../shared/services/rest/map-data.service';
 import { GameService } from '../../store/services/game.service';
@@ -33,7 +33,7 @@ export class SaveMapComponent implements OnInit, OnDestroy {
     this.sub = this.route.params.subscribe(params => {
       if (params['id']) {
         this.id = parseInt(params['id'], 10);
-        this.mapDataService.getMapById(this.id).first().forEach(map => {
+        this.mapDataService.getMapById(this.id).pipe(first()).forEach(map => {
           this.clientMap = map;
           this.busy = false;
         });
@@ -57,7 +57,7 @@ export class SaveMapComponent implements OnInit, OnDestroy {
       this.mapDataService.createMap(this.clientMap);
 
     this.busy = true;
-    callSub.first().forEach(response => {
+    callSub.pipe(first()).forEach(response => {
       if (response.ok) {
         this.router.navigateByUrl('/game/maps');
       }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs';
 
 import {AppStore} from '../app-store';
 import {Untold} from '../../shared/models/backend-export';

@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { merge } from 'rxjs/operators';
 
-import {Token} from '../../../../store/models/token';
-import {TokenService} from '../../../../store/services/token.service';
-import {GameService} from '../../../../store/services/game.service';
-import {Untold} from '../../../../shared/models/backend-export';
+import { Token } from '../../../../store/models/token';
+import { TokenService } from '../../../../store/services/token.service';
+import { GameService } from '../../../../store/services/game.service';
 
 @Component({
   selector: 'app-selected-token',
@@ -17,13 +17,13 @@ export class SelectedTokenComponent implements OnInit {
   selectedPos: number;
 
   constructor(private tokenService: TokenService,
-              private gameService: GameService) {
+    private gameService: GameService) {
     this.selectedToken = null;
     this.tokens = [];
 
-    this.tokenService.selectedToken.
-      merge(this.tokenService.tokens).
-      subscribe(() => {
+    this.tokenService.selectedToken
+      .pipe(merge(this.tokenService.tokens))
+      .subscribe(() => {
         this.resetCarousel();
       });
   }
@@ -54,7 +54,7 @@ export class SelectedTokenComponent implements OnInit {
     if (toNext) {
       pos = this.tokens.length > this.selectedPos ? this.selectedPos + 1 : 0;
     } else {
-      pos =  0 === this.selectedPos ? this.tokens.length - 1 : this.selectedPos - 1;
+      pos = 0 === this.selectedPos ? this.tokens.length - 1 : this.selectedPos - 1;
     }
 
     this.tokenService.selectTokenById(this.tokens[pos].id);

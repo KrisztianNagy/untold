@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Response} from '@angular/http';
+import { map } from 'rxjs/operators';
 
 import {WebApiService} from './web-api.service';
 import { Untold } from '../../models/backend-export';
@@ -14,12 +15,12 @@ export class MapDataService {
 
   getMyCreatedMaps(realmId: number): Observable<Untold.ClientMap[]> {
     return this.webApiService.get('/api/map/created/' + realmId)
-    .map(res => JSON.parse(res));
+    .pipe(map(res => JSON.parse(res)));
   }
 
   getMapById(id: number): Observable<Untold.ClientMap> {
     return this.webApiService.get('/api/map/' + id)
-    .map(res => JSON.parse(res));
+    .pipe(map(res => JSON.parse(res)));
   }
 
   deleteMap(id: number): Observable<Response> {

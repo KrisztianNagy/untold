@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
+import {Subject, Observable, fromEvent} from 'rxjs';
 
 import {LayerPositionConstants} from '../../../shared/constants/layer-position-constants';
 
+@Injectable()
 export class RenderService {
   stage: createjs.Stage;
   gridLayer: createjs.Container;
@@ -65,9 +64,9 @@ export class RenderService {
     this.stage.addChild(this.resizeLayer);
     this.stage.addChild(this.sightLayer);
 
-    this.stageMouseDown = Observable.fromEvent<createjs.MouseEvent>(this.stage, 'stagemousedown');
-    this.stageMouseUp = Observable.fromEvent<createjs.MouseEvent>(this.stage, 'stagemouseup');
-    this.stageMouseMove = Observable.fromEvent<createjs.MouseEvent>(this.stage, 'stagemousemove');
+    this.stageMouseDown = fromEvent<createjs.MouseEvent>(this.stage, 'stagemousedown');
+    this.stageMouseUp = fromEvent<createjs.MouseEvent>(this.stage, 'stagemouseup');
+    this.stageMouseMove = fromEvent<createjs.MouseEvent>(this.stage, 'stagemousemove');
   }
 
   update() {

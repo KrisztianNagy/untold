@@ -1,6 +1,4 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ApplicationRef, NgZone} from '@angular/core';
-import 'rxjs/add/operator/max';
-import 'rxjs/add/operator/map';
 
 import { SelectItem } from 'primeng/primeng';
 

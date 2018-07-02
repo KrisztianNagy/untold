@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { Untold } from '../../models/backend-export';
 import { AzureTableRow } from '../../models/data-table';
 
 @Injectable()
@@ -40,7 +39,7 @@ export class StorageDataService {
 
     const path = this.storageUrl + tableName + readerSignature + '&$filter=PartitionKey%20eq%20\'column\'%20';
     const observable = this.http.get(path, options)
-      .map(res => res.text());
+      .pipe(map(res => res.text()));
 
     return observable;
   }
@@ -57,7 +56,7 @@ export class StorageDataService {
     const path = this.storageUrl + tableName +
       '(PartitionKey=\'' + partitionKey + '\',RowKey=\'' + rowKey + '\')' + readerSignature;
     const observable = this.http.get(path, options)
-      .map(res => res.text());
+      .pipe(map(res => res.text()));
 
     return observable;
   }
@@ -73,7 +72,7 @@ export class StorageDataService {
 
     const path = this.storageUrl + tableName + readerSignature + '&$filter=PartitionKey%20eq%20\'row\'%20';
     const observable = this.http.get(path, options)
-      .map(res => res.text());
+      .pipe(map(res => res.text()));
 
     return observable;
   }
@@ -89,7 +88,7 @@ export class StorageDataService {
 
     const path = this.storageUrl + tableName + readerSignature + '&$filter=' + filter;
     const observable = this.http.get(path, options)
-      .map(res => res.text());
+      .pipe(map(res => res.text()));
 
     return observable;
   }

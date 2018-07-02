@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/merge';
-import 'rxjs/add/operator/first';
+import { merge, first } from 'rxjs/operators';
 
 import {RenderService} from '../services/render.service';
 import {GridRenderService} from '../services/grid-render.service';
@@ -11,8 +9,6 @@ import {VisibleAreaService} from '../../../store/services/visible-area.service';
 import {InteractionService} from '../../../store/services/interaction.service';
 import {GridTile} from '../../../store/models/grid-tile';
 import {Wall} from '../../../store/models/wall';
-import {VisibleArea} from '../../../store/models/visible-area';
-import {Interaction} from '../../../store/models/interaction';
 import {LayerPositionConstants} from '../../../shared/constants/layer-position-constants';
 import {SelectionModeConstants} from '../../../shared/constants/selection-mode-constants';
 
@@ -39,10 +35,10 @@ export class WallRenderService {
         this.updateWalls(tiles);
     });
 
-    this.mergedSubscription = this.interactionService.interaction.
-      merge(this.wallService.calculatedWalls).
-      merge(this.wallService.userWalls).
-      subscribe(() => {
+    this.mergedSubscription = this.interactionService.interaction
+      .pipe(merge(this.wallService.calculatedWalls),
+      merge(this.wallService.userWalls))
+      .subscribe(() => {
        this.draw();
     });
   }
@@ -194,7 +190,7 @@ export class WallRenderService {
         return;
       }
 
-      this.renderService.stageMouseUp.first().forEach(ev => {
+      this.renderService.stageMouseUp.pipe(first()).forEach(ev => {
         if (e.localX !== ev.localX || e.localY !== ev.localY) {
           this.wallService.addUserWall({
             fromX: e.localX,

@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
-import { Router } from '@angular/router';
-import 'rxjs/add/operator/merge';
+import { merge } from 'rxjs/operators';
 
 import { SelectItem } from 'primeng/primeng';
-import { Inplace } from 'primeng/primeng';
 
 import { Untold } from '../../shared/models/backend-export';
 import { Sheet } from '../../store/models/sheet';
@@ -34,7 +32,7 @@ export class GenesisSheetsComponent implements OnInit, OnDestroy {
     this.sheets = [];
 
     this.definitionSubscription = this.realmDefinitionService.definitions
-      .merge(this.sheetService.sheets)
+      .pipe(merge(this.sheetService.sheets))
       .subscribe(() => {
         const realmDefinitions = this.realmDefinitionService.getCurrent();
         this.editNameSheet = null;

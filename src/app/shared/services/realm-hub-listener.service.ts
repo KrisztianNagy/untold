@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
+import { Observable, fromEvent} from 'rxjs';
 
 import { SignalRService } from './signal-r.service';
 import { Untold } from '../models/backend-export';
@@ -31,26 +30,26 @@ export class RealmHubListenerService {
   constructor(private signalRService: SignalRService) {
       const hub = this.signalRService.realmHub;
 
-      this.responseJoinRealm = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseJoinRealm');
-      this.responseGetCurrentRealm = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseGetCurrentRealm');
-      this.responseLeaveRealm = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseLeaveRealm');
-      this.responseActivateMap = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseActivateMap');
-      this.responseUpdateMapGrid = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseUpdateMapGrid');
-      this.userJoined = Observable.fromEvent<Untold.UntoldResponse>(hub, 'userJoined');
-      this.userLeft = Observable.fromEvent<Untold.UntoldResponse>(hub, 'userLeft');
-      this.responseGetAllTokens = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseGetAllTokens');
-      this.responseUpdateToken = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseUpdateToken');
-      this.responseCreateToken = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseCreateToken');
-      this.responseEntityPermissionChange = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseEntityPermissionChange');
-      this.responseEntityDataChange = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseEntityDataChange');
-      this.responseRealmTableDeleted = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseRealmTableDeleted');
-      this.responseRealmTableUpdate = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseRealmTableUpdate');
-      this.responseReloadRealmTableModules = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseReloadRealmTableModules');
-      this.responseReloadRealmDefinitionModules = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseReloadRealmDefinitionModules');
-      this.responseClearLocalTableCache = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseClearLocalTableCache');
-      this.responseReloadSheets = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseReloadSheets');
-      this.responseNewMessage = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseNewMessage');
-      this.responseReloadEntities = Observable.fromEvent<Untold.UntoldResponse>(hub, 'responseReloadEntities');
+      this.responseJoinRealm = fromEvent<Untold.UntoldResponse>(hub, 'responseJoinRealm');
+      this.responseGetCurrentRealm = fromEvent<Untold.UntoldResponse>(hub, 'responseGetCurrentRealm');
+      this.responseLeaveRealm = fromEvent<Untold.UntoldResponse>(hub, 'responseLeaveRealm');
+      this.responseActivateMap = fromEvent<Untold.UntoldResponse>(hub, 'responseActivateMap');
+      this.responseUpdateMapGrid = fromEvent<Untold.UntoldResponse>(hub, 'responseUpdateMapGrid');
+      this.userJoined = fromEvent<Untold.UntoldResponse>(hub, 'userJoined');
+      this.userLeft = fromEvent<Untold.UntoldResponse>(hub, 'userLeft');
+      this.responseGetAllTokens = fromEvent<Untold.UntoldResponse>(hub, 'responseGetAllTokens');
+      this.responseUpdateToken = fromEvent<Untold.UntoldResponse>(hub, 'responseUpdateToken');
+      this.responseCreateToken = fromEvent<Untold.UntoldResponse>(hub, 'responseCreateToken');
+      this.responseEntityPermissionChange = fromEvent<Untold.UntoldResponse>(hub, 'responseEntityPermissionChange');
+      this.responseEntityDataChange = fromEvent<Untold.UntoldResponse>(hub, 'responseEntityDataChange');
+      this.responseRealmTableDeleted = fromEvent<Untold.UntoldResponse>(hub, 'responseRealmTableDeleted');
+      this.responseRealmTableUpdate = fromEvent<Untold.UntoldResponse>(hub, 'responseRealmTableUpdate');
+      this.responseReloadRealmTableModules = fromEvent<Untold.UntoldResponse>(hub, 'responseReloadRealmTableModules');
+      this.responseReloadRealmDefinitionModules = fromEvent<Untold.UntoldResponse>(hub, 'responseReloadRealmDefinitionModules');
+      this.responseClearLocalTableCache = fromEvent<Untold.UntoldResponse>(hub, 'responseClearLocalTableCache');
+      this.responseReloadSheets = fromEvent<Untold.UntoldResponse>(hub, 'responseReloadSheets');
+      this.responseNewMessage = fromEvent<Untold.UntoldResponse>(hub, 'responseNewMessage');
+      this.responseReloadEntities = fromEvent<Untold.UntoldResponse>(hub, 'responseReloadEntities');
   }
 
 }

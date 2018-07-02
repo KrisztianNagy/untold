@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/map';
+import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import 'jquery';
 
 import { MenuItem, SelectItem } from 'primeng/primeng';
@@ -117,7 +117,7 @@ export class RuleTableImportWizardComponent implements OnInit {
     };
 
     this.genesisDataService.createRuletableSchema(this.module.id, ruleTable)
-    .map(res => res.text())
+    .pipe(map(res => res.text()))
     .subscribe(resp => {
       const rt: Untold.ClientRuleTable = JSON.parse(resp);
       const maxPos = this.parsedCsv.data.length - 1;

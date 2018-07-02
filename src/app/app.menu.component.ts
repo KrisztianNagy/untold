@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnDestroy, EventEmitter, ViewChild, Inject, forwardRef} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {trigger, state, style, transition, animate} from '@angular/animations';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
@@ -8,31 +8,33 @@ import {AppComponent} from './app.component';
 @Component({
     selector: 'app-menu',
     template: `
-        <ul app-submenu [item]="model" root="true" class="navigation-menu" visible="true"></ul>
+        <div class="menu-scroll-content">
+            <ul app-submenu [item]="model" root="true" class="navigation-menu" visible="true" parentActive="true"></ul>
+        </div>
     `
 })
 export class AppMenuComponent implements OnInit {
 
     public model: any[];
 
-    constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent) {}
+    constructor(public app: AppComponent) {}
 
     ngOnInit() {
         this.model = [
             {label: 'Dashboard', icon: 'dashboard', routerLink: ['/']},
             {
-                label: 'Themes', icon: 'palette',
+                label: 'Themes', icon: 'palette', badge: '5',
                 items: [
-                    {label: 'Blue - Amber', icon: 'brush', command: (event) => {this.changeTheme('blue'); } },
-                    {label: 'Teal - Amber', icon: 'brush', command: (event) => {this.changeTheme('teal'); } },
-                    {label: 'Blue Grey - Green', icon: 'brush', command: (event) => {this.changeTheme('blue-grey'); } },
-                    {label: 'Cyan - Yellow', icon: 'brush', command: (event) => {this.changeTheme('cyan'); } },
-                    {label: 'Dark - Blue', icon: 'brush', command: (event) => {this.changeTheme('dark-blue'); } },
-                    {label: 'Dark - Green', icon: 'brush', command: (event) => {this.changeTheme('dark-green'); } },
-                    {label: 'Light Blue - Green', icon: 'brush', command: (event) => {this.changeTheme('light-blue'); } },
-                    {label: 'Indio - Cyan', icon: 'brush', command: (event) => {this.changeTheme('indigo'); } },
-                    {label: 'Deep Purple - Pink', icon: 'brush', command: (event) => {this.changeTheme('deep-purple'); } },
-                    {label: 'Green - Yellow', icon: 'brush', command: (event) => {this.changeTheme('green'); } }
+                    {label: 'Blue - Amber', icon: 'brush', command: (event) => {this.changeTheme('blue'); }},
+                    {label: 'Teal - Amber', icon: 'brush', command: (event) => {this.changeTheme('teal'); }},
+                    {label: 'Blue Grey - Green', icon: 'brush', command: (event) => {this.changeTheme('blue-grey'); }},
+                    {label: 'Cyan - Yellow', icon: 'brush', command: (event) => {this.changeTheme('cyan'); }},
+                    {label: 'Dark - Blue', icon: 'brush', command: (event) => {this.changeTheme('dark-blue'); }},
+                    {label: 'Dark - Green', icon: 'brush', command: (event) => {this.changeTheme('dark-green'); }},
+                    {label: 'Light Blue - Green', icon: 'brush', command: (event) => {this.changeTheme('light-blue'); }},
+                    {label: 'Indio - Cyan', icon: 'brush', command: (event) => {this.changeTheme('indigo'); }},
+                    {label: 'Deep Purple - Pink', icon: 'brush', command: (event) => {this.changeTheme('deep-purple'); }},
+                    {label: 'Green - Yellow', icon: 'brush', command: (event) => {this.changeTheme('green'); }}
                 ]
             },
             {
@@ -45,7 +47,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Components', icon: 'list',
+                label: 'Components', icon: 'list', badge: '2', badgeStyleClass: 'red-badge',
                 items: [
                     {label: 'Sample Page', icon: 'desktop_mac', routerLink: ['/sample']},
                     {label: 'Forms', icon: 'input', routerLink: ['/forms']},
@@ -130,33 +132,34 @@ export class AppMenuComponent implements OnInit {
 }
 
 @Component({
-    // tslint:disable-next-line:component-selector
+    /* tslint:disable:component-selector */
     selector: '[app-submenu]',
-
-    // tslint:disable-next-line:max-line-length
+    /* tslint:enable:component-selector */
     template: `
         <ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
-            <li [ngClass]="{'active-menuitem': isActive(i)}" *ngIf="child.visible === false ? false : true">
-                <a [href]="child.url||'#'" (click)="itemClick($event,child,i)"
-                    class="ripplelink" *ngIf="!child.routerLink" [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target"
+            <li [ngClass]="{'active-menuitem': isActive(i)}" [class]="child.badgeStyleClass" *ngIf="child.visible === false ? false : true">
+                <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" class="ripplelink"
+                   *ngIf="!child.routerLink" [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target"
                     (mouseenter)="hover=true" (mouseleave)="hover=false">
                     <i class="material-icons">{{child.icon}}</i>
                     <span>{{child.label}}</span>
                     <span class="ink" *ngIf="hover"></span>
+                    <span class="menuitem-badge" *ngIf="child.badge">{{child.badge}}</span>
                     <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
                 </a>
 
                 <a (click)="itemClick($event,child,i)" class="ripplelink" *ngIf="child.routerLink"
                     [routerLink]="child.routerLink" routerLinkActive="active-menuitem-routerlink"
-                    [routerLinkActiveOptions]="{exact: true}" [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target"
+                   [routerLinkActiveOptions]="{exact: true}" [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target"
                     (mouseenter)="hover=true" (mouseleave)="hover=false">
                     <i class="material-icons">{{child.icon}}</i>
                     <span>{{child.label}}</span>
                     <span class="ink" *ngIf="hover"></span>
+                    <span class="menuitem-badge" *ngIf="child.badge">{{child.badge}}</span>
                     <i class="material-icons" *ngIf="child.items">keyboard_arrow_down</i>
                 </a>
-                <ul app-submenu [item]="child" *ngIf="child.items"
-                    [@children]="isActive(i) ? 'visible' : 'hidden'" [visible]="isActive(i)"></ul>
+                <ul app-submenu [item]="child" *ngIf="child.items" [parentActive]="isActive(i)" [@children]="isActive(i) ?
+                'visible' : 'hidden'" [visible]="isActive(i)"></ul>
             </li>
         </ng-template>
     `,
@@ -173,57 +176,73 @@ export class AppMenuComponent implements OnInit {
         ])
     ]
 })
+export class AppSubMenuComponent {
 
-// tslint:disable-next-line:component-class-suffix
-export class AppSubMenu {
-        @Input() item: MenuItem;
-        @Input() root: boolean;
-        @Input() visible: boolean;
+    @Input() item: MenuItem;
 
-        activeIndex: number;
-        hover: boolean;
+    @Input() root: boolean;
 
-        constructor(@Inject(forwardRef(() => AppComponent)) public app: AppComponent, public router: Router, public location: Location) {}
+    @Input() visible: boolean;
 
-        itemClick(event: Event, item: MenuItem, index: number) {
-            // avoid processing disabled items
-            if (item.disabled) {
-                event.preventDefault();
-                return true;
-            }
+    _parentActive: boolean;
 
-            // activate current item and deactivate active sibling if any
-            this.activeIndex = (this.activeIndex === index) ? null : index;
+    activeIndex: number;
 
-            // execute command
-            if (item.command) {
-                item.command({originalEvent: event, item: item});
-            }
+    hover: boolean;
 
-            // prevent hash change
-            if (item.items || (!item.url && !item.routerLink)) {
-                event.preventDefault();
-            }
+    constructor(public app: AppComponent, public router: Router, public location: Location) {}
 
-            // hide menu
-            if (!item.items && this.app.overlay) {
-                this.app.sidebarActive = false;
-            }
+    itemClick(event: Event, item: MenuItem, index: number) {
+        // avoid processing disabled items
+        if (item.disabled) {
+            event.preventDefault();
+            return true;
         }
 
-        isActive(index: number): boolean {
-            return this.activeIndex === index;
+        // activate current item and deactivate active sibling if any
+        this.activeIndex = (this.activeIndex === index) ? null : index;
+
+        // execute command
+        if (item.command) {
+            item.command({originalEvent: event, item: item});
         }
 
-        unsubscribe(item: any) {
-            if (item.eventEmitter) {
-                item.eventEmitter.unsubscribe();
-            }
+        // prevent hash change
+        if (item.items || (!item.url && !item.routerLink)) {
+            event.preventDefault();
+        }
 
-            if (item.items) {
-                for (const childItem of item.items) {
-                    this.unsubscribe(childItem);
-                }
+        // hide menu
+        if (!item.items && this.app.overlay) {
+            this.app.sidebarActive = false;
+        }
+    }
+
+    isActive(index: number): boolean {
+        return this.activeIndex === index;
+    }
+
+    unsubscribe(item: any) {
+        if (item.eventEmitter) {
+            item.eventEmitter.unsubscribe();
+        }
+
+        if (item.items) {
+            for (const childItem of item.items) {
+                this.unsubscribe(childItem);
             }
         }
     }
+
+    @Input() get parentActive(): boolean {
+        return this._parentActive;
+    }
+
+    set parentActive(val: boolean) {
+        this._parentActive = val;
+
+        if (!this._parentActive) {
+            this.activeIndex = null;
+        }
+    }
+}

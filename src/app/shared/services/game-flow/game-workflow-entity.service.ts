@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/max';
-import 'rxjs/add/operator/map';
 
 import { EntityEnhancerService } from '../expressions/entity-enhancer.service';
 import { EntityService } from '../../../store/services/entity.service';

@@ -1,6 +1,4 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Router} from '@angular/router';
 
 import { RealmHubSenderService } from '../../shared/services/realm-hub-sender.service';
 import { MapDataService } from '../../shared/services/rest/map-data.service';

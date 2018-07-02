@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/observable/fromEvent';
+import {Observable} from 'rxjs';
+import {Subject} from 'rxjs';
 
 import {AppStore} from '../app-store';
 import {GridTile} from '../models/grid-tile';

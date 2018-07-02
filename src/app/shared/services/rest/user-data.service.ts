@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Response} from '@angular/http';
+import { map } from 'rxjs/operators';
 
 import { WebApiService } from './web-api.service';
 import { Untold } from '../../models/backend-export';
@@ -14,7 +15,7 @@ export class UserDataService {
 
   searchUsers(text: string): Observable<Untold.ClientUser[]> {
     return this.webApiService.get('api/user/search/' + text)
-      .map(res => JSON.parse(res));
+      .pipe(map(res => JSON.parse(res)));
   }
 
   ensureUser(user: Untold.ClientUser): Observable<Response> {

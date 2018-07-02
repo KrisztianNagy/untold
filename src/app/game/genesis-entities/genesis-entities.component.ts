@@ -1,10 +1,7 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewEncapsulation} from '@angular/core';
-import { Router } from '@angular/router';
-import 'rxjs/add/operator/merge';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
+import { merge } from 'rxjs/operators';
 
 import { SelectItem } from 'primeng/primeng';
-import { Inplace } from 'primeng/primeng';
-import { DialogModule } from 'primeng/primeng';
 
 import { Untold } from '../../shared/models/backend-export';
 import { RealmDefinitionService } from '../../store/services/realm-definition.service';
@@ -34,11 +31,11 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
   private definitionSubscription;
 
   constructor(private realmDefinitionService: RealmDefinitionService,
-              private changeDetectorRef: ChangeDetectorRef,
-              private entityService: EntityService,
-              private sheetService: SheetService,
-              private gameWorkflowEntityService: GameWorkflowEntityService,
-              private definitionEnhancerService: DefinitionEnhancerService) {
+    private changeDetectorRef: ChangeDetectorRef,
+    private entityService: EntityService,
+    private sheetService: SheetService,
+    private gameWorkflowEntityService: GameWorkflowEntityService,
+    private definitionEnhancerService: DefinitionEnhancerService) {
 
   }
 
@@ -49,8 +46,9 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
     this.selectedSheetId = 0;
 
     this.definitionSubscription = this.realmDefinitionService.definitions
-      .merge(this.entityService.entities)
-      .merge(this.sheetService.sheets)
+      .pipe(
+        merge(this.entityService.entities),
+        merge(this.sheetService.sheets))
       .subscribe(() => {
         this.editNameEntity = null;
         const realmDefinitions = this.realmDefinitionService.getCurrent();
@@ -68,7 +66,7 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
           this.populateSheets();
         }
 
-        if (!this.selectedModule && this.modules.length ) {
+        if (!this.selectedModule && this.modules.length) {
           this.selectedModule = this.modules[0].value;
           this.populateEntities();
           this.populateSheets();
@@ -88,7 +86,7 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
   }
 
   updateEntityName(entity: Untold.ClientEntity) {
-      this.gameWorkflowEntityService.saveEntityName(entity);
+    this.gameWorkflowEntityService.saveEntityName(entity);
   }
 
   deleteEntity(entity: Untold.ClientEntity) {
@@ -128,7 +126,7 @@ export class GenesisEntitiesComponent implements OnInit, OnDestroy {
 
     const definitionChain = this.definitionEnhancerService.getParentChain(definitions, this.selectedEntity.definitionGuid);
 
-    this.sheets.filter(sh =>  definitionChain.some(chain => chain.definitionGuid === sh.definitionGuid))
+    this.sheets.filter(sh => definitionChain.some(chain => chain.definitionGuid === sh.definitionGuid))
       .forEach(sh => {
         this.availableSheets.push({
           label: sh.name,

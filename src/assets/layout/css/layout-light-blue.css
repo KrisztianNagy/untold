@@ -634,9 +634,8 @@
       -webkit-box-shadow: none;
       -moz-box-shadow: none;
       margin: 100px 0 0 30px; }
-      .exception-body .exception-panel .ui-button.ui-state-hover {
-        background-color: #e8e8e8;
-        color: #000000; }
+      .exception-body .exception-panel .ui-button:enabled:not(:focus):hover {
+        background-color: #e8e8e8; }
   .exception-body .exception-band {
     height: 80px;
     margin-top: -160px;
@@ -1235,9 +1234,11 @@ body {
           color: #E1F5FE; }
         .layout-wrapper .topbar .topbar-menu > li.search-item input {
           color: #ffffff;
+          padding: 2px;
           padding-right: 20px;
-          border-color: #E1F5FE;
-          background-color: transparent; }
+          background-color: transparent;
+          background-image: linear-gradient(to bottom, #ffffff, #ffffff), linear-gradient(to bottom, #79d4fd, #79d4fd);
+          border-width: 0; }
           .layout-wrapper .topbar .topbar-menu > li.search-item input.ui-state-hover, .layout-wrapper .topbar .topbar-menu > li.search-item input.ui-state-focus {
             border-color: #ffffff; }
           .layout-wrapper .topbar .topbar-menu > li.search-item input.ui-state-focus + i {
@@ -1377,7 +1378,7 @@ body {
             border-width: 5px 5px 5px 0;
             border-right-color: #424242; }
     .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents {
-      min-width: 250px;
+      width: 250px;
       position: absolute;
       top: 0;
       left: 60px;
@@ -1447,17 +1448,21 @@ body {
             .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .ui-scrollpanel .ui-scrollpanel-hidden {
               display: block;
               visibility: hidden; }
-            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .ui-scrollpanel .ui-scrollpanel-content > *:last-child {
-              overflow: visible;
+            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .ui-scrollpanel .ui-scrollpanel-content {
+              overflow-x: hidden; }
+            .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .ui-scrollpanel .menu-scroll-content {
+              width: 268px;
               padding-bottom: 170px;
               padding-right: 22px; }
+              .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .ui-scrollpanel .menu-scroll-content .navigation-menu {
+                width: 268px; }
           .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu {
             margin: 0;
-            padding: 0 22px 0 0;
+            padding: 0;
             list-style-type: none; }
             .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li a {
               display: block;
-              padding: 8px 16px;
+              padding: 8px 32px 8px 16px;
               -moz-transition: background-color 0.3s;
               -o-transition: background-color 0.3s;
               -webkit-transition: background-color 0.3s;
@@ -1490,17 +1495,17 @@ body {
               list-style-type: none;
               overflow: hidden; }
               .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li ul li a {
-                padding: 8px 16px 8px 32px; }
+                padding: 8px 32px 8px 32px; }
               .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li ul li ul li a {
-                padding: 8px 16px 8px 48px; }
+                padding: 8px 32px 8px 48px; }
               .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li ul li ul li ul li a {
-                padding: 8px 16px 8px 64px; }
+                padding: 8px 32px 8px 64px; }
               .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li ul li ul li ul li ul li a {
-                padding: 8px 16px 8px 80px; }
+                padding: 8px 32px 8px 80px; }
               .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li ul li ul li ul li ul li ul li a {
-                padding: 8px 16px 8px 96px; }
+                padding: 8px 32px 8px 96px; }
               .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li ul li ul li ul li ul li ul li ul li a {
-                padding: 8px 16px 8px 112px; }
+                padding: 8px 32px 8px 112px; }
             .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li.active-menuitem > a {
               color: #03A9F4; }
               .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu li.active-menuitem > a i:last-child {
@@ -1511,7 +1516,7 @@ body {
                 transform: rotate(-180deg); }
             .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-contents .layout-tabmenu-content .layout-submenu-content .navigation-menu .menuitem-badge {
               position: absolute;
-              right: 40px;
+              right: 58px;
               top: 10px;
               display: inline-block;
               width: 16px;
@@ -1769,6 +1774,8 @@ body {
         font-size: 14px; }
       .layout-wrapper .topbar .topbar-menu > li.profile-item .profile-info .topbar-item-name.profile-role {
         display: none; }
+      .layout-wrapper .topbar .topbar-menu > li.search-item input {
+        background-image: linear-gradient(to bottom, #03A9F4, #03A9F4), linear-gradient(to bottom, #8aceec, #8aceec); }
       .layout-wrapper .topbar .topbar-menu > li.search-item {
         text-align: center; }
         .layout-wrapper .topbar .topbar-menu > li.search-item .fa {
@@ -1776,21 +1783,19 @@ body {
           left: 14px;
           width: 20px; }
         .layout-wrapper .topbar .topbar-menu > li.search-item label {
-          display: none; }
+          color: #79d4fd;
+          padding-left: 10px; }
         .layout-wrapper .topbar .topbar-menu > li.search-item input {
           color: #424242;
           border: 0 none;
-          border-bottom: 1px solid #bdbdbd;
-          background: transparent;
           width: 90%;
           box-sizing: border-box;
-          padding-left: 30px;
+          padding-left: 10px;
           padding-right: 2px; }
           .layout-wrapper .topbar .topbar-menu > li.search-item input.ui-state-hover {
             border-color: #bdbdbd; }
           .layout-wrapper .topbar .topbar-menu > li.search-item input:focus {
-            border-color: #03A9F4;
-            border-width: 0 0 2px 0; }
+            border-width: 0; }
           .layout-wrapper .topbar .topbar-menu > li.search-item input:focus ~ .fa {
             color: #03A9F4; }
     .layout-wrapper .topbar .topbar-menu.topbar-menu-visible {
@@ -1862,37 +1867,40 @@ body {
   .layout-wrapper.layout-rtl .layout-main {
     margin-left: 0px;
     margin-right: 40px; } }
-.layout-tabmenu-content .inbox-tab ul {
-  padding: 0 6px;
-  margin: 0;
-  list-style-type: none; }
-  .layout-tabmenu-content .inbox-tab ul li {
-    padding: 8px 16px; }
-    .layout-tabmenu-content .inbox-tab ul li img {
-      float: left;
-      margin-right: 8px; }
-    .layout-tabmenu-content .inbox-tab ul li .name {
-      font-weight: bold;
-      float: left; }
-    .layout-tabmenu-content .inbox-tab ul li .message {
-      float: left; }
-.layout-tabmenu-content .inbox-tab .inbox-labels {
-  margin: 20px 6px 0 6px; }
-  .layout-tabmenu-content .inbox-tab .inbox-labels > span {
-    font-weight: bold; }
-  .layout-tabmenu-content .inbox-tab .inbox-labels ul {
-    margin-top: 10px; }
-    .layout-tabmenu-content .inbox-tab .inbox-labels ul li {
-      padding: 6px; }
-      .layout-tabmenu-content .inbox-tab .inbox-labels ul li .inbox-label-badge {
-        color: #ffffff;
-        background-color: #8BC34A;
-        padding: 2px 6px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        border-radius: 3px;
-        float: right;
-        margin-top: -3px; }
+.layout-tabmenu-content .inbox-tab {
+  width: 250px;
+  padding-bottom: 180px; }
+  .layout-tabmenu-content .inbox-tab ul {
+    padding: 0 6px;
+    margin: 0;
+    list-style-type: none; }
+    .layout-tabmenu-content .inbox-tab ul li {
+      padding: 8px 16px; }
+      .layout-tabmenu-content .inbox-tab ul li img {
+        float: left;
+        margin-right: 8px; }
+      .layout-tabmenu-content .inbox-tab ul li .name {
+        font-weight: bold;
+        float: left; }
+      .layout-tabmenu-content .inbox-tab ul li .message {
+        float: left; }
+  .layout-tabmenu-content .inbox-tab .inbox-labels {
+    margin: 20px 6px 0 6px; }
+    .layout-tabmenu-content .inbox-tab .inbox-labels > span {
+      font-weight: bold; }
+    .layout-tabmenu-content .inbox-tab .inbox-labels ul {
+      margin-top: 10px; }
+      .layout-tabmenu-content .inbox-tab .inbox-labels ul li {
+        padding: 6px; }
+        .layout-tabmenu-content .inbox-tab .inbox-labels ul li .inbox-label-badge {
+          color: #ffffff;
+          background-color: #8BC34A;
+          padding: 2px 6px;
+          -moz-border-radius: 3px;
+          -webkit-border-radius: 3px;
+          border-radius: 3px;
+          float: right;
+          margin-top: -3px; }
 .layout-tabmenu-content .calendar-tab ul {
   padding: 0;
   margin: 0;
@@ -1932,31 +1940,34 @@ body {
           color: #35ae47; }
         .layout-tabmenu-content .calendar-tab ul li .calendar-event-detail .calendar-event-rsvp.calendar-event-rsvp-maybe {
           color: #f5a623; }
-.layout-tabmenu-content .projects-tab ul {
-  padding: 8px 16px;
-  margin: 0;
-  list-style-type: none; }
-  .layout-tabmenu-content .projects-tab ul li {
-    padding: 12px 0; }
-    .layout-tabmenu-content .projects-tab ul li i {
-      font-size: 36px;
-      margin-right: 12px;
-      float: left;
-      width: 32px;
-      color: #757575; }
-    .layout-tabmenu-content .projects-tab ul li .project-title {
-      font-weight: 700; }
-    .layout-tabmenu-content .projects-tab ul li span {
-      float: left;
-      display: block; }
-    .layout-tabmenu-content .projects-tab ul li .project-progressbar {
-      width: 100px;
-      float: left;
-      background-color: #545b61;
-      margin-top: 4px; }
-      .layout-tabmenu-content .projects-tab ul li .project-progressbar .project-progressbar-value {
-        background-color: #8BC34A;
-        height: 4px; }
+.layout-tabmenu-content .projects-tab {
+  padding-bottom: 180px; }
+  .layout-tabmenu-content .projects-tab ul {
+    width: 250px;
+    padding: 8px 16px;
+    margin: 0;
+    list-style-type: none; }
+    .layout-tabmenu-content .projects-tab ul li {
+      padding: 12px 0; }
+      .layout-tabmenu-content .projects-tab ul li i {
+        font-size: 36px;
+        margin-right: 12px;
+        float: left;
+        width: 32px;
+        color: #757575; }
+      .layout-tabmenu-content .projects-tab ul li .project-title {
+        font-weight: 700; }
+      .layout-tabmenu-content .projects-tab ul li span {
+        float: left;
+        display: block; }
+      .layout-tabmenu-content .projects-tab ul li .project-progressbar {
+        width: 100px;
+        float: left;
+        background-color: #545b61;
+        margin-top: 4px; }
+        .layout-tabmenu-content .projects-tab ul li .project-progressbar .project-progressbar-value {
+          background-color: #8BC34A;
+          height: 4px; }
 .layout-tabmenu-content .team-tab ul {
   padding: 8px 16px;
   margin: 0;

@@ -1,21 +1,18 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/merge';
-import 'rxjs/add/operator/first';
+import { merge, first } from 'rxjs/operators';
 
-import {RenderService} from '../services/render.service';
-import {GridRenderService} from '../services/grid-render.service';
-import {GameService} from '../../../store/services/game.service';
-import {TokenService} from '../../../store/services/token.service';
-import {InteractionService} from '../../../store/services/interaction.service';
-import {VisibleAreaService} from '../../../store/services/visible-area.service';
-import {Token} from '../../../store/models/token';
-import {VisibleArea} from '../../../store/models/visible-area';
-import {Interaction} from '../../../store/models/interaction';
-import {SelectionModeConstants} from '../../../shared/constants/selection-mode-constants';
-import {DragConstants} from '../../../shared/constants/drag-constants';
-import {DragDataTransfer} from '../../../shared/models/drag-data-transfer';
-import {MapConstants} from '../../../shared/constants/map-constants';
-import {LayerPositionConstants} from '../../../shared/constants/layer-position-constants';
+import { RenderService } from '../services/render.service';
+import { GridRenderService } from '../services/grid-render.service';
+import { GameService } from '../../../store/services/game.service';
+import { TokenService } from '../../../store/services/token.service';
+import { InteractionService } from '../../../store/services/interaction.service';
+import { VisibleAreaService } from '../../../store/services/visible-area.service';
+import { Token } from '../../../store/models/token';
+import { Interaction } from '../../../store/models/interaction';
+import { SelectionModeConstants } from '../../../shared/constants/selection-mode-constants';
+import { DragConstants } from '../../../shared/constants/drag-constants';
+import { DragDataTransfer } from '../../../shared/models/drag-data-transfer';
+import { LayerPositionConstants } from '../../../shared/constants/layer-position-constants';
 
 @Injectable()
 export class TokenRenderService {
@@ -25,34 +22,34 @@ export class TokenRenderService {
 
   private tokenSubscription;
   constructor(private renderService: RenderService,
-              private gridRenderService: GridRenderService,
-              private tokenService: TokenService,
-              private visibleAreaService: VisibleAreaService,
-              private interactionService: InteractionService,
-              private gameService: GameService) {
+    private gridRenderService: GridRenderService,
+    private tokenService: TokenService,
+    private visibleAreaService: VisibleAreaService,
+    private interactionService: InteractionService,
+    private gameService: GameService) {
 
-     this.renderService.tokenClickSubject.subscribe((event: createjs.MouseEvent) => this.tokenClicked(event) );
-     this.renderService.tokenPressMoveSubject.subscribe((event: createjs.MouseEvent) => this.tokenPressMove(event) );
-     this.renderService.tokenPressUpSubject.subscribe((event: createjs.MouseEvent) => this.tokenPressUp(event) );
+    this.renderService.tokenClickSubject.subscribe((event: createjs.MouseEvent) => this.tokenClicked(event));
+    this.renderService.tokenPressMoveSubject.subscribe((event: createjs.MouseEvent) => this.tokenPressMove(event));
+    this.renderService.tokenPressUpSubject.subscribe((event: createjs.MouseEvent) => this.tokenPressUp(event));
   }
 
-   init(foregroundLayer: createjs.Container, backgroundLayer: createjs.Container, hiddenLayer: createjs.Container) {
+  init(foregroundLayer: createjs.Container, backgroundLayer: createjs.Container, hiddenLayer: createjs.Container) {
     this.foregroundLayer = foregroundLayer;
     this.backgroundLayer = backgroundLayer;
     this.hiddenLayer = hiddenLayer;
 
-    this.tokenSubscription = this.tokenService.tokens.
-      merge(this.interactionService.interaction).
-      subscribe(() => {
+    this.tokenSubscription = this.tokenService.tokens
+      .pipe(merge(this.interactionService.interaction))
+      .subscribe(() => {
         const tokens = this.tokenService.getCurrent();
         const interaction = this.interactionService.getCurrent();
         this.draw(tokens, interaction);
-    });
+      });
 
     this.renderService.dropSubject.subscribe(dropEvent => {
-       const interaction = this.interactionService.getCurrent();
+      const interaction = this.interactionService.getCurrent();
 
-       this.drop(dropEvent, interaction);
+      this.drop(dropEvent, interaction);
     });
   }
 
@@ -67,7 +64,7 @@ export class TokenRenderService {
   private getLayerFromId(id: number): createjs.Container {
     if (id === LayerPositionConstants.Background) {
       return this.backgroundLayer;
-    } else if ( id === LayerPositionConstants.Hidden) {
+    } else if (id === LayerPositionConstants.Hidden) {
       return this.hiddenLayer;
     } else if (id === LayerPositionConstants.Foreground) {
       return this.foregroundLayer;
@@ -118,25 +115,25 @@ export class TokenRenderService {
           bitmap.scaleY = token.height / bitmap.image.height;
 
           if (!interaction.isTokenEditorOpen &&
-          (game.realm.isCurrentUserOwner || (token.owner && token.owner.id === game.localMembership.user.id))) {
+            (game.realm.isCurrentUserOwner || (token.owner && token.owner.id === game.localMembership.user.id))) {
             bitmap.addEventListener('click', (evt: createjs.Event) => {
-                this.renderService.tokenClickSubject.next(evt);
+              this.renderService.tokenClickSubject.next(evt);
             });
 
             bitmap.addEventListener('pressmove', (evt: createjs.MouseEvent) => {
-                this.renderService.tokenPressMoveSubject.next(evt);
+              this.renderService.tokenPressMoveSubject.next(evt);
             });
 
             bitmap.addEventListener('pressup', (evt: createjs.MouseEvent) => {
-                this.renderService.tokenPressUpSubject.next(evt);
+              this.renderService.tokenPressUpSubject.next(evt);
             });
           }
 
           layer.addChild(bitmap);
         });
-      });
+    });
 
-      this.renderService.update();
+    this.renderService.update();
   }
 
   private tokenClicked(event: createjs.Event) {
@@ -147,7 +144,7 @@ export class TokenRenderService {
       return;
     }
 
-    const token = this.tokenService.getTokenById( parseInt(event.target.name, 10));
+    const token = this.tokenService.getTokenById(parseInt(event.target.name, 10));
     const tokenLayer = this.getLayerFromToken(token);
 
     if (layer === tokenLayer) {
@@ -163,7 +160,7 @@ export class TokenRenderService {
       return;
     }
 
-    const name = <string> event.target.name;
+    const name = <string>event.target.name;
 
     const shape = layer.getChildByName(name);
     const token = this.tokenService.getTokenById(parseInt(name, 10));
@@ -187,7 +184,7 @@ export class TokenRenderService {
   }
 
   private tokenPressUp(event: createjs.MouseEvent) {
-    const name = <string> event.target.name;
+    const name = <string>event.target.name;
     const token = this.tokenService.getTokenById(parseInt(name, 10));
     token.beingDragged = false;
 

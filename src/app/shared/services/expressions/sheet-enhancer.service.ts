@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Response } from '@angular/http';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
-import { Subject } from 'rxjs/Subject';
+import { AsyncSubject } from 'rxjs';
 
 import { Untold } from '../../models/backend-export';
 import { Sheet, SheetTab } from '../../../store/models/sheet';

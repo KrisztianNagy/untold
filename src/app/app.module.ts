@@ -9,7 +9,6 @@ import {AppRoutes , PreventErrorRouteReuseStrategy} from './app.routes';
 import {StoreModule} from '@ngrx/store';
 import {enableProdMode} from '@angular/core';
 import { PapaParseModule } from 'ngx-papaparse';
-import 'rxjs/add/operator/toPromise';
 
 // PrimeNG components
 import {AccordionModule} from 'primeng/primeng';
@@ -79,11 +78,10 @@ import {TreeTableModule} from 'primeng/primeng';
 import {OrganizationChartModule} from 'primeng/primeng';
 import {InplaceModule} from 'primeng/primeng';
 import {SidebarModule} from 'primeng/components/sidebar/sidebar';
-import {AceEditorModule} from 'ng2-ace-editor';
 
 // Barcelona layout
 import {AppComponent} from './app.component';
-import {AppMenuComponent, AppSubMenu} from './app.menu.component';
+import {AppMenuComponent, AppSubMenuComponent} from './app.menu.component';
 import {AppSideBarComponent} from './app.sidebar.component';
 import {AppSidebartabcontentComponent} from './app.sidebartabcontent.component';
 import {AppTopBar} from './app.topbar.component';
@@ -289,14 +287,13 @@ import { SheetTabListComponent } from './game/genesis-sheets/sheet-creator//shee
         OrganizationChartModule,
         InplaceModule,
         SidebarModule,
-        AceEditorModule,
         PapaParseModule,
         StoreModule.forRoot(CombinedReducers)
     ],
     declarations: [
         AppComponent,
         AppMenuComponent,
-        AppSubMenu,
+        AppSubMenuComponent,
         AppSideBarComponent,
         AppSidebartabcontentComponent,
         AppTopBar,

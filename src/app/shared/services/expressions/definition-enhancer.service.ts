@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
-import { Subject } from 'rxjs/Subject';
+import { AsyncSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { Untold, System } from '../../../shared/models/backend-export';
 import { ExpressionTableCacheService } from '../../../shared/services/expressions/expression-table-cache.service';

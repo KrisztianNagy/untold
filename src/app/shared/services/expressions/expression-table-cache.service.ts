@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
+import { AsyncSubject } from 'rxjs';
 
 import { Untold } from '../../models/backend-export';
 import { RealmTableService } from '../../../store/services/realm-table.service';

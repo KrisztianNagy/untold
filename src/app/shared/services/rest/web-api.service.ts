@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+import {Observable, Subject} from 'rxjs';
+import { map, catchError, throw } from 'rxjs/operators';
 
 import {AuthService} from '../../../shared/services/auth.service';
 
@@ -25,9 +23,9 @@ export class WebApiService {
 
     const options = new RequestOptions({ headers: headers });
 
-    const observable = this.http.get(path, options)
-      .map(res => res.text())
-       .catch(err => this.handleError(err));
+    const observable = this.http.get(path, options).pipe(
+      map(res => res.text()),
+      catchError(err => this.handleError(err)));
 
     return observable;
   }
@@ -56,7 +54,7 @@ export class WebApiService {
     });
 
     return this.http.post(path, data, options)
-      .catch(err => this.handleError(err));
+    .pipe(catchError(err => this.handleError(err)));
   }
 
   put(path: string, data: any): Observable<Response> {
@@ -71,7 +69,7 @@ export class WebApiService {
     });
 
     return this.http.put(path, data, options)
-      .catch(err => this.handleError(err));
+      .pipe(catchError(err => this.handleError(err)));
   }
 
   private handleError(error: Response | any): Observable<any> {
@@ -94,6 +92,6 @@ export class WebApiService {
     }
 
     this.errorSubject.next(shortMessage);
-    return Observable.throw(errMsg);
+    throw(errMsg);
   }
 }

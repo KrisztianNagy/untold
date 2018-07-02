@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { tokenNotExpired } from 'angular2-jwt';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+import { AsyncSubject } from 'rxjs';
 import { Location } from '@angular/common';
 
 // Avoid name not found warnings
@@ -8,6 +9,7 @@ declare var Auth0Lock: any;
 
 @Injectable()
 export class AuthService {
+  helper = new JwtHelperService();
   userProfile: any;
   lock = new Auth0Lock('3xRrx59vnaZWyZDbBGtuMFTtmbJhRJST', 'untold.eu.auth0.com', {});
   ready: AsyncSubject<boolean>;
@@ -49,9 +51,7 @@ export class AuthService {
   public authenticated() {
     // Check if there's an unexpired JWT
     // This searches for an item in localStorage with key == 'id_token'
-    return tokenNotExpired('id_token');
-
-  }
+    return !this.helper.isTokenExpired(this.getAccessToken());  }
 
   public logout() {
     // Remove token from localStorage

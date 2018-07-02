@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
 import {RenderService} from '../services/render.service';
 import {GridService} from '../../../store/services/grid.service';
@@ -36,7 +37,8 @@ export class StageRenderService {
         y: this.renderService.stage.y - e.stageY
       };
 
-      this.renderService.stageMouseMove.takeUntil(this.renderService.stageMouseUp).forEach(ev => {
+      this.renderService.stageMouseMove.
+        pipe(takeUntil(this.renderService.stageMouseUp)).forEach(ev => {
           this.renderService.stage.x = ev.stageX + offset.x;
           this.renderService.stage.y = ev.stageY + offset.y;
 

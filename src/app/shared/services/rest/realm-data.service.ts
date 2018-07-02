@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Response} from '@angular/http';
+import { map } from 'rxjs/operators';
 
 import {WebApiService} from './web-api.service';
 import { Untold } from '../../models/backend-export';
@@ -14,17 +15,17 @@ export class RealmDataService {
 
   getMyCreatedRealms(): Observable<Untold.ClientRealm[]> {
     return this.webApiService.get('/api/realm/created')
-      .map(res => JSON.parse(res));
+      .pipe(map(res => JSON.parse(res)));
   }
 
   getMyPlayerRealms(): Observable<Untold.ClientUserRealmMembership[]> {
     return this.webApiService.get('/api/realm/player')
-      .map(res => JSON.parse(res));
+      .pipe(map(res => JSON.parse(res)));
   }
 
   getRealmById(id: number): Observable<Untold.ClientRealm> {
     return this.webApiService.get('/api/realm/' + id)
-      .map(res => JSON.parse(res));
+      .pipe(map(res => JSON.parse(res)));
   }
 
   deleteRealm(id: number): Observable<Response> {

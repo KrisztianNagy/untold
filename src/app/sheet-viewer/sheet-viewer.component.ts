@@ -7,9 +7,9 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { debounceTime } from 'rxjs/operators';
 
-import 'rxjs/add/operator/debounce';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { Untold } from '../shared/models/backend-export';
 
@@ -202,7 +202,7 @@ export class SheetViewerComponent implements OnInit, OnChanges, OnDestroy {
 
       ngOnInit() {
         this.changeSub = new Subject<boolean>();
-        this.changeDelaySub = this.changeSub.debounceTime(500).subscribe(() => {
+        this.changeDelaySub = this.changeSub.pipe(debounceTime(500)).subscribe(() => {
           if (JSON.stringify(this.entity) !== JSON.stringify(this.oldEntity)) {
             this.oldEntity = JSON.parse(JSON.stringify(this.entity));
             this.entityChangedEvent.emit(JSON.parse(JSON.stringify(this.entity)));

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AsyncSubject } from 'rxjs/AsyncSubject';
+import { AsyncSubject } from 'rxjs';
 
 import { ExpressionTableCacheService } from './expression-table-cache.service';
 import { GenesisEntity } from '../../models/genesis-entity';

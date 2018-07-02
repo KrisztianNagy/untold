@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
-import {Store} from '@ngrx/store';
-import {Router} from '@angular/router';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/debounceTime';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 
 import { RenderService } from './services/render.service';
 import { StageRenderService } from './services/stage-render.service';
@@ -28,41 +25,41 @@ import { DomService } from '../../shared/services/dom.service';
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
   providers: [
-              RenderService,
-              StageRenderService,
-              GridRenderService,
-              TokenRenderService,
-              WallRenderService,
-              SightRenderService,
-              ResizeRenderService,
-              VisibilityService,
-              SimpleDungeonService]
+    RenderService,
+    StageRenderService,
+    GridRenderService,
+    TokenRenderService,
+    WallRenderService,
+    SightRenderService,
+    ResizeRenderService,
+    VisibilityService,
+    SimpleDungeonService]
 })
 export class BoardComponent implements OnInit, OnDestroy {
   private gridTilesSubscription;
   private refreshCanvasSubscription;
 
   constructor(private renderService: RenderService,
-              private stageRenderService: StageRenderService,
-              private gridRenderService: GridRenderService,
-              private wallRenderService: WallRenderService,
-              private sightRenderService: SightRenderService,
-              private resizeRenderService: ResizeRenderService,
-              private tokenRenderService: TokenRenderService,
-              private interactionService: InteractionService,
-              public gameService: GameService,
-              private router: Router,
-              private gridService: GridService,
-              private realmHubSenderService: RealmHubSenderService,
-              private domService: DomService,
-              private store: Store<AppStore>) {
+    private stageRenderService: StageRenderService,
+    private gridRenderService: GridRenderService,
+    private wallRenderService: WallRenderService,
+    private sightRenderService: SightRenderService,
+    private resizeRenderService: ResizeRenderService,
+    private tokenRenderService: TokenRenderService,
+    private interactionService: InteractionService,
+    public gameService: GameService,
+    private router: Router,
+    private gridService: GridService,
+    private realmHubSenderService: RealmHubSenderService,
+    private domService: DomService,
+    private store: Store<AppStore>) {
 
     this.interactionService.update({
       cursor: 'select',
       layerId: LayerPositionConstants.Foreground,
       isTokenEditorOpen: false
     });
-   }
+  }
 
   ngOnInit() {
     this.renderService.init('demoCanvas');
@@ -111,19 +108,21 @@ export class BoardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.gridTilesSubscription = this.gridService.gridTiles.debounceTime(5000).subscribe(tiles => {
-      const blocks = tiles.filter(tl => {
-        return tl.isBlock === true;
-      });
-      const jsonData = JSON.stringify(blocks);
+    this.gridTilesSubscription = this.gridService.gridTiles
+      .pipe(debounceTime(5000))
+      .subscribe(tiles => {
+        const blocks = tiles.filter(tl => {
+          return tl.isBlock === true;
+        });
+        const jsonData = JSON.stringify(blocks);
 
-      this.realmHubSenderService.updateMapGrid({
-        id: game.localMembership.activeMap.id,
-        name: game.localMembership.activeMap.name,
-        reamId: game.localMembership.activeMap.reamId,
-        gridJson: jsonData
+        this.realmHubSenderService.updateMapGrid({
+          id: game.localMembership.activeMap.id,
+          name: game.localMembership.activeMap.name,
+          reamId: game.localMembership.activeMap.reamId,
+          gridJson: jsonData
+        });
       });
-    });
   }
 
   private removeGridUploader() {

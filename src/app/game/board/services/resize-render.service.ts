@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { merge } from 'rxjs/operators';
 
 import { RenderService } from '../services/render.service';
 import { TokenService } from '../../../store/services/token.service';
@@ -26,9 +27,9 @@ export class ResizeRenderService {
 
   init(layer: createjs.Container) {
     this.layer = layer;
-    this.subscription = this.interactionService.interaction.
-      merge(this.tokenService.selectedToken).
-      subscribe(() => {
+    this.subscription = this.interactionService.interaction
+      .pipe(merge(this.tokenService.selectedToken))
+      .subscribe(() => {
         this.resizeBox = null;
         const selectedToken = this.tokenService.getCurrentSelectedToken();
         const interaction = this.interactionService.getCurrent();
@@ -87,7 +88,7 @@ export class ResizeRenderService {
         .lineTo(this.resizeBox.toX, this.resizeBox.fromY)
         .cp();
 
-        const bottom = new createjs.Shape();
+      const bottom = new createjs.Shape();
       bottom.name = 'bottom';
       bottom.graphics
         .beginStroke('Red')

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import 'rxjs/add/operator/first';
+import { first } from 'rxjs/operators';
 
 import { RealmDataService } from '../shared/services/rest/realm-data.service';
 import { UserDataService } from '../shared/services/rest/user-data.service';
@@ -34,7 +34,9 @@ export class SaveRealmComponent implements OnInit, OnDestroy {
     this.sub = this.route.params.subscribe(params => {
       if (params['id']) {
         this.id = parseInt(params['id'], 10);
-        this.realmDataService.getRealmById(this.id).first().forEach(realm => {
+        this.realmDataService.getRealmById(this.id)
+        .pipe(first())
+        .forEach(realm => {
           this.clientRealm = realm;
           this.clientRealm.members = this.clientRealm.members.filter(mem => {
             return mem.userName !== this.clientRealm.owner.userName;
@@ -59,7 +61,7 @@ export class SaveRealmComponent implements OnInit, OnDestroy {
       this.realmDataService.createRealm(this.clientRealm);
 
     this.busy = true;
-    callSub.first().forEach(response => {
+    callSub.pipe(first()).forEach(response => {
       if (response.ok) {
         this.router.navigateByUrl('');
       }
@@ -70,7 +72,7 @@ export class SaveRealmComponent implements OnInit, OnDestroy {
   }
 
   searchMember(event) {
-    this.userDataService.searchUsers(event.query).first().forEach(response => {
+    this.userDataService.searchUsers(event.query).pipe(first()).forEach(response => {
       this.userResults = response;
       this.changeDetectorRef.markForCheck();
     });

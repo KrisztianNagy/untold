@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/merge';
+import { merge } from 'rxjs/operators';
 
-import {RenderService} from '../services/render.service';
-import {WallService} from '../../../store/services/wall.service';
-import {VisibleAreaService} from '../../../store/services/visible-area.service';
-import {InteractionService} from '../../../store/services/interaction.service';
-import {TokenService} from '../../../store/services/token.service';
-import {Wall} from '../../../store/models/wall';
-import {VisibleArea} from '../../../store/models/visible-area';
-import {Interaction} from '../../../store/models/interaction';
-import {VisibilityService} from '../../../shared/services/visibility.service';
-import {Token} from '../../../store/models/token';
-import {MapConstants} from '../../../shared/constants/map-constants';
-import {LayerPositionConstants} from '../../../shared/constants/layer-position-constants';
+import { RenderService } from '../services/render.service';
+import { WallService } from '../../../store/services/wall.service';
+import { VisibleAreaService } from '../../../store/services/visible-area.service';
+import { InteractionService } from '../../../store/services/interaction.service';
+import { TokenService } from '../../../store/services/token.service';
+import { Wall } from '../../../store/models/wall';
+import { VisibleArea } from '../../../store/models/visible-area';
+import { VisibilityService } from '../../../shared/services/visibility.service';
+import { MapConstants } from '../../../shared/constants/map-constants';
+import { LayerPositionConstants } from '../../../shared/constants/layer-position-constants';
 
 @Injectable()
 export class SightRenderService {
@@ -20,24 +18,25 @@ export class SightRenderService {
 
   private mergedSubscription;
   constructor(private renderService: RenderService,
-              private wallService: WallService,
-              private visibleAreaService: VisibleAreaService,
-              private interactionService: InteractionService,
-              private tokenService: TokenService,
-              private visibilityService: VisibilityService) {
-   }
+    private wallService: WallService,
+    private visibleAreaService: VisibleAreaService,
+    private interactionService: InteractionService,
+    private tokenService: TokenService,
+    private visibilityService: VisibilityService) {
+  }
 
   init(layer: createjs.Container) {
     this.layer = layer;
 
     this.mergedSubscription = this.interactionService.interaction
-      .merge(this.tokenService.selectedToken)
-      .merge(this.wallService.calculatedWalls)
-      .merge(this.wallService.userWalls)
-      .merge(this.visibleAreaService.visibleArea)
+      .pipe(
+        merge(this.tokenService.selectedToken),
+        merge(this.wallService.calculatedWalls),
+        merge(this.wallService.userWalls),
+        merge(this.visibleAreaService.visibleArea))
       .subscribe(() => {
         this.draw();
-    });
+      });
   }
 
   destroy() {
@@ -50,20 +49,20 @@ export class SightRenderService {
 
     if (interaction.layerId !== LayerPositionConstants.Foreground || !token.id) {
       if (this.layer.numChildren > 0) {
-        const innervisibleArea =  this.visibleAreaService.getCurrent();
+        const innervisibleArea = this.visibleAreaService.getCurrent();
 
         this.layer.removeAllChildren();
         this.layer.cache(innervisibleArea.fromX, innervisibleArea.fromY, innervisibleArea.toX, innervisibleArea.toY);
         this.renderService.update();
       }
-      return ;
+      return;
     }
 
-    const walls =  [...this.wallService.getCurrentCalculatedWalls(), ...this.wallService.getCurrentUserWalls()];
-    const visibleArea =  this.visibleAreaService.getCurrent();
+    const walls = [...this.wallService.getCurrentCalculatedWalls(), ...this.wallService.getCurrentUserWalls()];
+    const visibleArea = this.visibleAreaService.getCurrent();
 
     this.getMapWalls().forEach(wall => {
-        walls.push(wall);
+      walls.push(wall);
     });
 
     const lightSource = new createjs.Point(token.x, token.y);
@@ -129,9 +128,9 @@ export class SightRenderService {
   }
 
   private getMapWalls(): Wall[] {
-      const size = MapConstants.GridSize * MapConstants.MapSize;
+    const size = MapConstants.GridSize * MapConstants.MapSize;
 
-      return [
+    return [
       {
         fromX: 0,
         fromY: 0,

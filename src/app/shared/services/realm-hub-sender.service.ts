@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/observable/fromPromise';
+import { Observable, Subject, from } from 'rxjs';
 
 import { SignalRService } from './signal-r.service';
 import { Untold } from '../models/backend-export';
@@ -20,7 +18,7 @@ export class RealmHubSenderService {
         this.signalRService.realmHub.invoke(eventName, argEntity).promise() :
         this.signalRService.realmHub.invoke(eventName).promise();
 
-      const observable = Observable.fromPromise(<any> prom);
+      const observable = from(prom);
       observable.subscribe(
         data => {},
         err => {
@@ -29,7 +27,7 @@ export class RealmHubSenderService {
         }
       );
 
-      return Observable.fromPromise(<any> prom);
+      return from(<any> prom);
   }
 
   joinRealm(realmId: number): Observable<any> {
