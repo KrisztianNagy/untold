@@ -48,7 +48,7 @@ export class SheetCreatorComponent implements OnInit, OnDestroy {
   snippetCollapsed = true;
   commandTestFormat: string;
   commandTestInput: string;
-  tabIndex = 0;
+  tabIndex = 0; 
   sheetTabVisible = false;
   definitionPickerVisible: boolean;
   visiblePreview: boolean;

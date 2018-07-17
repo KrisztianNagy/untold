@@ -1,4 +1,4 @@
-<div>
+<div class="ui-g-12">
     <app-entity-editor *ngIf="entity &&choiceOptions && !hasSheet" [entity]="entity" (entityChanged)="updateEntity($event)" [choiceOptions]="choiceOptions"></app-entity-editor>
     <app-sheet-viewer *ngIf="model && choiceOptions && hasSheet" [model]="model" [html]="sheetHtml" [css]="sheetCss" [options]="choiceOptions" [definition]="definition" (entityChangedEvent)="entityChanged($event)" (onBuildCompleted)="onBuildCompleted($event)" (commandExecuted)="onCommandExecuted($event)" (chatExecuted)="onChatExecuted($event)"></app-sheet-viewer>
 </div>

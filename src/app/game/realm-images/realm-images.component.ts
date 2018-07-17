@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import {Header} from 'primeng/primeng';
+import { Header } from 'primeng/primeng';
 
 import { GameService } from '../../store/services/game.service';
 import { FileDataService } from '../../shared/services/rest/file-data.service';
 import { Untold } from '../../shared/models/backend-export';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-realm-images',
@@ -18,7 +19,8 @@ export class RealmImagesComponent implements OnInit {
   game: Untold.ClientGameRealmDetails;
 
   constructor(private fileDataService: FileDataService,
-              private gameService: GameService) {
+    private gameService: GameService,
+    private authService: AuthService) {
 
     this.game = this.gameService.getCurrent();
   }
@@ -38,7 +40,7 @@ export class RealmImagesComponent implements OnInit {
   }
 
   loadData(event) {
-      this.loadImages(event.first / event.rows + 1, event);
+    this.loadImages(event.first / event.rows + 1, event);
   }
 
   delete(image: Untold.ClientImage) {
@@ -46,6 +48,16 @@ export class RealmImagesComponent implements OnInit {
       this.images = this.images.filter(img => {
         return img.fileName !== image.fileName;
       });
+    });
+  }
+
+  onBeforeSend(event) {
+    event.xhr.setRequestHeader('Authorization', `Bearer ${this.authService.getAccessToken()}`);
+ }
+
+  uploadFile(event) {
+    this.fileDataService.upload(event.files).subscribe(() => {
+      this.loadImages(1, event);
     });
   }
 

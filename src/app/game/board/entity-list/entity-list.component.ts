@@ -12,10 +12,11 @@ import { Untold } from '../../../shared/models/backend-export';
   selector: 'app-entity-list',
   templateUrl: './entity-list.component.html',
   styleUrls: ['./entity-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntityListComponent implements OnInit {
   images: Array<Untold.ClientImage>;
+  cars: number[] = [1, 2, 3];
   searchFilter: string;
   game: Untold.ClientGameRealmDetails;
 
@@ -28,6 +29,8 @@ export class EntityListComponent implements OnInit {
 
   ngOnInit() {
     this.images = [];
+
+    this.loadImages(1);
   }
 
   loadImages(page: number) {

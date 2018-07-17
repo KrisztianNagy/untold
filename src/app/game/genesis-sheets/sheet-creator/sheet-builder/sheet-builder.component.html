@@ -1,4 +1,4 @@
-<app-sheet-mock (onClick)="childClick($event)" [sheetElement]="rootElement" *ngIf="rootElement"></app-sheet-mock>
+ <app-sheet-mock (onClick)="childClick($event)" [sheetElement]="rootElement" *ngIf="rootElement"></app-sheet-mock>
 <p-sidebar [(visible)]="definitionPickerVisible"[fullScreen]="true">
     <app-genesis-definitions-chart *ngIf="definitionPickerVisible" [config]="definitionChartConfig" [definition]="pickerDefinition" (onDefinitionChainClick)="onDefinitionChainClick($event)"></app-genesis-definitions-chart>
 </p-sidebar>
