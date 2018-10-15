@@ -30,7 +30,7 @@ Since I didn't want to reinvent the wheel every single time, I spent a lot of ti
 
 [SignalR](https://www.asp.net/signalr): This library help us to create real-time web functionality. This feature is a must have if we want players to interact with eachother.
 
-[Azure Storage](https://azure.microsoft.com/en-us/services/storage/): In a multiplayer game we don't want the clients to call the server for every single resource. With the azure table and blob storage I was able to "outsorce" the text and file resources which reduced the load on the server.
+[Azure Storage](https://azure.microsoft.com/en-us/services/storage/): In a multiplayer game we don't want the clients to call the server for every single resource. With the azure table and blob storage I was able to "outsource" the text and file resources which reduced the load on the server.
 
 [LZ String](http://pieroxy.net/blog/pages/lz-string/index.html): I used it to compress the strings before sending them to the store.
 
